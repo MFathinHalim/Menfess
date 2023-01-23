@@ -3,9 +3,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const notes = [{
 		noteId: 1,
-		noteContent: "Hey, Geeks you can add your important notes here.",
+		noteContent: "Halo",
         noteName: "Doma",
-		notenameTo: "Mado"
+		noteNameTo: "Mado"
 	}
 ]
 

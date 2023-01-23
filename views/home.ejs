@@ -206,15 +206,6 @@
 			#oren{
 				color:orange;
 			}
-			footer {
-			position: fixed;
-			left: 0;
-			bottom: 0;
-			width: 100%;
-			background-color: red;
-			color: white;
-			text-align: center;
-			}
 			button:active{transform: scale(0.9);}
 			@import url(https://fonts.googleapis.com/css?family=Khula:700);
 			@media screen and (max-width: 1146px) {
@@ -263,7 +254,23 @@
  }
 		</style>
 	</head>
-	
+	<footer class="card4">
+		<form action="/" method="post" id="add" style="display: none;">
+			<p>Add Note</p>
+			<input type="number" style="display: none;"
+				name="noteId">
+			<textarea type="text" rows="6" cols="30"
+					placeholder="Type Here..."
+					name="noteContent"></textarea>
+			<textarea type="text" rows="6" cols="30"
+					placeholder="Your Name?"
+					name="noteName"></textarea>
+			<br>
+			<button type="submit">POST!</button>
+		</form>
+		<button onclick="myFunction()">Mau Ngepost?</button>
+		<h5>©Created By <strong>M.Fathin Halim</strong></h5>
+	</footer>
 	<body>
 	<h1>Menfess!</h1>
 
@@ -300,23 +307,7 @@
 	</div>
 	
 </body>
-<footer class="card4">
-	<form action="/" method="post" id="add" style="display: none;">
-		<p>Add Note</p>
-		<input type="number" style="display: none;"
-			name="noteId">
-		<textarea type="text" rows="6" cols="30"
-				placeholder="Type Here..."
-				name="noteContent"></textarea>
-		<textarea type="text" rows="6" cols="30"
-				placeholder="Your Name?"
-				name="noteName"></textarea>
-		<br>
-		<button type="submit">POST!</button>
-	</form>
-	<button onclick="myFunction()">Mau Ngepost?</button>
-    <h5>©Created By <strong>M.Fathin Halim</strong></h5>
-</footer>
+
 <script>
 	function myFunction() {
 	var x = document.getElementById("add");

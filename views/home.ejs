@@ -267,6 +267,9 @@
 				<textarea type="text" rows="6" cols="30"
 						placeholder="Your Name?"
 						name="noteName"></textarea>
+				<textarea type="text" rows="6" cols="30"
+					placeholder="For ?"
+					name="noteNameTo"></textarea>
 				<br>
 				<button type="submit">POST!</button>
 			</form>
@@ -291,6 +294,11 @@
 						placeholder="Type Here..." name="noteContent"
 						value="from: <%= element.noteName %>">
 						from : <%= element.noteName %> 
+					</h4>
+					<h4 type="text" rows="6"readonly="true"
+						placeholder="Type Here..." name="noteContent"
+						value="from: <%= element.noteNameTo %>">
+						from : <%= element.noteNameTo %> 
 					</h4>
 					
 					<form action="/delete" method="post">

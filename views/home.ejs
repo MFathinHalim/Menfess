@@ -292,18 +292,18 @@
 						value="from: <%= element.noteName %>">
 						from : <%= element.noteName %> 
 					</h4>
-
+					
+					<form action="/delete" method="post">
+						<input type="number" style="display: none;"
+							name="noteId" value="<%= element.noteId %>">
+						<button type="submit"
+								style="margin: 0px 4px;">Report!</button>
+					</form>
+					<% }) %>
 				</article>
 				<br>
 			</form>
 
-			<form action="/delete" method="post">
-				<input type="number" style="display: none;"
-					name="noteId" value="<%= element.noteId %>">
-				<button type="submit"
-						style="margin: 0px 4px;">Report!</button>
-			</form>
-			<% }) %>
 	</div>
 	
 </body>

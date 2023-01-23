@@ -26,13 +26,14 @@ app.get("/", function (req, res) {
 
 app.post("/", (req, res) => {
 	const noteContent = req.body.noteContent
-    const noteName = req.body.noteName
+    const noteNameTo = req.body.noteNameTo
 	const noteId = notes.length + 1;
 
 	notes.push({
 		noteId: noteId,
 		noteContent: noteContent,
-        noteName: noteName
+        noteName: noteName,
+		noteNameTo: noteNameTo
 	})
 
 	res.render("home", {
@@ -44,11 +45,13 @@ app.post('/update', (req, res) => {
 	var noteId = req.body.noteId;
 	var noteContent = req.body.noteContent;
     var noteName = req.body.noteName;
+	var noteNameTo = req.body.noteName;
 	
 	notes.forEach(note => {
 		if (note.noteId == noteId) {
 			note.noteContent = noteContent;
             note.noteName = noteName;
+			note.noteNameTo = noteNameTo;
 		}
 	})
 	res.render("home", {

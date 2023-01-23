@@ -3,9 +3,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const notes = [{
 		noteId: 1,
-		noteContent: "Halo",
-        noteName: "Doma",
-		noteNameTo: "Mado"
+		noteContent: "Hey, Geeks you can add your important notes here.",
+        noteName: "Doma"
 	}
 ]
 
@@ -27,15 +26,13 @@ app.get("/", function (req, res) {
 
 app.post("/", (req, res) => {
 	const noteContent = req.body.noteContent
-	const noteName = req.body.noteName
-    const noteNameTo = req.body.noteNameTo
+    const noteName = req.body.noteName
 	const noteId = notes.length + 1;
 
 	notes.push({
 		noteId: noteId,
 		noteContent: noteContent,
-        noteName: noteName,
-		noteNameTo: noteNameTo
+        noteName: noteName
 	})
 
 	res.render("home", {
@@ -47,13 +44,11 @@ app.post('/update', (req, res) => {
 	var noteId = req.body.noteId;
 	var noteContent = req.body.noteContent;
     var noteName = req.body.noteName;
-	var noteNameTo = req.body.noteNameTo;
 	
 	notes.forEach(note => {
 		if (note.noteId == noteId) {
 			note.noteContent = noteContent;
             note.noteName = noteName;
-			note.noteNameTo = noteNameTo;
 		}
 	})
 	res.render("home", {

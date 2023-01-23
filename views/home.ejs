@@ -277,7 +277,7 @@
 			<h5>©Created By <strong>M.Fathin Halim</strong></h5>
 		</footer>
 
-	<div class="card">
+	<div class="card2">
 
 		<% data.forEach(element=> { %>
 
@@ -301,15 +301,15 @@
 						To : <%= element.noteNameTo %> 
 					</h4>
 					
-					<form action="/delete" method="post">
-						<input type="number" style="display: none;"
-							name="noteId" value="<%= element.noteId %>">
-						<button type="submit"
-								style="margin: 0px 4px;">Report!</button>
-					</form>
 					<% }) %>
 				</article>
 				<br>
+			</form>
+			<form action="/delete" method="post">
+				<input type="number" style="display: none;"
+					name="noteId" value="<%= element.noteId %>">
+				<button type="submit"
+						style="margin: 0px 4px;">Report!</button>
 			</form>
 
 	</div>

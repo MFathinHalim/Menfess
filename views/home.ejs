@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<title>Note Keeper</title>
+		<style>
+			@font-face {
+				font-family: 'Comicsans';
+				src: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+			}
+			@media print {
+				html, body {
+				display: none;  /* hide whole page */
+				}
+			}
+			@import url(https://fonts.googleapis.com/css?family=Khula:700);
+			html {
+				scroll-behavior: smooth
+			}
+			body {
+			/*font-family:'Courier New', Courier, monospace;*/
+			font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+			color: #E16428;
+			background-image: "assets/bg.jpeg";
+			background: #363333;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-position: center;    
+			text-align: center;
+			animation: fadeInAnimation ease 3s;
+			animation-iteration-count: 1;
+			animation-fill-mode: forwards;
+			}
+
+			.reveal{
+				position: relative;
+				transform: translateY(150px);
+				opacity: 0;
+				transition: 2s all ease;
+				animation-play-state: paused;
+				animation-delay: calc(var(--scroll) * -1s);
+			}
+			.reveal.active{
+				transform: translateY(0);
+				opacity: 1;
+			}
+			
+			@keyframes fadeInAnimation {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+
+			.console-container {
+			
+			font-size:3vw;
+			text-align:center;
+			height:3vw;
+			color:#E16428;
+			
+			}
+			h3, h4, h1{
+				color:#EEEEEE;
+			}
+
+			.card {
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+				background-color: #272121;
+				border-radius: 10px;
+				padding: 10px;
+				margin-top: 20px;
+				margin-left: 5px;
+				position:sticky;
+				
+			}
+
+			.card2 {
+				flex-grow: 1;
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+				background-color: #2f2828;
+				border-radius: 24px;
+				padding: 10px;
+				margin-top: 20px;
+				margin: 20px;
+				
+			}
+			.card4 {
+				flex-grow: 1;
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+				background-color: #272121;
+				border-radius: 24px;
+				padding: 10px;
+				margin-top: 20px;
+				margin: 20px;
+				
+			}
+
+			button{
+				flex: 1 1 0px;
+				flex-flow: wrap;
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+				background-color: #363333;
+				color:#EEEEEE;
+				border-radius: 20px;
+				padding: 20px;
+				margin-top: 20px;
+				text-align: center;
+				font-size: 5vw;
+				flex-basis: 25%;
+				transition: all .2s ease-in-out;
+				border:none;
+				opacity:1;        
+			}
+
+			img:hover{
+				opacity:0.8;
+				-webkit-transform: scale(2);
+				-ms-transform: scale(2);
+				transform: scale(2);
+				cursor: grab;
+				cursor: -moz-grab;
+				cursor: -webkit-grab;
+			}
+			img:active{
+				cursor: grabbing;
+				cursor: -moz-grabbing;
+				cursor: -webkit-grabbing;
+			}
+			.imgland{
+				margin-top: 10px;
+				rotate : -90deg;
+				width: 15vw;
+				border-radius: 24px;
+				transition: all .2s ease-in-out;
+				
+			}
+			.imgland:hover{
+				opacity:0.8;
+				-webkit-transform: scale(2);
+				-ms-transform: scale(2);
+				transform: scale(2);
+			}
+			#fotosekolah{
+				margin-top:10px;
+				width: 50vw;
+
+				border-radius: 24px;
+				transition: all .2s ease-in-out;
+			}
+			.container {
+				width: 800px;
+				border: 2px solid black;
+				margin: 0 auto;
+			}
+			
+			.flex-column {
+				display: flex;
+				flex-direction: column;
+			}
+			
+			.flex-row {
+				display: flex;
+				flex-direction: row;
+				flex-grow: 1;
+			}
+			
+			.box {
+				flex-basis: 25%;
+				text-align: center;
+				flex-grow: 1;
+
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+				background-color: #2f2828;
+				border-radius: 24px;
+				margin-top: 20px;
+			}
+			a {
+				color:#E16428;
+			}
+			#content {
+				display: flex;
+				flex-direction: column;
+			}
+			button:hover{
+				opacity:0.8;
+				transform: scale(1.1);
+			}
+			#logo{
+				box-shadow: 0 0px 0px 0 #15133c00;
+			}
+			img{
+				margin-top:10px;
+				width: 25vw;
+				border-radius: 24px;
+				transition: all .2s ease-in-out;
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+				
+			}
+			strong{
+				color:#E16428;
+			}
+				
+			#oren{
+				color:orange;
+			}
+			footer {
+			position: fixed;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			background-color: red;
+			color: white;
+			text-align: center;
+			}
+			button:active{transform: scale(0.9);}
+			@import url(https://fonts.googleapis.com/css?family=Khula:700);
+			@media screen and (max-width: 1146px) {
+				body {
+					font-size: 6vw;
+				}
+				
+				header{
+					font-size: 6vw;
+				}
+				
+				img{
+					width: 25vw;
+				}
+				button{
+					font-size:6vw;
+				}
+			}
+			@media screen and (min-width: 1146px){
+				img:hover{
+					opacity:0.8;
+					-webkit-transform: scale(1.5);
+					-ms-transform: scale(1.5);
+					transform: scale(1.5);
+				}
+				#fotosekolah{
+					width: 60vw;
+				}
+				img{
+					width: 10vw;
+				}
+				body {
+					font-size: 2vw;
+				}
+				button{
+					font-size:1.5vw;
+				}
+				header{
+					font-size: 2vw;
+				}
+				img{
+					width: 15vw;
+				}
+
+				button:active{transform: scale(0.9);}
+ }
+		</style>
+	</head>
+	
+	<body>
+	<h1>Menfess!</h1>
+
+	<div class="card">
+
+		<% data.forEach(element=> { %>
+
+			<form action="/update" method="post">
+				<input type="number" style="display: none;"
+					name="noteId" value="<%= element.noteId %>">
+				<article class="card2">
+					<h3 type="text" rows="6"readonly="true"
+						placeholder="Type Here..." name="noteContent"
+						value="<%= element.noteContent %>">
+						<%= element.noteContent %> 
+					</h3>
+					<h4 type="text" rows="6"readonly="true"
+						placeholder="Type Here..." name="noteContent"
+						value="from: <%= element.noteName %>">
+						from : <%= element.noteName %> 
+					</h4>
+
+				</article>
+				<br>
+			</form>
+
+			<form action="/delete" method="post">
+				<input type="number" style="display: none;"
+					name="noteId" value="<%= element.noteId %>">
+				<button type="submit"
+						style="margin: 0px 4px;">Report!</button>
+			</form>
+			<% }) %>
+	</div>
+	
+</body>
+<footer class="card4">
+	<form action="/" method="post" id="add" style="display: none;">
+		<p>Add Note</p>
+		<input type="number" style="display: none;"
+			name="noteId">
+		<textarea type="text" rows="6" cols="30"
+				placeholder="Type Here..."
+				name="noteContent"></textarea>
+		<textarea type="text" rows="6" cols="30"
+				placeholder="Your Name?"
+				name="noteName"></textarea>
+		<br>
+		<button type="submit">POST!</button>
+	</form>
+	<button onclick="myFunction()">Mau Ngepost?</button>
+    <h5>©Created By <strong>M.Fathin Halim</strong></h5>
+</footer>
+<script>
+	function myFunction() {
+	var x = document.getElementById("add");
+	if (x.style.display === "none") {
+		x.style.display = "block";
+	} else {
+		x.style.display = "none";
+	}
+	}
+</script>
+</html>

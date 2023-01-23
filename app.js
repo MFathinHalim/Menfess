@@ -26,6 +26,7 @@ app.get("/", function (req, res) {
 
 app.post("/", (req, res) => {
 	const noteContent = req.body.noteContent
+	const noteName = req.body.noteName
     const noteNameTo = req.body.noteNameTo
 	const noteId = notes.length + 1;
 
@@ -45,7 +46,7 @@ app.post('/update', (req, res) => {
 	var noteId = req.body.noteId;
 	var noteContent = req.body.noteContent;
     var noteName = req.body.noteName;
-	var noteNameTo = req.body.noteName;
+	var noteNameTo = req.body.noteNameTo;
 	
 	notes.forEach(note => {
 		if (note.noteId == noteId) {

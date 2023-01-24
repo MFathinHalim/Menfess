@@ -253,25 +253,22 @@
 				button:active{transform: scale(0.9);}
  }
  .float{
-	position:fixed;
-	width:100px;
-	height:100px;
-	bottom:40px;
-	right:40px;
-	color:#FFF;
-	border-radius:50px;
-	text-align:center;
-	box-shadow: 2px 2px 3px #999;
-}
-#add{
-	width:400px;
-            height:400px;
-            position: fixed;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: #2f2828;
-}
-
-		</style>
+	 position:fixed;
+	 width:100px;
+	 height:100px;
+	 bottom:40px;
+	 right:40px;
+	 color:#FFF;
+	 border-radius:50px;
+	 text-align:center;
+	 box-shadow: 2px 2px 3px #999;
+	}
+	#add{
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+		background-color: #2f2828;
+	}
+	
+	</style>
 		
 	</head>
 	<body>
@@ -282,6 +279,19 @@
 		<footer class="card4">
 			<h5>©Created By <strong>M.Fathin Halim</strong></h5>
 		</footer>
+		<form action="/" method="post" id="add" style="display: none;">
+			<p>Add Note</p>
+			<input type="number" style="display: none;"
+				name="noteId">
+			<textarea type="text" rows="6" cols="30"
+					placeholder="Type Here..."
+					name="noteContent"></textarea>
+			<textarea type="text" rows="6" cols="30"
+					placeholder="Your Name? or For?"
+					name="noteName"></textarea>
+			<br>
+			<button type="submit">POST!</button>
+		</form>
 		
 		
 
@@ -315,19 +325,6 @@
 			<% }) %>
 		</div>
 		<button class="float" onclick="myFunction()">+</button>
-		<form action="/" method="post" id="add" style="display: none;">
-			<p>Add Note</p>
-			<input type="number" style="display: none;"
-				name="noteId">
-			<textarea type="text" rows="6" cols="30"
-					placeholder="Type Here..."
-					name="noteContent"></textarea>
-			<textarea type="text" rows="6" cols="30"
-					placeholder="Your Name? or For?"
-					name="noteName"></textarea>
-			<br>
-			<button type="submit">POST!</button>
-		</form>
 		
 	
 </body>

@@ -345,20 +345,23 @@
 
 <script>
 	function myFunction() {
-	var x = document.getElementById("add");
-	if (x.style.display === "none") {
-		x.style.display = "block";
-	} else {
-		x.style.display = "none";
-	}
+		var x = document.getElementById("add");
+		if (x.style.display === "none") {
+			x.style.display = "block";
+		} else {
+			x.style.display = "none";
+		}
+		document.body.scrollTop = 0; // For Safari
+		document.documentElement.scrollTop = 0;
 	}
 	function myFunction2() {
-	var x = document.getElementById("comment");
-	if (x.style.display === "none") {
-		x.style.display = "block";
-	} else {
-		x.style.display = "none";
+		var x = document.getElementById("comment");
+		if (x.style.display === "none") {
+			x.style.display = "block";
+		} else {
+			x.style.display = "none";
+		}
 	}
-	}
+
 </script>
 </html>

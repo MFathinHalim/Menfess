@@ -263,6 +263,17 @@
 	 text-align:center;
 	 box-shadow: 2px 2px 3px #999;
 	}
+	.float2{
+	 position:fixed;
+	 width:100px;
+	 height:100px;
+	 bottom:40px;
+	 left:40px;
+	 color:#FFF;
+	 border-radius:50px;
+	 text-align:center;
+	 box-shadow: 2px 2px 3px #999;
+	}
 	#add{
 		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
 		background-color: #2f2828;
@@ -325,6 +336,9 @@
 			<% }) %>
 		</div>
 		<button class="float" onclick="myFunction()">+</button>
+		<form action="/r" method="post" id="add" style="display: none;">
+			<button class="float" type="submit">R</button>
+		</form>
 		
 	
 </body>

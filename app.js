@@ -123,9 +123,15 @@ app.post('/deleteCom', (req, res) => {
 	})
 })
 
+app.post('/r', (req, res) => {
+
+	res.render("home", {
+		data: notes
+	})
+})
+
 
 app.listen(3000, (req, res) => {
 	Host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
 	console.log("App is running on port 3000")
 })
-

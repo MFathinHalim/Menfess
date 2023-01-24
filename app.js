@@ -1,11 +1,15 @@
 const path = require('path');
 const express = require('express')
 const bodyParser = require('body-parser')
-
 const notes = [{
 		noteId: 1,
 		noteContent: "Hai.",
         noteName: "Doma"
+	},
+	{
+		noteId: 2,
+		noteContent: "Selamat Datang di Menfess! Medsos anak muda Rejang Lebong!",
+		noteName: "Doma"
 	}
 ]
 
@@ -29,16 +33,16 @@ app.get("/", function (req, res) {
 app.post("/", (req, res) => {
 	const noteContent = req.body.noteContent
     const noteName = req.body.noteName
-	const noteId = notes.length + 1;
-
+	const noteId = Math.floor(Math.random() * 500);
+	
     // All good
-
+	
 	notes.push({
 		noteId: noteId,
 		noteContent: noteContent,
         noteName: noteName,
 	})
-
+	
 	res.render("home", {
 		data: notes
 	})
@@ -49,9 +53,9 @@ app.post('/comment', (req, res) => {
     const noteName = req.body.noteNameComment
 	const noteId = req.body.noteId;
 	const noteIdComment = noteId + "y";
-
+	
     // All good
-
+	
 	notes.push({
 		noteId: noteId,
 		noteIdComment: noteIdComment,
@@ -59,7 +63,7 @@ app.post('/comment', (req, res) => {
         noteNameComment: noteName,
 		
 	})
-
+	
 	res.render("home", {
 		data: notes
 	})
@@ -73,6 +77,7 @@ app.post('/update', (req, res) => {
 	var noteIdComment = req.body.noteIdComment;
 	var noteContentComment= req.body.noteContentComment;
     var noteNameComment = req.body.noteNameComment;
+	console.log(noteId);
 	
 	
 	notes.forEach(note => {

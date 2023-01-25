@@ -8,7 +8,7 @@ const notes = [{
 	},
 	{
 		noteId: 2,
-		noteContent: "Selamat Datang di Menfess! Medsos anak muda Rejang Lebong!",
+		noteContent: "Selamat Datang di Menfess! Ungkapin Aja!",
 		noteName: "Doma"
 	}
 ]
@@ -36,12 +36,13 @@ app.post("/", (req, res) => {
 	const noteId = Math.floor(Math.random() * 500);
 	
     // All good
-	
-	notes.push({
-		noteId: noteId,
-		noteContent: noteContent,
-        noteName: noteName,
-	})
+	if(noteName!="" && noteContent!=""){
+		notes.push({
+			noteId: noteId,
+			noteContent: noteContent,
+			noteName: noteName,
+		})
+	}
 	
 	res.render("home", {
 		data: notes
@@ -55,14 +56,15 @@ app.post('/comment', (req, res) => {
 	const noteIdComment = noteId + "y";
 	
     // All good
-	
-	notes.push({
-		noteId: noteId,
-		noteIdComment: noteIdComment,
-		noteContentComment: noteContent,
-        noteNameComment: noteName,
-		
-	})
+	if(noteName!="" && noteContent!=""){
+		notes.push({
+			noteId: noteId,
+			noteIdComment: noteIdComment,
+			noteContentComment: noteContent,
+			noteNameComment: noteName,
+			
+		})
+	}
 	
 	res.render("home", {
 		data: notes
@@ -89,8 +91,10 @@ app.post('/update', (req, res) => {
 			}
 		}
 		if (note.noteIdComment == noteIdComment) {
-			note.noteContentComment = noteContentComment;
-			note.noteNameComment = noteNameComment;
+			if(noteNameComment!="" && noteContentComment!=""){
+				note.noteContentComment = noteContentComment;
+				note.noteNameComment = noteNameComment;
+			}
 			
 		}
 		

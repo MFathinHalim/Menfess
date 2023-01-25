@@ -82,8 +82,11 @@ app.post('/update', (req, res) => {
 	
 	notes.forEach(note => {
 		if (note.noteId == noteId) {
-			note.noteContent = noteContent;
-            note.noteName = noteName;
+			if(noteName!="" && noteContent!=""){
+				note.noteContent = noteContent;
+				note.noteName = noteName;
+
+			}
 		}
 		if (note.noteIdComment == noteIdComment) {
 			note.noteContentComment = noteContentComment;

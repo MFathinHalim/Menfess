@@ -155,19 +155,6 @@ app.post('/delete', (req, res) => {
 
 
 app.post('/r', (req, res) => {
-	sql = 'SELECT * FROM data';
-		db.all(sql, [], (err, rows) => {
-			if(err) return console.error(err.message);
-			rows.forEach((row) => {
-				console.log(row);
-				data.push({
-					noteId:row.noteId,
-					noteContent: row.noteContent,
-					noteName: row.noteName
-				});
-				
-			});
-});
 	res.render("home", {
 		data: data
 	})

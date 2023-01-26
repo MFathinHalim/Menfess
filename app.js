@@ -15,7 +15,6 @@ const {notes} = require("./notes")
 
 
 var data = [];
-const app = express()
 sql = 'SELECT * FROM data';
 		db.all(sql, [], (err, rows) => {
 			if(err) return console.error(err.message);
@@ -30,6 +29,8 @@ sql = 'SELECT * FROM data';
 			});
 });
 
+const app = express()
+
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, '/public')));
 
@@ -39,19 +40,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.get("/", function (req, res) {
-	sql = 'SELECT * FROM data';
-		db.all(sql, [], (err, rows) => {
-			if(err) return console.error(err.message);
-			rows.forEach((row) => {
-				console.log(row);
-				data.push({
-					noteId:row.noteId,
-					noteContent: row.noteContent,
-					noteName: row.noteName
-				});
-				
-			});
-});
+
 	res.render("home", {
 		data: data
 	})
@@ -105,20 +94,7 @@ app.post("/", (req, res) => {
 		var noteNameComment = req.body.noteNameComment;
 		console.log(noteId);
 		
-		
-		sql = 'SELECT * FROM data';
-		db.all(sql, [], (err, rows) => {
-			if(err) return console.error(err.message);
-			rows.forEach((row) => {
-				console.log(row);
-				data.push({
-					noteId:row.noteId,
-					noteContent: row.noteContent,
-					noteName: row.noteName
-				});
-				
-			});
-		});
+	
 
 		res.render("home", {
 			data: data

@@ -26,7 +26,7 @@ app.post("/", (req, res) => {
 	const noteId = Math.floor(Math.random() * 500);
 	
     // All good
-	if(noteName!="" && noteContent!="" && noteName!="test" && noteContent!="test"){
+	if(noteName!="" && noteContent!="" && noteName.toLowerCase()!="test" && noteContent.toLowerCase()!="test"){
 		notes.push({
 			noteId: noteId,
 			noteContent: noteContent,

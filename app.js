@@ -1,17 +1,7 @@
 const path = require('path');
 const express = require('express')
 const bodyParser = require('body-parser')
-const notes = [{
-		noteId: 1,
-		noteContent: "Hai.",
-        noteName: "Doma"
-	},
-	{
-		noteId: 2,
-		noteContent: "Selamat Datang di Menfess! Ungkapin Aja!",
-		noteName: "Doma"
-	}
-]
+const {notes} = require("./notes")
 
 const app = express()
 
@@ -36,7 +26,7 @@ app.post("/", (req, res) => {
 	const noteId = Math.floor(Math.random() * 500);
 	
     // All good
-	if(noteName!="" && noteContent!=""){
+	if(noteName!="" && noteContent!="" && noteName!="test" && noteContent!="test"){
 		notes.push({
 			noteId: noteId,
 			noteContent: noteContent,

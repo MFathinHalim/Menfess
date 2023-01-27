@@ -2,9 +2,9 @@
   "name": "app2",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js, admin.js",
+  "main": "index.js",
   "scripts": {
-    "start-prod": "NODE_ENV=production node admin.js",
+    "start-prod": "NODE_ENV=production node index.js",
     "start-dev": "nodemon admin.js"
   },
   "keywords": [],

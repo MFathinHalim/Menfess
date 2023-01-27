@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js, admin.js",
   "scripts": {
-    "start-prod": "NODE_ENV=production node app.js",
+    "start-prod": "NODE_ENV=production node admin.js",
     "start-dev": "nodemon admin.js"
   },
   "keywords": [],

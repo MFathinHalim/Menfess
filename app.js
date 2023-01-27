@@ -14,7 +14,7 @@ const db = new sqlite3.Database("./test.db", sqlite3.OPEN_READWRITE, (err) => {
 const {notes} = require("./notes")
 
 
-var data = [];
+var data = notes;
 sql = 'SELECT * FROM data';
 		db.all(sql, [], (err, rows) => {
 			if(err) return console.error(err.message);

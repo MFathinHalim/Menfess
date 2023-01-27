@@ -2,10 +2,10 @@
   "name": "app2",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "app.js, admin.js",
   "scripts": {
     "start-prod": "NODE_ENV=production node app.js",
-    "start-dev": "nodemon app.js"
+    "start-dev": "nodemon admin.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,9 @@
   "dependencies": {
     "body-parser": "^1.20.1",
     "ejs": "^3.1.8",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "multer": "^1.4.5-lts.1",
+    "sqlite3": "^5.1.4"
   }
 }

@@ -329,7 +329,11 @@
 					</article>
 					<br>
 				</form>
-				
+				<form action="/delete" method="post">
+					<input type="number" style="display: none;"
+						name="noteId" value="<%= element.noteId %>">
+					<button type="submit">Delete!</button>
+				</form>
 			</article>
 			<% }) %>
 		</div>

@@ -15,19 +15,6 @@ const {notes} = require("./notes")
 
 
 var data = notes;
-sql = 'SELECT * FROM data';
-		db.all(sql, [], (err, rows) => {
-			if(err) return console.error(err.message);
-			rows.forEach((row) => {
-				console.log(row);
-				data.push({
-					noteId:row.noteId,
-					noteContent: row.noteContent,
-					noteName: row.noteName
-				});
-				
-			});
-});
 
 const app = express()
 

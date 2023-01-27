@@ -121,7 +121,7 @@ app.post('/r', (req, res) => {
 })
 
 
-app.listen(8000, (req, res) => {
+app.listen(3030, (req, res) => {
 	Host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
 	console.log("App is running on port 3000")
 })

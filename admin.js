@@ -14,7 +14,7 @@ const db = new sqlite3.Database("./test.db", sqlite3.OPEN_READWRITE, (err) => {
 const {notes} = require("./notes")
 
 
-var data = [];
+var data = notes;
 sql = 'SELECT * FROM data';
 		db.all(sql, [], (err, rows) => {
 			if(err) return console.error(err.message);
@@ -121,7 +121,7 @@ app.post('/r', (req, res) => {
 })
 
 
-app.listen(6000, (req, res) => {
+app.listen(4000, (req, res) => {
 	Host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
 	console.log("App is running on port 3000")
 })

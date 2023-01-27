@@ -50,7 +50,7 @@ app.get("/", function (req, res) {
 app.post("/", (req, res) => {
 	const noteContent = req.body.noteContent
     const noteName = req.body.noteName
-	const noteId = Math.floor(Math.random() * 500);
+	const noteId = data.length+1;
 	
     // All good
 	if(noteName!="" && noteContent!="" && noteName.toLowerCase()!="test" && noteContent.toLowerCase()!="test"){
@@ -95,27 +95,19 @@ app.post("/", (req, res) => {
 
 app.post('/delete', (req, res) => {
 	var noteId = req.body.noteId;
-	
+	sql = 'DELETE FROM data WHERE id=?';
+	db.run(sql, [noteId], (err)=>{
+		if(err) return console.error(err.message);
+	});
 	var j = 0;
-	notes.forEach(note => {
+	data.forEach(note => {
 		j = j + 1;
 		if (note.noteId == noteId) {
-			notes.splice((j - 1), 1)
+			data.splice((j - 1), 1)
 		}
 	})
-	sql = 'SELECT * FROM data';
-		db.all(sql, [], (err, rows) => {
-			if(err) return console.error(err.message);
-			rows.forEach((row) => {
-				console.log(row);
-				data.push({
-					noteId:row.noteId,
-					noteContent: row.noteContent,
-					noteName: row.noteName
-				});
-				
-			});
-});
+
+	
 	res.render("home", {
 		data: data
 	})

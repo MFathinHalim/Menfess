@@ -347,13 +347,13 @@
 						</h4>
 						<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
 							
-						<form action="/delete" method="post">
-							<input type="number" style="display: none;"
-								name="noteId" value="<%= element.noteId %>">
-							<button type="submit">Delete!</button>
-						</form>
 					</article>
 					<br>
+				</form>
+				<form action="/delete" method="post">
+					<input type="number" style="display: none;"
+						name="noteId" value="<%= element.noteId %>">
+					<button type="submit">Delete!</button>
 				</form>
 			</article>
 			<% }) %>

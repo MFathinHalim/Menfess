@@ -12,7 +12,23 @@ const db = new sqlite3.Database("./test.db", sqlite3.OPEN_READWRITE, (err) => {
 //db.run(sql);
 
 const {notes} = require("./notes")
-
+function shuffle(array) {
+	let currentIndex = array.length,  randomIndex;
+	// While there remain elements to shuffle.
+	while (currentIndex != 0) {
+  
+	  // Pick a remaining element.
+	  randomIndex = Math.floor(Math.random() * currentIndex);
+	  currentIndex--;
+  
+	  // And swap it with the current element.
+	  [array[currentIndex], array[randomIndex]] = [
+		array[randomIndex], array[currentIndex]];
+	}
+  
+	return array;
+  }
+  
 
 var data = notes;
 sql = 'SELECT * FROM data';
@@ -40,7 +56,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.get("/", function (req, res) {
-
+	shuffle(data);
 	res.render("home", {
 		data: data
 	})
@@ -53,7 +69,7 @@ app.post("/", (req, res) => {
 	const noteId = data.length+1;
 	
     // All good
-	if(noteName!="" && noteContent!="" && noteName.toLowerCase()!="test" && noteContent.toLowerCase()!="test"){
+	if(noteName && noteContent&& noteName.toLowerCase()!=="test" && noteContent.toLowerCase()!=="test"){
 		//notes.push({
 			//noteId: noteId,
 			//noteContent: noteContent,
@@ -85,6 +101,7 @@ app.post("/", (req, res) => {
 		var noteContentComment= req.body.noteContentComment;
 		var noteNameComment = req.body.noteNameComment;
 		console.log(noteId);
+		shuffle(data);
 		
 	
 
@@ -115,6 +132,7 @@ app.post('/delete', (req, res) => {
 
 
 app.post('/r', (req, res) => {
+	shuffle(data);
 	res.render("home", {
 		data: data
 	})

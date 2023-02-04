@@ -22,7 +22,7 @@
 			font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 			color: #E16428;
 			background-image: "assets/bg.jpeg";
-			background: #363333;
+			background: #1F1D36;
 			background-repeat: no-repeat;
 			background-attachment: fixed;
 			background-position: center;    
@@ -68,7 +68,7 @@
 
 			.card {
 				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: #272121;
+				background-color: #433a52;
 				border-radius: 10px;
 				padding: 10px;
 				margin-top: 20px;
@@ -80,7 +80,7 @@
 			.card2 {
 				flex-grow: 1;
 				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: #2f2828;
+				background-color: #3F3351;
 				border-radius: 24px;
 				padding: 10px;
 				margin-top: 20px;
@@ -90,7 +90,7 @@
 			.card4 {
 				flex-grow: 1;
 				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: #272121;
+				background-color: #3F3351;
 				border-radius: 24px;
 				padding: 10px;
 				margin-top: 20px;
@@ -102,7 +102,7 @@
 				flex: 1 1 0px;
 				flex-flow: wrap;
 				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: #363333;
+				background-color: #864879;
 				color:#EEEEEE;
 				border-radius: 20px;
 				padding: 20px;
@@ -178,7 +178,7 @@
 				margin-top: 20px;
 			}
 			a {
-				color:#E16428;
+				color:#827397;
 			}
 			#content {
 				display: flex;
@@ -200,11 +200,11 @@
 				
 			}
 			strong{
-				color:#E16428;
+				color:#827397;
 			}
 				
 			#oren{
-				color:orange;
+				color: #D8B9C3;
 			}
 			button:active{transform: scale(0.9);}
 			@import url(https://fonts.googleapis.com/css?family=Khula:700);
@@ -273,38 +273,56 @@
 	 border-radius:50px;
 	 text-align:center;
 	 box-shadow: 2px 2px 3px #999;
-	}
-	#add{
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-		background-color: #2f2828;
-	}
+	}.
+#reload {
+  overflow: hidden;
+  transition: transform 0.3s ease-out;
+  height: auto;
+  transform: scaleY(1);
+  transform-origin: top;
+  
+}	
+#reload.hidden {
+  transform: scaleY(0);
+}
+
 	
 	</style>
 		
 	</head>
 	<body>
 		<h1>Menfess!</h1>
-		<footer class="card4">
-			<h5>©Created By <strong>M.Fathin Halim</strong></h5>
-		</footer>
-		<form action="/" method="post" id="add" style="display: none;">
+		<form action="/" method="post" id="add" class="card4" style="display: none;">
 			<p>What is your think?</p>
 			<input type="number" style="display: none;"
-				name="noteId">
+			name="noteId">
 			<textarea type="text" rows="6" cols="30"
-					placeholder="Type Here..."
-					name="noteContent"></textarea>
+			placeholder="Type Here..."
+			name="noteContent"></textarea>
 			<textarea type="text" rows="6" cols="30"
-					placeholder="Your Name? or For?"
-					name="noteName"></textarea>
+			placeholder="Your Name? or For?"
+			name="noteName"></textarea>
 			<br>
 			<button type="submit">POST!</button>
 		</form>
+		<footer class="card4">
+			<h5 style="color: #D8B9C3;">©Created By <strong>M.Fathin Halim</strong></h5>
+		</footer>
 		
 		
 
 	<div class="card">
-
+		<article class="card2">
+			<h3 type="text" rows="6"readonly="true"
+				placeholder="Type Here...">
+				Selamat Datang di Menfess! Ungkapin Aja!
+			</h3>
+			
+			<h4 id="oren" type="text" rows="6"readonly="true"
+				placeholder="Type Here...">
+				Doma
+			</h4>
+		</article>
 		<% data.forEach(element=> { %>
 			<article class="card2">
 					<form action="/update" method="post">
@@ -334,7 +352,7 @@
 		</div>
 		<button class="float" onclick="myFunction()">+</button>
 		<form action="/r" method="post" id="add">
-			<button class="float2" type="submit">R</button>
+			<button class="float2" type="submit" id="reload" style="display: none;">R</button>
 		</form>
 		
 	
@@ -350,6 +368,18 @@
 		}
 		document.body.scrollTop = 0; // For Safari
 		document.documentElement.scrollTop = 0;
+	}
+	let mybutton = document.getElementById("reload");
+
+	// When the user scrolls down 20px from the top of the document, show the button
+	window.onscroll = function() {scrollFunction()};
+
+	function scrollFunction() {
+	if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
+		mybutton.style.display = "block";
+	} else {
+		mybutton.style.display = "none";
+	}
 	}
 	function myFunction2() {
 		var x = document.getElementById("comment");

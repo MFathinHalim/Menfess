@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express')
 const bodyParser = require('body-parser')
+var fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 let sql;
 
@@ -91,8 +92,16 @@ app.post('/delete', (req, res) => {
 		j = j + 1;
 		if (note.noteId == noteId) {
 			data.splice((j - 1), 1)
+			try {
+				fs.unlinkSync('public/images/uploads/image-'+noteId+'.jpg');
+			  
+				console.log("Delete File successfully.");
+		  } catch (error) {
+			console.log(error);
+		  }
 		}
 	})
+	
 
 	
 	res.render("admin", {

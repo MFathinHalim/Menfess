@@ -3,6 +3,16 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const sqlite3 = require('sqlite3').verbose();
 let sql;
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/images/uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, `image-${data.length+1}.jpg`);
+  }
+});
+const upload = multer({ storage: storage });
 
 const db = new sqlite3.Database("./test.db", sqlite3.OPEN_READWRITE, (err) => {
 	if (err) return console.error(err.message);
@@ -62,8 +72,14 @@ app.get("/", function (req, res) {
 	})
 })
 
-
-app.post("/", (req, res) => {
+app.post('/upload-image', upload.single('image'), (req, res) => {
+	// req.file contains information about the uploaded file
+	// You can save the file information to your database here
+	res.render("home", {
+		data: data
+	})
+});
+app.post("/",upload.single('image'), (req, res) => {
 	const noteContent = req.body.noteContent
     const noteName = req.body.noteName
 	const noteId = data.length+1;

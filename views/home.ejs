@@ -21,8 +21,7 @@
 			/*font-family:'Courier New', Courier, monospace;*/
 			font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 			color: #E16428;
-			background-image: "assets/bg.jpeg";
-			background: #1F1D36;
+			background-image: url("/images/8753.jpg");
 			background-repeat: no-repeat;
 			background-attachment: fixed;
 			background-position: center;    
@@ -68,7 +67,7 @@
 
 			.card {
 				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: #433a52;
+				background-color: rgba(67, 58, 82, 0.4);
 				border-radius: 10px;
 				padding: 10px;
 				margin-top: 20px;
@@ -80,9 +79,10 @@
 			.card2 {
 				flex-grow: 1;
 				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: #3F3351;
+				background-color: rgba(63, 51, 81, 0.6);
 				border-radius: 24px;
 				padding: 10px;
+				
 				margin-top: 20px;
 				margin: 20px;
 				
@@ -90,7 +90,7 @@
 			.card4 {
 				flex-grow: 1;
 				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: #3F3351;
+				background-color: rgba(67, 58, 82, 0.4);
 				border-radius: 24px;
 				padding: 10px;
 				margin-top: 20px;
@@ -188,8 +188,9 @@
 				opacity:0.8;
 				transform: scale(1.1);
 			}
-			#logo{
-				box-shadow: 0 0px 0px 0 #15133c00;
+			#gambar{
+				width: 15vw;
+				opacity: 0.8;
 			}
 			img{
 				margin-top:10px;
@@ -197,6 +198,7 @@
 				border-radius: 24px;
 				transition: all .2s ease-in-out;
 				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+				opacity: 0.5;
 				
 			}
 			strong{
@@ -218,7 +220,7 @@
 				}
 				
 				img{
-					width: 25vw;
+					width: 50vw;
 				}
 				button{
 					font-size:6vw;
@@ -235,7 +237,7 @@
 					width: 60vw;
 				}
 				img{
-					width: 10vw;
+					width: 1080px;
 				}
 				body {
 					font-size: 2vw;
@@ -247,7 +249,7 @@
 					font-size: 2vw;
 				}
 				img{
-					width: 15vw;
+					width: 1080px;
 				}
 
 				button:active{transform: scale(0.9);}
@@ -261,6 +263,7 @@
 	 color:#FFF;
 	 border-radius:50px;
 	 text-align:center;
+	 opacity: 0.3;
 	 box-shadow: 2px 2px 3px #999;
 	}
 	.float2{
@@ -271,6 +274,7 @@
 	 left:40px;
 	 color:#FFF;
 	 border-radius:50px;
+	 opacity: 0.3;
 	 text-align:center;
 	 box-shadow: 2px 2px 3px #999;
 	}.
@@ -279,6 +283,7 @@
   transition: transform 0.3s ease-out;
   height: auto;
   transform: scaleY(1);
+  opacity: 0.3;
   transform-origin: top;
   
 }	
@@ -313,23 +318,23 @@
 			</form>
 		</div>
 		<footer class="card4">
-			<h5 style="color: #D8B9C3;">©Created By <strong>M.Fathin Halim</strong></h5>
+			<h5 style="color: #D8B9C3; background-color: rgba(67, 58, 82, 0.4);">©Created By <strong>M.Fathin Halim</strong></h5>
 		</footer>
 		
 		
 
 	<div class="card">
 		<article class="card2">
-			<h3 type="text" rows="6"readonly="true"
-				placeholder="Type Here...">
-				Selamat Datang di Menfess! Ungkapin Aja!
-			</h3>
-			
 			<h4 id="oren" type="text" rows="6"readonly="true"
 				placeholder="Type Here...">
 				Doma
 			</h4>
+			
 			<img src="/images/uploads/first.jpg">
+			<h3 type="text" rows="6"readonly="true"
+				placeholder="Type Here...">
+				Selamat Datang di Menfess! Ungkapin Aja!
+			</h3>
 		</article>
 		<% data.forEach(element=> { %>
 			<article class="card2">
@@ -338,18 +343,18 @@
 						name="noteId" value="<%= element.noteId %>">
 						<article>
 							<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
+							<h4 id="oren" type="text" rows="6"readonly="true"
+							placeholder="Type Here..." name="noteContent"
+							value="<%= element.noteName %>">
+							<%= element.noteName %>
+						</h4>
+						<img src="/images/uploads/image-<%= element.noteId%>.jpg">
 						<h3 type="text" rows="6"readonly="true"
 							placeholder="Type Here..." name="noteContent"
 							value="<%= element.noteContent %>">
 							<%= element.noteContent %> 
 						</h3>
 						
-						<h4 id="oren" type="text" rows="6"readonly="true"
-							placeholder="Type Here..." name="noteContent"
-							value="<%= element.noteName %>">
-							<%= element.noteName %>
-						</h4>
-						<img src="/images/uploads/image-<%= element.noteId%>.jpg">
 						<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
 							
 							

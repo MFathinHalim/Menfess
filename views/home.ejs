@@ -1,408 +1,121 @@
-<!DOCTYPE html>
-<html>
-	
-	<head>
-		<title>Menfess Yuk!</title>
-		<style>
-			@font-face {
-				font-family: 'Comicsans';
-				src: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-			}
-			@media print {
-				html, body {
-				display: none;  /* hide whole page */
-				}
-			}
-			@import url(https://fonts.googleapis.com/css?family=Khula:700);
-			html {
-				scroll-behavior: smooth
-			}
-			body {
-			/*font-family:'Courier New', Courier, monospace;*/
-			font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-			color: #E16428;
-			background-image: url("/images/8753.jpg");
-			background-repeat: no-repeat;
-			background-attachment: fixed;
-			background-position: center;    
-			text-align: center;
-			animation: fadeInAnimation ease 3s;
-			animation-iteration-count: 1;
-			animation-fill-mode: forwards;
-			}
-
-			.reveal{
-				position: relative;
-				transform: translateY(150px);
-				opacity: 0;
-				transition: 2s all ease;
-				animation-play-state: paused;
-				animation-delay: calc(var(--scroll) * -1s);
-			}
-			.reveal.active{
-				transform: translateY(0);
-				opacity: 1;
-			}
-			
-			@keyframes fadeInAnimation {
-				0% {
-					opacity: 0;
-				}
-				100% {
-					opacity: 1;
-				}
-			}
-
-			.console-container {
-			
-			font-size:3vw;
-			text-align:center;
-			height:3vw;
-			color:#E16428;
-			
-			}
-			h3, h4, h1{
-				color:#EEEEEE;
-			}
-
-			.card {
-				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: rgba(67, 58, 82, 0.4);
-				border-radius: 10px;
-				padding: 10px;
-				margin-top: 20px;
-				margin-left: 5px;
-				position:sticky;
-				
-			}
-
-			.card2 {
-				flex-grow: 1;
-				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: rgba(63, 51, 81, 0.6);
-				border-radius: 24px;
-				padding: 10px;
-				
-				margin-top: 20px;
-				margin: 20px;
-				
-			}
-			.card4 {
-				flex-grow: 1;
-				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: rgba(67, 58, 82, 0.4);
-				border-radius: 24px;
-				padding: 10px;
-				margin-top: 20px;
-				margin: 20px;
-				
-			}
-
-			button{
-				flex: 1 1 0px;
-				flex-flow: wrap;
-				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: #864879;
-				color:#EEEEEE;
-				border-radius: 20px;
-				padding: 20px;
-				margin-top: 20px;
-				text-align: center;
-				font-size: 5vw;
-				flex-basis: 25%;
-				transition: all .2s ease-in-out;
-				border:none;
-				opacity:1;        
-			}
-
-			img:hover{
-				opacity:0.8;
-				-webkit-transform: scale(2);
-				-ms-transform: scale(2);
-				transform: scale(2);
-				cursor: grab;
-				cursor: -moz-grab;
-				cursor: -webkit-grab;
-			}
-			img:active{
-				cursor: grabbing;
-				cursor: -moz-grabbing;
-				cursor: -webkit-grabbing;
-			}
-			.imgland{
-				margin-top: 10px;
-				rotate : -90deg;
-				width: 15vw;
-				border-radius: 24px;
-				transition: all .2s ease-in-out;
-				
-			}
-			.imgland:hover{
-				opacity:0.8;
-				-webkit-transform: scale(2);
-				-ms-transform: scale(2);
-				transform: scale(2);
-			}
-			#fotosekolah{
-				margin-top:10px;
-				width: 50vw;
-
-				border-radius: 24px;
-				transition: all .2s ease-in-out;
-			}
-			.container {
-				width: 800px;
-				border: 2px solid black;
-				margin: 0 auto;
-			}
-			
-			.flex-column {
-				display: flex;
-				flex-direction: column;
-			}
-			
-			.flex-row {
-				display: flex;
-				flex-direction: row;
-				flex-grow: 1;
-			}
-			
-			.box {
-				flex-basis: 25%;
-				text-align: center;
-				flex-grow: 1;
-
-				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				background-color: #2f2828;
-				border-radius: 24px;
-				margin-top: 20px;
-			}
-			a {
-				color:#827397;
-			}
-			#content {
-				display: flex;
-				flex-direction: column;
-			}
-			button:hover{
-				opacity:0.8;
-				transform: scale(1.1);
-			}
-			#gambar{
-				width: 15vw;
-				opacity: 0.8;
-			}
-			img{
-				margin-top:10px;
-				width: 25vw;
-				border-radius: 24px;
-				transition: all .2s ease-in-out;
-				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-				opacity: 0.5;
-				
-			}
-			strong{
-				color:#827397;
-			}
-				
-			#oren{
-				color: #D8B9C3;
-			}
-			button:active{transform: scale(0.9);}
-			@import url(https://fonts.googleapis.com/css?family=Khula:700);
-			@media screen and (max-width: 1146px) {
-				body {
-					font-size: 6vw;
-				}
-				
-				header{
-					font-size: 6vw;
-				}
-				
-				img{
-					width: 50vw;
-				}
-				button{
-					font-size:6vw;
-				}
-			}
-			@media screen and (min-width: 1146px){
-				img:hover{
-					opacity:0.8;
-					-webkit-transform: scale(1.5);
-					-ms-transform: scale(1.5);
-					transform: scale(1.5);
-				}
-				#fotosekolah{
-					width: 60vw;
-				}
-				img{
-					width: 1080px;
-				}
-				body {
-					font-size: 2vw;
-				}
-				button{
-					font-size:1.5vw;
-				}
-				header{
-					font-size: 2vw;
-				}
-				img{
-					width: 1080px;
-				}
-
-				button:active{transform: scale(0.9);}
- }
- .float{
-	 position:fixed;
-	 width:100px;
-	 height:100px;
-	 bottom:40px;
-	 right:40px;
-	 color:#FFF;
-	 border-radius:50px;
-	 text-align:center;
-	 opacity: 0.3;
-	 box-shadow: 2px 2px 3px #999;
-	}
-	.float2{
-	 position:fixed;
-	 width:100px;
-	 height:100px;
-	 bottom:40px;
-	 left:40px;
-	 color:#FFF;
-	 border-radius:50px;
-	 opacity: 0.3;
-	 text-align:center;
-	 box-shadow: 2px 2px 3px #999;
-	}.
-#reload {
-  overflow: hidden;
-  transition: transform 0.3s ease-out;
-  height: auto;
-  transform: scaleY(1);
-  opacity: 0.3;
-  transform-origin: top;
-  
-}	
-#reload.hidden {
-  transform: scaleY(0);
-}
-
-	
-	</style>
+	<!DOCTYPE html>
+	<html>
 		
-	</head>
-	<body>
-		<img id="gambar"
-		src="https://lh3.googleusercontent.com/WaUBklf-pAfsxFsxGTcEOK-SA4r6Vq7LM2lwck94TFg3uGIXp3zRuljeHeomUexJXw"
-		alt="Its a rubiks cube!" width="150">
-		<h1>Menfess!</h1>
-		<div id="add" class="card4" style="display: none;">
+		<head>
+			<title>Menfess Yuk!</title>
+			<link rel="stylesheet" href="/css/style.css">
 			
-			<form action="/" method="post" enctype="multipart/form-data">
-				<input type="number" style="display: none;"
-				name="noteId">
-				<input type="file" name="image" />
-				<p>What is your think?</p>
-				<textarea type="text" rows="6" cols="30"
-				placeholder="Type Here..."
-				name="noteContent"></textarea>
-				<textarea type="text" rows="6" cols="30"
-				placeholder="Your Name? or For?"
-				name="noteName"></textarea>
-				<br>
-				<button type="submit">POST!</button>
-			</form>
-		</div>
-		<footer class="card4">
-			<h5 style="color: #D8B9C3;">©Created By <strong>M.Fathin Halim</strong></h5>
-		</footer>
-		
-		
-
-	<div class="card">
-		<article class="card2">
-			<h4 id="oren" type="text" rows="6"readonly="true"
-				placeholder="Type Here...">
-				Doma
-			</h4>
-			
-			<img src="/images/uploads/first.jpg">
-			<h3 type="text" rows="6"readonly="true"
-				placeholder="Type Here...">
-				Selamat Datang di Menfess! Ungkapin Aja!
-			</h3>
-		</article>
-		<% data.forEach(element=> { %>
-			<article class="card2">
-					<form action="/update" method="post">
-						<input type="number" style="display: none;"
-						name="noteId" value="<%= element.noteId %>">
-						<article>
-							<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
-							<h4 id="oren" type="text" rows="6"readonly="true"
-							placeholder="Type Here..." name="noteContent"
-							value="<%= element.noteName %>">
-							<%= element.noteName %>
-						</h4>
-						<img src="/images/uploads/image-<%= element.noteId%>.jpg">
-						<h3 type="text" rows="6"readonly="true"
-							placeholder="Type Here..." name="noteContent"
-							value="<%= element.noteContent %>">
-							<%= element.noteContent %> 
-						</h3>
-						
-						<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
-							
-							
+		</head>
+		<body>
+			<img id="gambar"
+			src="https://lh3.googleusercontent.com/WaUBklf-pAfsxFsxGTcEOK-SA4r6Vq7LM2lwck94TFg3uGIXp3zRuljeHeomUexJXw"
+			alt="Its a rubiks cube!" width="150">
+			<h1>Menfess!</h1>
+			<div class="card">
+				<article class="card2">
+					<h4 id="oren" type="text" rows="6"readonly="true"
+						placeholder="Type Here...">
+						Doma
+					</h4>
+					
+					<img src="/images/uploads/first.jpg">
+					<h3 type="text" rows="6"readonly="true"
+						placeholder="Type Here...">
+						Selamat Datang di Menfess! Ungkapin Aja!
+					</h3>
+				</article>
+				<% data.forEach(element=> { %>
+					<article class="card2">
+							<form action="/update" method="post">
+								<input type="number" style="display: none;"
+								name="noteId" value="<%= element.noteId %>">
+								<article>
+									<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
+									<h4 id="oren" type="text" rows="6"readonly="true"
+									placeholder="Type Here..." name="noteContent"
+									value="<%= element.noteName %>">
+									<%= element.noteName %>
+								</h4>
+								<img src="/images/uploads/image-<%= element.noteId%>.jpg">
+								<h3 type="text" rows="6"readonly="true"
+									placeholder="Type Here..." name="noteContent"
+									value="<%= element.noteContent %>">
+									<%= element.noteContent %> 
+								</h3>
+								
+								<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
+								
+								
+							</article>
+							<br>
+						</form>
 					</article>
-					<br>
-				</form>
-			</article>
-			<% }) %>
-		</div>
-		<button class="float" onclick="myFunction()">+</button>
-		<form action="/r" method="post" id="add">
-			<button class="float2" type="submit" id="reload" style="display: none;">R</button>
-		</form>
+					<% }) %>
+				</div>
+				<div class="background" id="background">
+					<div id="add" class="card4">
+						<button onclick="myFunction()" style="padding-left:20px;">X</button>
+						<form action="/" method="post" enctype="multipart/form-data" id="popup">
+							<input type="number" style="display: none;"
+							name="noteId">
+							<p>Apa Yang Anda Pikirkan?</p>
+							<textarea type="text" rows="6" cols="30"
+							placeholder="Tulis Yang Anda Pikirkan!"
+							name="noteContent"></textarea>
+							<textarea type="text" rows="6" cols="30"
+							placeholder="Nama Anda? atau Untuk Siapa?"
+							name="noteName"></textarea>
+							<br>
+						<label for="choose">Pilih Gambar!</label>
+						<input type="file" name="image" id="choose"/>
+						<br>
+						<button type="submit">Confess!</button>
+					</form>
+				</div>
+
+			</div>
+			<form action="/r" method="post" enctype="multipart/form-data" style="align-items: center;">
+				<button type="submit" id="reload" class="float2" style="display: none; opacity: 0.3;">R</button>
+			</form>
+				
+			<footer class="card4">
+				<h5 style="color: #D8B9C3;">©Created By <strong>M.Fathin Halim</strong></h5>
+			</footer>
+			
+			<button class="float" onclick="myFunction()">+</button>
+			
 		
-	
-</body>
+	</body>
 
-<script>
-	function myFunction() {
-		var x = document.getElementById("add");
-		if (x.style.display === "none") {
-			x.style.display = "block";
-		} else {
-			x.style.display = "none";
+	<script>
+		function myFunction() {
+			var x = document.getElementById("background");
+			if (x.style.display === "none") {
+				x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			}
 		}
-		document.body.scrollTop = 0; // For Safari
-		document.documentElement.scrollTop = 0;
-	}
-	let mybutton = document.getElementById("reload");
+		let mybutton = document.getElementById("reload");
 
-	// When the user scrolls down 20px from the top of the document, show the button
-	window.onscroll = function() {scrollFunction()};
+		// When the user scrolls down 20px from the top of the document, show the button
+		window.onscroll = function() {scrollFunction()};
 
-	function scrollFunction() {
-	if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
-		mybutton.style.display = "block";
-	} else {
-		mybutton.style.display = "none";
-	}
-	}
-	function myFunction2() {
-		var x = document.getElementById("comment");
-		if (x.style.display === "none") {
-			x.style.display = "block";
+		function scrollFunction() {
+		if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
+			mybutton.style.display = "block";
 		} else {
-			x.style.display = "none";
+			mybutton.style.display = "none";
 		}
-	}
+		}
+		function myFunction2() {
+			var x = document.getElementById("comment");
+			if (x.style.display === "none") {
+				x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			}
+		}
 
-</script>
-</html>
+	</script>
+	</html>

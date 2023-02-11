@@ -111,7 +111,7 @@ label{
 	color:#EEEEEE;
 	border-radius: 20px;
 	padding: 20px;
-	margin-top: 20px;
+
 	text-align: center;
 	font-size: 1vw;
 	flex-basis: 25%;
@@ -275,7 +275,6 @@ button:active{transform: scale(0.9);}
 	box-shadow: 2px 2px 3px #999;
 	}
 .float2{
-	position:fixed;
 	width:100px;
 	height:100px;
 	bottom:40px;
@@ -288,7 +287,6 @@ button:active{transform: scale(0.9);}
 	}
 
 #reload {
-	position: fixed;
 	overflow: hidden;
 	width:100px;
 	height:100px;

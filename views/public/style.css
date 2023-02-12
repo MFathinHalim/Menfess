@@ -339,7 +339,7 @@ textarea[type=text]{
 
 /* Add a black background color to the top navigation */
 .sidebar {
-	width: 70px;
+	width: 90px;
 	height: 100%;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
 	background-color: rgba(67, 58, 82, 0.4);
@@ -375,5 +375,5 @@ textarea[type=text]{
   }
   
   nav a:hover {
-	background-color: #d8b9c35f;
+	background-color: #D8B9C3;
   }

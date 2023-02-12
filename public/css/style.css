@@ -224,8 +224,90 @@ button:active{transform: scale(0.9);}
 	button{
 		font-size:6vw;
 	}
+	.sidebar {
+		width: 100px;
+		height: 100%;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+		background-color: rgba(67, 58, 82, 0.4);
+		border-radius: 10px;
+		position: fixed;
+		flex-grow: 1;
+		top: 0;
+		left: 0;
+	  }
+	  
+	  .profile {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 20px;
+		border-bottom: 1px solid #ddd;
+	  }
+	  
+	  .profile img {
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		margin-bottom: 10px;
+	  }
+	  
+	  nav a {
+		display: block;
+		padding: 20px;
+		font-size: 2.7vw;
+		text-decoration: none;
+		color: #D8B9C3;
+		border-bottom: 1px solid #D8B9C3;
+	  }
+	  
+	  nav a:hover {
+		background-color: #D8B9C3;
+	  }
+	  #main{
+		padding-left: 100px;
+	  }
 }
 @media screen and (min-width: 1146px){
+	
+	.sidebar {
+		width: 200px;
+		height: 100%;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+		background-color: rgba(67, 58, 82, 0.4);
+		border-radius: 10px;
+		position: fixed;
+		flex-grow: 1;
+		top: 0;
+		left: 0;
+	  }
+	  
+	  .profile {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 20px;
+		border-bottom: 1px solid #ddd;
+	  }
+	  
+	  .profile img {
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		margin-bottom: 10px;
+	  }
+	  
+	  nav a {
+		display: block;
+		padding: 20px;
+		font-size: 2.7vw;
+		text-decoration: none;
+		color: #D8B9C3;
+		border-bottom: 1px solid #D8B9C3;
+	  }
+	  
+	  nav a:hover {
+		background-color: #D8B9C3;
+	  }
 	img:hover{
 		opacity:0.8;
 		-webkit-transform: scale(1.5);
@@ -253,6 +335,9 @@ button:active{transform: scale(0.9);}
 		width: 1080px;
 	}
 	button:active{transform: scale(0.9);}
+	#main{
+		padding-left: 200px;
+	}
 
 }
 .float{
@@ -338,42 +423,3 @@ textarea[type=text]{
 }
 
 /* Add a black background color to the top navigation */
-.sidebar {
-	width: 100px;
-	height: 100%;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-	background-color: rgba(67, 58, 82, 0.4);
-	border-radius: 10px;
-	position: fixed;
-	flex-grow: 1;
-	top: 0;
-	left: 0;
-  }
-  
-  .profile {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	padding: 20px;
-	border-bottom: 1px solid #ddd;
-  }
-  
-  .profile img {
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	margin-bottom: 10px;
-  }
-  
-  nav a {
-	display: block;
-	padding: 20px;
-	font-size: 2.7vw;
-	text-decoration: none;
-	color: #D8B9C3;
-	border-bottom: 1px solid #D8B9C3;
-  }
-  
-  nav a:hover {
-	background-color: #D8B9C3;
-  }

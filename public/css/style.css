@@ -12,17 +12,17 @@ html {
 	scroll-behavior: smooth
 }
 body {
-/*font-family:'Courier New', Courier, monospace;*/
-font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-color: #D8B9C3;
-background-image: url("/images/8753.jpg");
-background-repeat: no-repeat;
-background-attachment: fixed;
-background-position: center;    
-text-align: center;
-animation: fadeInAnimation ease 3s;
-animation-iteration-count: 1;
-animation-fill-mode: forwards;
+	/*font-family:'Courier New', Courier, monospace;*/
+	font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	color: #D8B9C3;
+	background-image: url("/images/8753.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center;    
+	text-align: center;
+	animation: fadeInAnimation ease 3s;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
 }
 .reveal{
 	position: relative;
@@ -47,10 +47,10 @@ animation-fill-mode: forwards;
 }
 .console-container {
 
-font-size:3vw;
-text-align:center;
-height:3vw;
-color:#E16428;
+	font-size:3vw;
+	text-align:center;
+	height:3vw;
+	color:#E16428;
 
 }
 h3, h4, h1{
@@ -60,9 +60,6 @@ h3, h4, h1{
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
 	background-color: rgba(67, 58, 82, 0.4);
 	border-radius: 10px;
-	padding: 10px;
-	margin-top: 20px;
-	margin-left: 5px;
 	position:sticky;
 	
 }
@@ -193,10 +190,6 @@ a {
 button:hover{
 	opacity:0.8;
 	transform: scale(1.1);
-}
-#gambar{
-	width: 15vw;
-	opacity: 0.8;
 }
 img{
 	margin-top:10px;
@@ -343,3 +336,44 @@ textarea[type=text]{
   	from { opacity: 0 }
 	to { opacity: 1 }
 }
+
+/* Add a black background color to the top navigation */
+.sidebar {
+	width: 100px;
+	height: 100%;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+	background-color: rgba(67, 58, 82, 0.4);
+	border-radius: 10px;
+	position: fixed;
+	flex-grow: 1;
+	top: 0;
+	left: 0;
+  }
+  
+  .profile {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	border-bottom: 1px solid #ddd;
+  }
+  
+  .profile img {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	margin-bottom: 10px;
+  }
+  
+  nav a {
+	display: block;
+	padding: 20px;
+	font-size: 2vw;
+	text-decoration: none;
+	color: #D8B9C3;
+	border-bottom: 1px solid #D8B9C3;
+  }
+  
+  nav a:hover {
+	background-color: #d8b9c35f;
+  }

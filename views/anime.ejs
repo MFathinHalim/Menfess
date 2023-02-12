@@ -1,0 +1,128 @@
+	<!DOCTYPE html>
+	<html>
+		
+		<head>
+			<title>Menfess!</title>
+			<link rel = "icon" href = 
+"https://lh3.googleusercontent.com/WaUBklf-pAfsxFsxGTcEOK-SA4r6Vq7LM2lwck94TFg3uGIXp3zRuljeHeomUexJXw" 
+        type = "image/x-icon">
+			<link rel="stylesheet" href="/css/style.css">
+		</head>
+		
+		<body>
+			<div class="sidebar">
+				<nav>
+					
+				  <a href="/"><img src="https://lh3.googleusercontent.com/WaUBklf-pAfsxFsxGTcEOK-SA4r6Vq7LM2lwck94TFg3uGIXp3zRuljeHeomUexJXw" style="width: 50px;" alt="Profile Picture"></a>
+				  <a onclick="myFunction()">Bahas</a>
+				  <a href="/anime">Reload</a>
+				  <a href="/memes"">Memes</a>
+				  <a href="/anime">Anime</a>
+				  <a href="/">Love</a>
+				  <a>Tentang</a>
+				  <a href="https://Menfess-1.mfathinhalim.repl.co">Rules!</a>
+				</nav>
+			  </div>
+			<article  style="padding-left: 100px;">
+				<footer class="card4">
+					<h5 style="color: #D8B9C3;">©Created By <strong>M.Fathin Halim</strong></h5>
+				</footer>
+				<div class="card">
+					<article class="card2">
+						<h4 id="oren" type="text" rows="6"readonly="true"
+							placeholder="Type Here...">
+							Doma
+						</h4>
+						
+						<img src="/images/uploads/first.jpg">
+						<h3 type="text" ro	ws="6"readonly="true"
+							placeholder="Type Here...">
+							Selamat Datang di Menfess! Ungkapin Aja!
+						</h3>
+					</article>
+					<% data.forEach(element=> { %>
+						<article class="card2">
+								<form action="/updateanime" method="post">
+									<input type="number" style="display: none;"
+									name="noteId" value="<%= element.noteId %>">
+									<article>
+										<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
+										<h4 id="oren" type="text" rows="6"readonly="true"
+										placeholder="Type Here..." name="noteContent"
+										value="<%= element.noteName %>">
+										<%= element.noteName %>
+									</h4>
+									<img src="/images/uploads/anime/image-<%= element.noteId%>.jpg">
+									<h3 type="text" rows="6"readonly="true"
+										placeholder="Type Here..." name="noteContent"
+										value="<%= element.noteContent %>">
+										<%= element.noteContent %> 
+									</h3>
+									
+									<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
+									
+									
+								</article>
+								<br>
+							</form>
+						</article>
+						<% }) %>
+					</div>
+					<div class="background" id="background">
+						<div id="add" class="card4">
+							<button onclick="myFunction()"  class="float2" style="padding-left:20px;">X</button>
+							<form action="/anime" method="post" enctype="multipart/form-data" id="popup">
+								<input type="number" style="display: none;"
+								name="noteId">
+								<p>Apa Yang Anda Pikirkan?</p>
+								<textarea type="text" rows="6" cols="30"
+								placeholder="Tulis Yang Anda Pikirkan!"
+								name="noteContent"></textarea>
+								<textarea type="text" rows="6" cols="30"
+								placeholder="Nama Anda? atau Untuk Siapa?"
+								name="noteName"></textarea>
+								<br>
+							<label for="choose">Pilih Gambar!</label>
+							<input type="file" name="image" id="choose"/>
+							<br>
+							<button type="submit">Confess!</button>
+						</form>
+					</div>
+
+				</div>
+		</article>
+		
+	</body>
+
+	<script>
+		function myFunction() {
+			var x = document.getElementById("background");
+			if (x.style.display === "none") {
+				x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			}
+		}
+		let mybutton = document.getElementById("reload");
+
+		// When the user scrolls down 20px from the top of the document, show the button
+		window.onscroll = function() {scrollFunction()};
+
+		function scrollFunction() {
+		if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
+			mybutton.style.display = "block";
+		} else {
+			mybutton.style.display = "none";
+		}
+		}
+		function myFunction2() {
+			var x = document.getElementById("comment");
+			if (x.style.display === "none") {
+				x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			}
+		}
+
+	</script>
+	</html>

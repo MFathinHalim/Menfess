@@ -1,3 +1,12 @@
-notes = []
+notes = [
 
-module.exports = { notes }
+]
+
+anime = [
+
+]
+
+memes = [
+
+]
+module.exports = { notes,anime,memes }

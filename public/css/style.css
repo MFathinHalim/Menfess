@@ -224,47 +224,41 @@ button:active{transform: scale(0.9);}
 	button{
 		font-size:6vw;
 	}
-	.sidebar {
+	nav img {
 		width: 100px;
-		height: 100%;
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-		background-color: rgba(67, 58, 82, 0.4);
-		border-radius: 10px;
+	}
+	.sidebar {
+		
+		width: 200%;
+
+		bottom: 0;
 		position: fixed;
-		flex-grow: 1;
-		top: 0;
-		left: 0;
-	  }
-	  
-	  .profile {
-		display: flex;
-		flex-direction: column;
+		
 		align-items: center;
-		padding: 20px;
-		border-bottom: 1px solid #ddd;
+		overflow: hidden;
+		justify-content: center;
 	  }
-	  
-	  .profile img {
-		width: 50px;
-		height: 50px;
-		border-radius: 50%;
-		margin-bottom: 10px;
-	  }
-	  
-	  nav a {
-		display: block;
-		padding: 20px;
-		font-size: 2.7vw;
+
+	nav{
+		align-items: center;
+		background-color: rgba(67, 58, 82, 0.8);
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+		display: flex;
+		overflow: hidden;
+  		white-space: nowrap;
+	}
+	nav a{
+		background-color: #ffffff14;
 		text-decoration: none;
+		margin-right: 35px;
+		font-size: 7vw;
+		text-align: center;
 		color: #D8B9C3;
-		border-bottom: 1px solid #D8B9C3;
-	  }
+	}
 	  
-	  nav a:hover {
-		background-color: #D8B9C3;
-	  }
+
 	  #main{
-		padding-left: 100px;
+		padding-left: 0px;
 	  }
 }
 @media screen and (min-width: 1146px){
@@ -280,7 +274,9 @@ button:active{transform: scale(0.9);}
 		top: 0;
 		left: 0;
 	  }
-	  
+	  .sidebar img{
+		width: 50px;
+	  }
 	  .profile {
 		display: flex;
 		flex-direction: column;

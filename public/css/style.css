@@ -209,7 +209,7 @@ strong{
 }
 button:active{transform: scale(0.9);}
 @import url(https://fonts.googleapis.com/css?family=Khula:700);
-@media screen and (max-width: 758px) {
+@media screen and (max-width: 1146px) {
 	body {
 		font-size: 6vw;
 	}
@@ -260,7 +260,7 @@ left: 0;
 		padding-left: 0px;
 	  }
 }
-@media screen and (min-width: 758px){
+@media screen and (min-width: 1146px){
 	
 	.sidebar {
 		width: 130px;

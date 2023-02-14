@@ -233,6 +233,7 @@ button:active{transform: scale(0.9);}
 		
 
 		bottom: 0;
+		width: 100%;
 		position: sticky;
 		
 		background-color: rgba(67, 58, 82, 0.8);

@@ -219,7 +219,8 @@ button:active{transform: scale(0.9);}
 	}
 	
 	img{
-		width: 50vw;
+		width:56.25vw
+		;
 	}
 	button{
 		font-size:6vw;
@@ -326,7 +327,7 @@ left: 0;
 		font-size: 2vw;
 	}
 	img{
-		width: 1080px;
+		width: 56.25vw;
 	}
 	button:active{transform: scale(0.9);}
 	#main{

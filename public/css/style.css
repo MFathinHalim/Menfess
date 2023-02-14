@@ -247,7 +247,7 @@ left: 0;
 	
 	.sidebar a{
 		text-decoration: none;
-		margin-right: 35px;
+		margin-left: 30px;
 		font-size: 7vw;
 		-webkit-filter: grayscale(50%);
 		filter: grayscale(60%);

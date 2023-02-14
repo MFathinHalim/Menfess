@@ -224,34 +224,33 @@ button:active{transform: scale(0.9);}
 	button{
 		font-size:6vw;
 	}
-	nav img {
+	.sidebar img {
+		-webkit-filter: grayscale(0%);
+		filter: grayscale(0%);
 		width: 50px;
 	}
 	.sidebar {
 		
-		width: 200%;
 
 		bottom: 0;
-		position: fixed;
+		position: sticky;
 		
-		align-items: center;
-		overflow: hidden;
-		justify-content: center;
+		background-color: rgba(67, 58, 82, 0.8);
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0);
+
+		overflow: scroll;
+  		white-space: nowrap;
 	  }
 
-	nav{
-		align-items: center;
-		background-color: rgba(67, 58, 82, 0.8);
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-		display: flex;
-		overflow: hidden;
-  		white-space: nowrap;
-	}
-	nav a{
+	
+	.sidebar a{
 		background-color: #ffffff14;
 		text-decoration: none;
 		margin-right: 35px;
 		font-size: 7vw;
+		-webkit-filter: grayscale(50%);
+		filter: grayscale(60%);
+		padding: 10px;
 		text-align: center;
 		color: #D8B9C3;
 	}

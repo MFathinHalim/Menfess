@@ -227,7 +227,7 @@ button:active{transform: scale(0.9);}
 	.sidebar img {
 		-webkit-filter: grayscale(0%);
 		filter: grayscale(0%);
-		width: 50px;
+		width: 7vw;
 	}
 	.sidebar {
 		

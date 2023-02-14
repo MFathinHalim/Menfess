@@ -262,7 +262,7 @@ left: 0;
 @media screen and (min-width: 1146px){
 	
 	.sidebar {
-		width: 200px;
+		width: 130px;
 		height: 100%;
 		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
 		background-color: rgba(67, 58, 82, 0.4);
@@ -330,7 +330,7 @@ left: 0;
 	}
 	button:active{transform: scale(0.9);}
 	#main{
-		padding-left: 200px;
+		padding-left: 130px;
 	}
 
 }

@@ -40,7 +40,7 @@
 										value="<%= element.noteName %>">
 										<%= element.noteName %>
 									</h4>
-									<img src="/images/uploads/image-<%= element.noteId%>.jpg">
+									<img name="img" src="/images/uploads/image-<%= element.noteId%>.jpg" onError="removeElement(this);" >
 									<h3 type="text" rows="6"readonly="true"
 										placeholder="Type Here..." name="noteContent"
 										value="<%= element.noteContent %>">
@@ -93,35 +93,7 @@
 		  </div>
 	</body>
 
-	<script>
-		function myFunction() {
-			var x = document.getElementById("background");
-			if (x.style.display === "none") {
-				x.style.display = "block";
-			} else {
-				x.style.display = "none";
-			}
-		}
-		let mybutton = document.getElementById("reload");
-
-		// When the user scrolls down 20px from the top of the document, show the button
-		window.onscroll = function() {scrollFunction()};
-
-		function scrollFunction() {
-		if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
-			mybutton.style.display = "block";
-		} else {
-			mybutton.style.display = "none";
-		}
-		}
-		function myFunction2() {
-			var x = document.getElementById("comment");
-			if (x.style.display === "none") {
-				x.style.display = "block";
-			} else {
-				x.style.display = "none";
-			}
-		}
-
+	<script src="/js/main.js">
+		
 	</script>
 	</html>

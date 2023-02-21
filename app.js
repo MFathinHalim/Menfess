@@ -270,13 +270,13 @@ app.post("/",upload.single('image'), (req, res) => {
 
 	app.post('/update', (req, res) => {
 		var noteId = req.body.noteId;
-		var noteContent = req.body.noteContent;
-		var noteName = req.body.noteName;
-		var noteIdComment = req.body.noteIdComment;
-		var noteContentComment= req.body.noteContentComment;
-		var noteNameComment = req.body.noteNameComment;
+		var noteImg = req.body.img;
 		console.log(noteId);
 		shuffle(data);
+
+		if(noteImg==undefined){
+			noteImg.remove();
+		}
 		
 	
 

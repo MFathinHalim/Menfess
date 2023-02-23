@@ -57,13 +57,7 @@ body {
 h3, h4, h1{
 	color:#EEEEEE;
 }
-.card {
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-	background-color: rgba(67, 58, 82, 0.4);
-	border-radius: 10px;
-	position:sticky;
-	
-}
+
 .card2 {
 	flex-grow: 1;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
@@ -245,7 +239,9 @@ left: 0;
 		overflow-y: hidden;
   		white-space: nowrap;
 	  }
-
+	  nav a:hover {
+		background-color: #D8B9C3;
+	  }
 	
 	.sidebar a{
 		text-decoration: none;
@@ -417,5 +413,3 @@ textarea[type=text]{
   	from { opacity: 0 }
 	to { opacity: 1 }
 }
-
-/* Add a black background color to the top navigation */

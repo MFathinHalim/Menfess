@@ -148,7 +148,12 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
 app.post("/",upload.single('image'), (req, res) => {
 	const noteContent = req.body.noteContent
     const noteName = req.body.noteName
-	const noteId = data.length+1;
+	const noteId = Math.random();
+	data.forEach(note => {
+		if (note.noteId == noteId) {
+			noteId = Math.random();
+		}
+	})
 	
     // All good
 	if(noteName && noteContent&& noteName.toLowerCase()!=="test" && noteContent.toLowerCase()!=="test"){
@@ -316,3 +321,4 @@ app.post('/r', (req, res) => {
 module.exports = {
     app: app
 }
+

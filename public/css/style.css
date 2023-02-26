@@ -204,7 +204,7 @@ strong{
 }
 button:active{transform: scale(0.9);}
 @import url(https://fonts.googleapis.com/css?family=Khula:700);
-@media screen and (max-width: 1146px) {
+@media screen and (max-width: 781px) {
 	body {
 		font-size: 6vw;
 	}
@@ -257,10 +257,10 @@ left: 0;
 		padding-left: 0px;
 	  }
 }
-@media screen and (min-width: 1146px){
+@media screen and (min-width: 780px){
 	
 	.sidebar {
-		width: 130px;
+		width: 70px;
 		height: 100%;
 		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
 		background-color: rgba(67, 58, 82, 0.4);
@@ -269,16 +269,27 @@ left: 0;
 		flex-grow: 1;
 		top: 0;
 		left: 0;
+		display: flex;
+		justify-content: center;
 	  }
 	  .sidebar img{
-		width: 50px;
+		  width: 50px;
+		  border-radius: 50%;
+		margin-bottom: 10px;
+	  }
+	  #about {
+		margin-bottom: auto;
+		flex-grow: 1;
+		align-self: flex-end;
+		transform: translateY(-100%);
+		margin-top: 70px;
+		top:70px;
 	  }
 	  .profile {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		padding: 20px;
-		border-bottom: 1px solid #ddd;
 	  }
 	  
 	  .profile img {
@@ -294,11 +305,16 @@ left: 0;
 		font-size: 2.7vw;
 		text-decoration: none;
 		color: #D8B9C3;
-		border-bottom: 1px solid #D8B9C3;
+		transition: all .2s ease-in-out;
 	  }
 	  
 	  nav a:hover {
-		background-color: #D8B9C3;
+		-webkit-transform: scale(1.5);
+		-ms-transform: scale(1.5);
+		transform: scale(1.5);
+	  }
+	  nav a :hover > :not(:hover){
+		opacity: .4;
 	  }
 	img:hover{
 		opacity:0.8;
@@ -328,7 +344,10 @@ left: 0;
 	}
 	button:active{transform: scale(0.9);}
 	#main{
-		padding-left: 130px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding-left: 70px;
 	}
 
 }
@@ -406,7 +425,7 @@ textarea[type=text]{
      padding-left: 10px;
     }
 #background {
-	animation: fade 2s linear;
+	animation: fade 1s linear;
 }
 	
 @keyframes fade {

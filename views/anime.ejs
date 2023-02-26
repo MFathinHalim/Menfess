@@ -1,97 +1,99 @@
-	<!DOCTYPE html>
-	<html>
-		
-		<head>
-			<title>Menfess!</title>
-			<link rel = "icon" href = 
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<title>Menfess!</title>
+		<link rel = "icon" href = 
 "https://lh3.googleusercontent.com/WaUBklf-pAfsxFsxGTcEOK-SA4r6Vq7LM2lwck94TFg3uGIXp3zRuljeHeomUexJXw" 
-        type = "image/x-icon">
-			<link rel="stylesheet" href="/css/style.css">
-		</head>
+	type = "image/x-icon">
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
+	
+	<body>
 		
-		<body>
-			<article  id="main">
-				<h1>Anime</h1>
-				<footer class="card4">
-					<h5 style="color: #D8B9C3;">©Created By <strong>M.Fathin Halim</strong></h5>
-				</footer>
-				<div class="card">
+		<article  id="main">
+			<h1>Anime!</h1>
+			<footer class="card4">
+				<h5 style="color: #D8B9C3;">©Created By <strong>M.Fathin Halim</strong></h5>
+			</footer>
+			<div class="card">
+				<article class="card2">
+					<h4 id="oren" type="text" rows="6"readonly="true"
+						placeholder="Type Here...">
+						Doma
+					</h4>
+					
+					<img src="/images/uploads/first.jpg">
+					<h3 type="text" ro	ws="6"readonly="true"
+						placeholder="Type Here...">
+						Selamat Datang di Menfess! Ungkapin Aja!
+					</h3>
+				</article>
+				<% data.forEach(element=> { %>
 					<article class="card2">
-						<h4 id="oren" type="text" rows="6"readonly="true"
-							placeholder="Type Here...">
-							Doma
-						</h4>
-						
-						<img src="/images/uploads/first.jpg">
-						<h3 type="text" ro	ws="6"readonly="true"
-							placeholder="Type Here...">
-							Selamat Datang di Menfess! Ungkapin Aja!
-						</h3>
-					</article>
-					<% data.forEach(element=> { %>
-						<article class="card2">
-								<form action="/updateanime" method="post">
-									<input type="number" style="display: none;"
-									name="noteId" value="<%= element.noteId %>">
-									<article>
-										<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
-										<h4 id="oren" type="text" rows="6"readonly="true"
-										placeholder="Type Here..." name="noteContent"
-										value="<%= element.noteName %>">
-										<%= element.noteName %>
-									</h4>
-									<img src="/images/uploads/anime/image-<%= element.noteId%>.jpg" onError="removeElement(this);" >
-									<h3 type="text" rows="6"readonly="true"
-										placeholder="Type Here..." name="noteContent"
-										value="<%= element.noteContent %>">
-										<%= element.noteContent %> 
-									</h3>
-									
-									<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
-									
-									
-								</article>
-								<br>
-							</form>
-						</article>
-						<% }) %>
-					</div>
-					<div class="background" id="background">
-						<div id="add" class="card4">
-							<button onclick="myFunction()"  class="float2" style="padding-left:20px;">X</button>
-							<form action="/anime" method="post" enctype="multipart/form-data" id="popup">
+							<form action="/updateanime" method="post">
 								<input type="number" style="display: none;"
-								name="noteId">
-								<p>Apa Yang Anda Pikirkan?</p>
-								<textarea type="text" rows="6" cols="30"
-								placeholder="Tulis Yang Anda Pikirkan!"
-								name="noteContent"></textarea>
-								<textarea type="text" rows="6" cols="30"
-								placeholder="Nama Anda? atau Untuk Siapa?"
-								name="noteName"></textarea>
-								<br>
-							<label for="choose">Pilih Gambar!</label>
-							<input type="file" name="image" id="choose"/>
+								name="noteId" value="<%= element.noteId %>">
+								<article>
+									<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
+									<h4 id="oren" type="text" rows="6"readonly="true"
+									placeholder="Type Here..." name="noteContent"
+									value="<%= element.noteName %>">
+									<%= element.noteName %>
+								</h4>
+								<img src="/images/uploads/anime/image-<%= element.noteId%>.jpg" onError="removeElement(this);" >
+								<h3 type="text" rows="6"readonly="true"
+									placeholder="Type Here..." name="noteContent"
+									value="<%= element.noteContent %>">
+									<%= element.noteContent %> 
+								</h3>
+								
+								<!--img name="nimg" width="300" height="200" src="/img.jpg"-->
+								
+								
+							</article>
 							<br>
-							<button type="submit">Confess!</button>
 						</form>
-					</div>
-
+					</article>
+					<% }) %>
 				</div>
-		</article>
-			<nav class="sidebar">
-				
-			  <a href="/"><img src="https://lh3.googleusercontent.com/WaUBklf-pAfsxFsxGTcEOK-SA4r6Vq7LM2lwck94TFg3uGIXp3zRuljeHeomUexJXw"  alt="Profile Picture"></a>
-			  <a onclick="myFunction()">➕</a>
-			  <a href="/anime">🔄️</a>
-			  <a href="/memes"">🤣</a>
-			  <a href="/">❤️</a>
-			  <a href="/anime">🍙</a>
-			  <a href="https://Menfess-1.mfathinhalim.repl.co">⚠️</a>
-			</nav>
-		
-	</body>
+				<div class="background" id="background">
+					<div id="add" class="card4">
+						<button onclick="myFunction()"  class="float2" style="padding-left:20px;">X</button>
+						<form action="/" method="post" enctype="multipart/form-data" id="popup">
+							<input type="number" style="display: none;"
+							name="noteId">
+							<p>Apa Yang Anda Pikirkan?</p>
+							<textarea type="text" rows="6" cols="30"
+							placeholder="Tulis Yang Anda Pikirkan!"
+							name="noteContent">Tulis Yang Anda Pikirkan!</textarea>
+							<textarea type="text" rows="6" cols="30" style="margin-bottom: 55px;"
+							placeholder="Nama Anda? atau Untuk Siapa?"
+							name="noteName">Nama Anda? atau Untuk Siapa?</textarea>
+							<br>
+						<label for="choose" style="margin-top: 100px;">Pilih Gambar!</label>
+						<input type="file" name="image" id="choose"/>
+						<br>
+						<button type="submit">Confess!</button>
+					</form>
+				</div>
 
-	<script src="/js/main.js">
-	</script>
-	</html>
+			</div>
+	</article>
+	<div class="sidebar">
+		<nav>
+			
+		  <a href="/"><img src="https://lh3.googleusercontent.com/WaUBklf-pAfsxFsxGTcEOK-SA4r6Vq7LM2lwck94TFg3uGIXp3zRuljeHeomUexJXw"  alt="Profile Picture"></a>
+		  <a onclick="myFunction()">➕</a>
+		  <a href="/anime">🔍</a>
+		  <a href="/">❤️</a>
+		  <a href="/memes"">🤣</a>
+		  <a href="/anime">🍙</a>
+		  <a href="https://Menfess-1.mfathinhalim.repl.co">⭐</a>
+		</nav>
+	  </div>
+</body>
+
+<script src="/js/main.js">
+</script>
+</html>

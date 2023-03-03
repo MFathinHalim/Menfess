@@ -148,12 +148,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
 app.post("/",upload.single('image'), (req, res) => {
 	const noteContent = req.body.noteContent
     const noteName = req.body.noteName
-	const noteId = Math.random();
-	data.forEach(note => {
-		if (note.noteId == noteId) {
-			noteId = Math.random();
-		}
-	})
+	const noteId = noteId.length + 1;
 	
     // All good
 	if(noteName && noteContent&& noteName.toLowerCase()!=="test" && noteContent.toLowerCase()!=="test"){
@@ -276,12 +271,12 @@ app.post("/",upload.single('image'), (req, res) => {
 	app.post('/update', (req, res) => {
 		var noteId = req.body.noteId;
 		var noteImg = req.body.img;
-		console.log(noteId);
-		shuffle(data);
-
 		if(noteImg==undefined){
 			noteImg.remove();
 		}
+		console.log(noteId);
+		shuffle(data);
+
 		
 	
 

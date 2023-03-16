@@ -21,29 +21,29 @@ body {
 	background-attachment: fixed;
 	background-position: center;    
 	text-align: center;
+	scrollbar-width: none;
 	animation: fadeInAnimation ease 3s;
 	animation-iteration-count: 1;
 	animation-fill-mode: forwards;
 }
+
+
 .reveal{
 	position: relative;
-	transform: translateY(150px);
-	opacity: 0;
-	transition: 2s all ease;
-	animation-play-state: paused;
-	animation-delay: calc(var(--scroll) * -1s);
-}
-.reveal.active{
-	transform: translateY(0);
-	opacity: 1;
-}
 
+	visibility: hidden;
+	transition: 2s all ease;
+  }
+  .reveal.active{
+	transform: translateY(0);
+	visibility: visible;
+  }
 @keyframes fadeInAnimation {
 	0% {
-		opacity: 0;
+		visibility: hidden;
 	}
 	100% {
-		opacity: 1;
+		visibility: visible;
 	}
 }
 .console-container {
@@ -63,11 +63,9 @@ h3, h4, h1{
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
 	background-color: rgba(63, 51, 81, 0.6);
 	border-radius: 24px;
+	height: fit-content;
 	padding: 10px;
-	
-	margin-top: 20px;
-	margin: 20px;
-	
+	margin-top: 10px;	
 }
 .card4 {
 	flex-grow: 1 1 0px;
@@ -204,7 +202,7 @@ strong{
 }
 button:active{transform: scale(0.9);}
 @import url(https://fonts.googleapis.com/css?family=Khula:700);
-@media screen and (max-width: 781px) {
+@media screen and (max-width: 779px) {
 	body {
 		font-size: 6vw;
 	}
@@ -214,8 +212,11 @@ button:active{transform: scale(0.9);}
 	}
 	
 	img{
-		width:56.25vw
-		;
+		height: auto;
+		max-height: 200px;
+		width: auto;
+		max-width: 200px;
+		object-fit: contain;
 	}
 	button{
 		font-size:6vw;
@@ -225,45 +226,83 @@ button:active{transform: scale(0.9);}
 		filter: grayscale(0%);
 		width: 7vw;
 	}
+	#main{
+		margin-top: 160px;
+	}
 	.sidebar {
 		
 left: 0;
-		bottom: 0;
-		width: 100%;
-		position: sticky;
+		top: 0;
+		width: 100vw;
+		position: fixed;
 		
 		background-color: rgba(67, 58, 82, 0.8);
 		box-shadow: 0 4px 8px 0 rgba(0, 0, 0);
 
-		overflow-x: scroll;
-		overflow-y: hidden;
-  		white-space: nowrap;
 	  }
 	  nav a:hover {
-		background-color: #D8B9C3;
+		transform: scale(1.1);
 	  }
-	
+	.sidebar h3{
+		font-size: 4vw;
+		margin: 0;
+	}
 	.sidebar a{
 		text-decoration: none;
-		margin-left: 30px;
+		margin: 10px;
 		font-size: 7vw;
 
 		text-align: center;
 		color: #D8B9C3;
 	}
 	  
-
 	  #main{
-		padding-left: 0px;
-	  }
+		  padding-left: 0px;
+		}
+	}
+	@keyframes reveal {
+		0% {
+			transform: translate(0,100%);
+	}
+	100% {
+	  transform: translate(0,0);
+	}
 }
 @media screen and (min-width: 780px){
+	#mainn {
+		display: grid;
+		grid-template-rows: repeat(auto-fit, minmax(100px, auto));
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 50px;
+		justify-content: center;
+		align-items: start;
+	  }
 	
+
+	  
+	  
+	#table2{
+		display: grid;
+		grid-template-rows: repeat(auto-fit, minmax(100px, auto));
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 10px;
+		justify-content: center;
+		align-content: start;
+		grid-auto-rows: min-content;
+	}
+	#table3{
+		display: grid;
+		grid-template-rows: repeat(auto-fit, minmax(100px, auto));
+		grid-template-columns: 1fr 1fr;
+		justify-content: center;
+		align-content: start;
+		grid-auto-rows: min-content;
+	}
 	.sidebar {
-		width: 70px;
-		height: 100%;
+		width: 100%;
+		height: 70px;
 		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-		background-color: rgba(67, 58, 82, 0.4);
+		background-color: rgba(67, 58, 82, 1);
 		border-radius: 10px;
 		position: fixed;
 		flex-grow: 1;
@@ -271,7 +310,20 @@ left: 0;
 		left: 0;
 		display: flex;
 		justify-content: center;
+		text-align: center;
 	  }
+
+	  .card2::-webkit-scrollbar {
+		width: 5px;
+		height: 70%;
+		background-color: #4C3575;
+	  }
+	  #hehe{
+		height: 500px; /* set the height to your desired fixed size */
+					overflow-y: auto;  
+					overflow-x: hidden;
+	  }
+
 	  .sidebar img{
 		  width: 50px;
 		  border-radius: 50%;
@@ -300,15 +352,18 @@ left: 0;
 	  }
 	  
 	  nav a {
-		display: block;
-		padding: 20px;
+		padding-left: 20px;
 		font-size: 2.7vw;
 		text-decoration: none;
 		color: #D8B9C3;
 		transition: all .2s ease-in-out;
-	  }
-	  
-	  nav a:hover {
+	}
+	.sidebar h3{
+		padding-top: 10px;
+		padding-left: 20px;
+    margin: 0;
+	}
+	nav a:hover {
 		-webkit-transform: scale(1.5);
 		-ms-transform: scale(1.5);
 		transform: scale(1.5);
@@ -316,20 +371,43 @@ left: 0;
 	  nav a :hover > :not(:hover){
 		opacity: .4;
 	  }
-	img:hover{
-		opacity:0.8;
-		-webkit-transform: scale(1.5);
-		-ms-transform: scale(1.5);
-		transform: scale(1.5);
-	}
-	#fotosekolah{
-		width: 60vw;
-	}
-	img{
-		width: 1080px;
+	  img {
+		height: auto;
+		max-height: 300px;
+		width: auto;
+		max-width: 300px;
+		object-fit: contain;
 		margin-left: auto;
 		margin-right: auto;
-	}
+		transition: transform 0.2s ease-in-out;
+	  }
+	  
+	  img:hover {
+		opacity: 0.8;
+		transform-origin: center;
+		transform: scale(1.5);
+	  }
+	  
+	  
+	  /* Add a container element to position the image */
+	  .image-container {
+		position: relative;
+	  }
+	  /* Add a pseudo-element to track mouse position */
+	  .image-container::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	  }
+	  
+	  /* Update transform-origin based on mouse position */
+	  .image-container:hover img {
+		transform-origin: var(--x) var(--y);
+	  }
 	body {
 		font-size: 2vw;
 	}
@@ -339,15 +417,10 @@ left: 0;
 	header{
 		font-size: 2vw;
 	}
-	img{
-		width: 56.25vw;
-	}
 	button:active{transform: scale(0.9);}
 	#main{
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		padding-left: 70px;
+
+		padding-top: 70px;
 	}
 
 }
@@ -364,8 +437,8 @@ left: 0;
 	box-shadow: 2px 2px 3px #999;
 	}
 .float2{
-	width:100px;
-	height:100px;
+	width:50px;
+	height:50px;
 	bottom:40px;
 	left:40px;
 	color:#FFF;
@@ -402,8 +475,6 @@ left: 0;
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: none;
 }
@@ -412,7 +483,7 @@ left: 0;
    position: absolute;
    z-index: -1;
 }
-textarea[type=text]{
+input[type=text]{
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
      border-radius: 20px;

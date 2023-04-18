@@ -1,0 +1,582 @@
+@font-face {
+	font-family: 'Comicsans';
+	src: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+@media print {
+	html, body {
+	display: none;  /* hide whole page */
+	}
+}
+@import url(https://fonts.googleapis.com/css?family=Khula:700);
+html {
+	scroll-behavior: smooth
+}
+body {
+	/*font-family:'Courier New', Courier, monospace;*/
+	font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	color: #D8B9C3;
+	background-image: url("/images/8753.jpg");
+	background-repeat: no-repeat;
+	background-color: #4C3575;
+	background-attachment: fixed;
+	background-position: center;    
+	text-align: center;
+	scrollbar-width: none;
+	animation: fadeInAnimation ease 3s;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+}
+
+
+.reveal{
+	position: relative;
+
+	visibility: hidden;
+	transition: 2s all ease;
+  }
+  .reveal.active{
+	transform: translateY(0);
+	visibility: visible;
+  }
+@keyframes fadeInAnimation {
+	0% {
+		visibility: hidden;
+	}
+	100% {
+		visibility: visible;
+	}
+}
+.console-container {
+
+	font-size:3vw;
+	text-align:center;
+	height:3vw;
+	color:#E16428;
+
+}
+h3, h4, h1{
+	color:#EEEEEE;
+}
+
+.card2 {
+	flex-grow: 1;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+	background-color: rgba(63, 51, 81, 0.6);
+	border-radius: 24px;
+	height: fit-content;
+	padding: 10px;
+	margin-top: 10px;	
+}
+.card4 {
+	flex-grow: 1 1 0px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+	background-color: rgba(67, 58, 82, 0.7);
+	border-radius: 24px;
+	padding: 10px;
+	margin-top: 20px;
+	margin: 20px;
+	
+}
+/* Gaya dasar untuk tombol */
+.pagination a {
+    display: inline-block;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+	background-color: #864879;
+	color:#EEEEEE;
+	border-radius: 20px;
+	padding: 20px;
+	margin-top: 20px;
+	text-align: center;
+	font-size: 2vw;
+	flex-basis: 25%;
+	transition: all .2s ease-in-out;
+	border:none;
+	opacity:1;    
+  }
+
+  /* Gaya saat cursor diarahkan ke tombol */
+  .pagination a:hover {
+    opacity:0.8;
+	-webkit-transform: scale(2);
+	-ms-transform: scale(2);
+	transform: scale(2);
+	cursor: grab;
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
+  }
+
+  /* Gaya saat tombol aktif */
+  .pagination a.active {
+    opacity:0.8;
+	-webkit-transform: scale(2);
+	-ms-transform: scale(2);
+	transform: scale(2);
+	cursor: grab;
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
+  }
+button{
+	flex: 1 1 0px;
+	flex-flow: wrap;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+	background-color: #864879;
+	color:#EEEEEE;
+	border-radius: 20px;
+	padding: 20px;
+	margin-top: 20px;
+	text-align: center;
+	font-size: 5vw;
+	flex-basis: 25%;
+	transition: all .2s ease-in-out;
+	border:none;
+	opacity:1;        
+}
+label{
+	flex: 1 1 0px;
+	flex-flow: wrap;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+	background-color: #864879;
+	color:#EEEEEE;
+	border-radius: 20px;
+	padding: 20px;
+
+	text-align: center;
+	font-size: 1vw;
+	flex-basis: 25%;
+	transition: all .2s ease-in-out;
+	border:none;
+	opacity:1;        
+}
+label:hover{
+	opacity:0.8;
+	transform: scale(1.1);
+}
+img:hover{
+	opacity:0.8;
+	-webkit-transform: scale(2);
+	-ms-transform: scale(2);
+	transform: scale(2);
+	cursor: grab;
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
+}
+img:active{
+	cursor: grabbing;
+	cursor: -moz-grabbing;
+	cursor: -webkit-grabbing;
+}
+.imgland{
+	margin-top: 10px;
+	rotate : -90deg;
+	width: 15vw;
+	border-radius: 24px;
+	transition: all .2s ease-in-out;
+	
+}
+.imgland:hover{
+	opacity:0.8;
+	-webkit-transform: scale(2);
+	-ms-transform: scale(2);
+	transform: scale(2);
+}
+#fotosekolah{
+	margin-top:10px;
+	width: 50vw;
+	border-radius: 24px;
+	transition: all .2s ease-in-out;
+}
+.container {
+	width: 800px;
+	border: 2px solid black;
+	margin: 0 auto;
+}
+
+.flex-column {
+	display: flex;
+	flex-direction: column;
+}
+
+.flex-row {
+	display: flex;
+	flex-direction: row;
+	flex-grow: 1;
+}
+
+.box {
+	flex-basis: 25%;
+	text-align: center;
+	flex-grow: 1;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+	background-color: #2f2828;
+	border-radius: 24px;
+	margin-top: 20px;
+}
+a {
+	color:#827397;
+}
+#content {
+	display: flex;
+	flex-direction: column;
+}
+button:hover{
+	opacity:0.8;
+	transform: scale(1.1);
+}
+img{
+	margin-top:10px;
+	width: 25vw;
+	border-radius: 24px;
+	transition: all .2s ease-in-out;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+	opacity: 0.5;
+	
+}
+strong{
+	color:#827397;
+}
+	
+#oren{
+	color: #D8B9C3;
+}
+button:active{transform: scale(0.9);}
+@import url(https://fonts.googleapis.com/css?family=Khula:700);
+@media screen and (max-width: 779px) {
+	#comment{
+		max-width: 300px;
+	}
+  #link {
+    font-size: 4vw;
+  }
+	body {
+		font-size: 6vw;
+	}
+	
+	header{
+		font-size: 6vw;
+	}
+	
+	img{
+		height: auto;
+		max-height: 200px;
+		width: auto;
+		max-width: 200px;
+		object-fit: contain;
+	}
+	button{
+		font-size:6vw;
+	}
+	.sidebar img {
+		-webkit-filter: grayscale(0%);
+		filter: grayscale(0%);
+		width: 7vw;
+	}
+	#main{
+		margin-top: 160px;
+	}
+	.sidebar {
+		
+left: 0;
+		top: 0;
+		width: 100vw;
+		position: fixed;
+		
+		background-color: rgba(67, 58, 82, 0.8);
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0);
+
+	  }
+	  nav a:hover {
+		transform: scale(1.1);
+	  }
+	.sidebar h3{
+		font-size: 4vw;
+		margin: 0;
+	}
+	.sidebar a{
+		text-decoration: none;
+		margin: 10px;
+		font-size: 7vw;
+
+		text-align: center;
+		color: #D8B9C3;
+	}
+	  
+	  #main{
+		  padding-left: 0px;
+		}
+	}
+	@keyframes reveal {
+		0% {
+			transform: translate(0,100%);
+	}
+	100% {
+	  transform: translate(0,0);
+	}
+}
+#testt{
+	visibility: hidden;
+}
+#myVideo {
+  width: 320px; /* Set a fixed width for desktop */
+  height: 480px; /* Set a fixed height for desktop */
+  object-fit: cover; /* Use object-fit property to fill the video element within its container */
+}
+
+@media screen and (min-width: 780px){
+	#myVideo {
+    width: 240px; /* Set a smaller width for larger screens */
+    height: 320px; /* Set a smaller height for larger screens */
+  }
+	#comment{
+		max-width: 320px;
+	}
+  #link {
+    font-size: 2vw;
+  }
+	#mainn {
+		display: grid;
+		grid-template-rows: repeat(auto-fit, minmax(100px, auto));
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 50px;
+		justify-content: center;
+		align-items: start;
+	  }
+
+	
+
+	  
+	  
+	#table2{
+		display: grid;
+		grid-template-rows: repeat(auto-fit, minmax(100px, auto));
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 10px;
+		justify-content: center;
+		align-content: start;
+		grid-auto-rows: min-content;
+	}
+	.sidebar {
+		width: 100%;
+		height: 70px;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+		background-color: rgba(67, 58, 82, 1);
+		border-radius: 10px;
+		position: fixed;
+		flex-grow: 1;
+		top: 0;
+		left: 0;
+		display: flex;
+		justify-content: center;
+		text-align: center;
+	  }
+
+	  .card2::-webkit-scrollbar {
+		width: 5px;
+		height: 70%;
+		background-color: #4C3575;
+	  }
+	  #hehe{
+		height: auto;
+		max-height: 500px; /* set the height to your desired fixed size */
+		overflow-y: auto;  
+		overflow-x: hidden;
+	  }
+		#hehevid{
+			height: fit-content;
+			overflow-x: hidden;
+			}
+
+	  .sidebar img{
+		  width: 50px;
+		  border-radius: 50%;
+		margin-bottom: 10px;
+	  }
+	  #about {
+		margin-bottom: auto;
+		flex-grow: 1;
+		align-self: flex-end;
+		transform: translateY(-100%);
+		margin-top: 70px;
+		top:70px;
+	  }
+	  .profile {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 20px;
+	  }
+	  
+	  .profile img {
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		margin-bottom: 10px;
+	  }
+	  
+	  nav a {
+		padding-left: 20px;
+		font-size: 2.7vw;
+		text-decoration: none;
+		color: #D8B9C3;
+		transition: all .2s ease-in-out;
+	}
+	.sidebar h3{
+		padding-top: 10px;
+		padding-left: 20px;
+    margin: 0;
+	}
+	nav a:hover {
+		-webkit-transform: scale(1.5);
+		-ms-transform: scale(1.5);
+		transform: scale(1.5);
+	  }
+	  nav a :hover > :not(:hover){
+		opacity: .4;
+	  }
+	  img {
+		height: auto;
+		max-height: 300px;
+		width: auto;
+		max-width: 300px;
+		object-fit: contain;
+		margin-left: auto;
+		margin-right: auto;
+		transition: transform 0.2s ease-in-out;
+	  }
+	  
+	  img:hover {
+		opacity: 0.8;
+		transform-origin: center;
+		transform: scale(1.5);
+	  }
+	  
+	  
+	  /* Add a container element to position the image */
+	  .image-container {
+		position: relative;
+	  }
+	  /* Add a pseudo-element to track mouse position */
+	  .image-container::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	  }
+	  
+	  /* Update transform-origin based on mouse position */
+	  .image-container:hover img {
+		transform-origin: var(--x) var(--y);
+	  }
+	body {
+		font-size: 2vw;
+	}
+	button{
+		font-size:1.5vw;
+	}
+	header{
+		font-size: 2vw;
+	}
+	button:active{transform: scale(0.9);}
+	#main{
+
+		padding-top: 70px;
+	}
+
+}
+.float{
+	position:fixed;
+	width:100px;
+	height:100px;
+	bottom:40px;
+	right:40px;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	opacity: 0.3;
+	box-shadow: 2px 2px 3px #999;
+	}
+.float2{
+	width:50px;
+	height:50px;
+	bottom:40px;
+	left:40px;
+	color:#FFF;
+	border-radius:50px;
+	opacity: 0.3;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+	}
+
+#reload {
+	overflow: hidden;
+	width:100px;
+	height:100px;
+	bottom:40px;
+	left:40px;
+	color:#FFF;
+	border-radius:50px;
+	opacity: 0.3;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+  
+}	
+#reload.hidden {
+  transform: scaleY(0);
+}
+#add{
+	position: fixed;
+  	top: 50%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+}
+#choose {
+   opacity: 0;
+   position: absolute;
+   z-index: -1;
+}
+input[type=text]{
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+     border-radius: 20px;
+     border: 1px solid #2d9fd9;
+     color: #D8B9C3;
+	 background-color: #827397;
+     width: 250px;
+	 text-align: center;
+     height: 30px;
+     padding-left: 10px;
+    }
+
+#notButton{
+		text-decoration: none;
+		-webkit-border-radius: 20px;
+		-moz-border-radius: 20px;
+		 border-radius: 20px;
+		 border: 1px solid #2d9fd9;
+		 color: #D8B9C3;
+		 background-color: #827397;
+		 width: 250px;
+		 text-align: center;
+		 height: 30px;
+		 padding-left: 10px;
+		}
+	
+	
+#background {
+	animation: fade 1s linear;
+}
+	
+@keyframes fade {
+  	from { opacity: 0 }
+	to { opacity: 1 }
+}

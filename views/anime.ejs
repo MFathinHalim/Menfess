@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<title>Menfess!</title>
+		<link rel = "icon" href = 
+"https://lh3.googleusercontent.com/WaUBklf-pAfsxFsxGTcEOK-SA4r6Vq7LM2lwck94TFg3uGIXp3zRuljeHeomUexJXw" 
+	type = "image/x-icon">
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
+	
+	<body>
+		<article  id="main">
+			<div class="card">
+				<article class="card2">
+					<h4 id="oren" type="text" rows="6"readonly="true"
+						placeholder="Type Here...">
+						Doma
+					</h4>
+					
+					<img src="/images/uploads/first.jpg">
+					<h3 type="text" ro	ws="6"readonly="true"
+					placeholder="Type Here...">
+					Selamat Datang di Menfess! Ungkapin Aja!
+				</h3>
+			</article>
+			<article id="mainn">
+				<% data.forEach(element => { %>
+					<article class="card2 reveal" id="hehe">
+						<input type="number" style="display: none;" name="noteId" charset="UTF-8" id="noteId" value="<%= element.noteId %>">
+						<article>
+							<h4 id="oren" type="text" rows="6" readonly="true" placeholder="Type Here..." name="noteContent" value="<%= element.noteName %>">
+								<%= element.noteName %>
+							</h4>
+							
+							<img class="image-zoom" name="img" src="/images/uploads/anime/image-<%= element.noteId %>.jpg" oncontextmenu="downloadImage(this);" onError="this.remove();">
+							
+							<h3 type="text" rows="6" readonly="true" placeholder="Type Here..." name="noteContent" value="<%= element.noteContent %>">
+								<%= element.noteContent %> 
+							</h3>
+							
+						</article>
+
+							
+								</article>
+								<% }) %>
+							</article>
+						</div>
+						<div class="background" id="background">
+							<center><div id="add" class="card4">
+						<button onclick="myFunction()"  class="float2">X</button>
+						<form action="/anime" method="post" enctype="multipart/form-data" id="popup">
+							<input type="number" style="display: none;"
+							name="noteId">
+							<p>Apa Yang Anda Pikirkan?</p>
+							<input type="text" rows="6" cols="30"
+							placeholder="Tulis Yang Anda Pikirkan!"
+							name="noteContent"></input>
+							<p>Nama?</p>
+							<input type="text" rows="6" cols="30"
+							style="margin-top: 20px; margin-bottom: 40px;"
+							placeholder="Nama Anda? atau Untuk Siapa?"
+							name="noteName"></input>
+							<br>
+							<label for="choose" id="input" style=" font-size: 2vw;">Pilih Gambar!</label>
+						<input type="file" name="image" id="choose" onchange="previewImage(event)"/>
+						<br>
+						<center><img id="image-preview" style="margin-top: 20px; height: 10vw;width: auto;display: none;"></center>
+						<br>
+						<button type="submit">Confess!</button>
+					</form>
+				</div>
+          </center>
+
+			</div>
+	</article>
+	<div class="sidebar">
+		<h3>Anime!!</h3>
+		<nav>
+		  <a href="/anime"><img src="https://lh3.googleusercontent.com/WaUBklf-pAfsxFsxGTcEOK-SA4r6Vq7LM2lwck94TFg3uGIXp3zRuljeHeomUexJXw"  alt="Profile Picture"></a>
+		  <a onclick="myFunction()"><img src="https://th.bing.com/th/id/R.6e08e7ceb9236d9b9f5b20311a94fcb2?rik=76Jpiull8WpRtQ&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_84809.png&ehk=mQdz5N19LTRG%2bk9CWZL2dGd%2f0KxjuNQd%2fQ1ZqEupx5A%3d&risl=&pid=ImgRaw&r=0"  alt="Profile Picture"></a></a>
+		  <a href="/anime"><img src="https://th.bing.com/th/id/OIP._RTO9yp1xH5aQA0vS7fpHAHaHW?pid=ImgDet&rs=1"></a>
+		  <a href="/"><img src="https://purepng.com/public/uploads/large/heart-icon-jst.png"></a>
+		<a href="/memes"><img src="https://th.bing.com/th/id/R.4242162baeafc152194f82a9a62220b3?rik=JEJtaAONqJHslQ&riu=http%3a%2f%2fappsgeyser.com%2fblog%2fwp-content%2fuploads%2f2016%2f11%2fmeme-icon-2.png&ehk=t7nSwCsz8C%2fS5ubA7SCjuhRt3WcWh6uxPfAKWLgQoMc%3d&risl=&pid=ImgRaw&r=0"></a>
+		<a href="/anime"><img src="https://i.pinimg.com/736x/bc/6a/04/bc6a0401685ee7b81ce3ce1594e13f0e.jpg"></a>
+		<a href="https://Menfess-1.mfathinhalim.repl.co"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Info_icon_001.svg/1024px-Info_icon_001.svg.png"></a></a>
+		</nav>
+		<h3 style="color: #D8B9C3;">©Created By <strong>M.Fathin Halim</strong></h3>
+
+	  </div>
+</body>
+
+<script src="/js/main.js">
+	
+</script>
+</html>

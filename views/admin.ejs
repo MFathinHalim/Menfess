@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+	<!--Header-->
+	<head>
+		<title>Menfess!(Admin)</title>
+		<link rel = "icon" href = "https://lh3.googleusercontent.com/WaUBklf-pAfsxFsxGTcEOK-SA4r6Vq7LM2lwck94TFg3uGIXp3zRuljeHeomUexJXw" type = "image/x-icon">
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
+
+	<!--Body(Tampilan)-->
+	<body>
+		<!--Tampilan Pada Aplikasi agar tidak mengganggu Sidebar-->
+		<article  id="main">
+			<!--Div Utama-->
+			<div class="card">
+				<!--Postingan-->
+				<article id="mainn">
+					<% data.forEach(element => { %>
+						<!--Untuk Setiap Post-->
+						<article class="card2 reveal" id="hehe">
+							<!--Untuk Like-->
+							<% if (element.hasLiked) { %>
+								<p style="text-align: center;" name="noteLike" value="<%= element.like %>"> ❤️ <%= element.like %> </p>
+								<% } else { %>
+								<form action="/like/<%= element.noteId %>" method="post" enctype="multipart/form-data" id="popup">
+									<button type="submit">❤️ <%= element.like %> </button>
+								</form>
+							<% } %>
+
+							<!--Input ID-->
+							<input type="number" style="display: none;" name="noteId" charset="UTF-8" id="noteId" value="<%= element.noteId %>">
+
+							<!--Isi dari postingan(Nama dan Postingan)-->
+							<article>
+								<h4 id="oren" type="text" rows="6" readonly="true" placeholder="Type Here..." name="noteContent" value="<%= element.noteName %>">
+									<%= element.noteName %>
+								</h4>
+								<img class="image-zoom" name="img" src="/images/uploads/image-<%= element.noteId %>.jpg" oncontextmenu="downloadImage(this);" onError="this.remove();">
+								<h3 type="text" rows="6" readonly="true" placeholder="Type Here..." name="noteContent" value="<%= element.noteContent %>">
+									<%= element.noteContent %>
+								</h3>
+							</article>
+
+							<!--Tentang Comment-->
+								<!--Tombol Coment--> <button onclick="showComment('<%= element.noteId %>')">Mau Comment?</button>
+								<!--Untuk Post Komen-->
+								<article id="table2">
+									<form action="/comment/<%= element.noteId %>" method="post" class="card2" id="testt<%= element.noteId %>" style="display: none;">
+										<h4>Comments:</h4>
+											<input type="number" style="display: none;" name="noteId" value="<%= element.noteId %>">
+											<p>Apa Yang Anda Pikirkan?</p>
+											<input type="text" placeholder="Tulis Yang Anda Pikirkan!" name="commentContent" id="commenterName">
+											<br>
+											<p>Nama?</p>
+											<input type="text" placeholder="Nama Anda?"name="commenterName" id="commenterName">
+											<br>
+											<button type="submit">Add Comment</button>
+									</form>
+									<article>
+									
+									<!--Jika terdapat Komen, maka akan ditampilkan-->
+									<% if (element.comment && element.comment.length > 0) { %>
+										<ul>
+											<% (element.comment).forEach(comments => { %>
+												<li class="card2" style="height: auto; max-height: 300px; width: fit-content; /* set the height to your desired fixed size */
+											-webkit-overflow-scrolling: none;
+											overflow-y:auto;
+											" id="comment">
+											<strong><%= comments.commenterName %>:</strong> <%= comments.commentContent %>
+										</li>
+									<% }) %>
+										</ul>
+									
+									<!--Jika tidak ada, maka akan ditambah "belum ada komen"-->
+									<% } else{%>
+										<ul>
+											<li class="card2" style="height: auto; max-height: 300px; width: fit-content; /* set the height to your desired fixed size */
+											-webkit-overflow-scrolling: none;
+											overflow-y:auto;
+											" id="comment">
+												Belum Ada Comment
+											</li>
+									<% } %>
+								</article>	
+							</article>
+
+							<button onclick="copyLink('<%= element.noteId %>')">Bagikan!</button><!--Tombol Share-->
+							<p id="link" style="max-width: 100px;">Link: https://menfess.mfathinhalim.repl.co/share/<%= element.noteId %></p> <!--Untuk Mobile(Android gak bisa copy pake script lagi _-)-->
+
+							<!--Untuk Admin-->
+							<p>Admin</p>
+							<!--Hapus Postingan-->
+							<form action="/delete/<%= element.noteId %>" method="post">
+								<input type="number" style="display: none;"
+									name="noteId" value="<%= element.noteId %>">
+								<button type="submit">Delete!</button>
+							</form>
+						</article>
+					<% }) %>
+				</article>
+			</div>
+			<!--Fungsi Untuk Post!-->
+			<div class="background" id="background"> <!--Backgroundnya agar lebih gelap-->
+
+				<div id="add" class="card4"> <!--Div untuk Postnya-->
+					<button onclick="myFunction()"  class="float2">X</button> <!--Tombol Close-->
+					
+					<!--Form untuk Posting-->
+					<form action="/" method="post" enctype="multipart/form-data" id="popup">
+						<input type="number" style="display: none;"
+							name="noteId"> <!--noteId(Seperti Biasa)-->
+
+						<p>Apa Yang Anda Pikirkan?</p>
+
+						<input type="text" rows="6" cols="30"
+							placeholder="Tulis Yang Anda Pikirkan!"
+							name="noteContent"></input> <!--Pengen Post tentang apa-->
+
+						<p>Nama?</p>
+
+						<input type="text" rows="6" cols="30"
+							style="margin-top: 20px; margin-bottom: 40px;"
+							placeholder="Nama Anda? atau Untuk Siapa?"
+							name="noteName"></input> <!--Nama-->
+
+						<br>
+
+						<label for="choose" id="input" style=" font-size: 2vw;">Pilih Gambar!</label>
+						<input type="file" name="image" id="choose" onchange="previewImage(event)"/>
+
+						<br>
+
+						<img id="image-preview" style="margin-top: 20px; height: auto;
+							max-height: 200px;
+							width: auto;
+							max-width: 200px;
+							object-fit: contain;"> <!--Tampilan Preview Gambar-->
+
+						<br>
+
+						<button type="submit">Confess!</button><!--Tombol Post-->
+					</form>
+				</div>
+			</div>
+		</article>
+
+		<!--Sidebar(Sekarang sudah jadi Top Bar)-->
+		<div class="sidebar">
+			<!--Untuk Tombol Tombol Yang Tersedia, ditaruh didalam sebuah Navigation-->
+			<nav>
+				<a onClick="window.location.reload();"><img src="https://lh3.googleusercontent.com/WaUBklf-pAfsxFsxGTcEOK-SA4r6Vq7LM2lwck94TFg3uGIXp3zRuljeHeomUexJXw"  alt="Profile Picture"></a>
+				<a onclick="myFunction()"><img src="https://th.bing.com/th/id/R.6e08e7ceb9236d9b9f5b20311a94fcb2?rik=76Jpiull8WpRtQ&riu=http%3a%2f%2fcdn.onlinewebfonts.com%2fsvg%2fimg_84809.png&ehk=mQdz5N19LTRG%2bk9CWZL2dGd%2f0KxjuNQd%2fQ1ZqEupx5A%3d&risl=&pid=ImgRaw&r=0"  alt="Profile Picture"></a></a>
+				<a onClick="window.location.reload();"><img src="https://th.bing.com/th/id/OIP._RTO9yp1xH5aQA0vS7fpHAHaHW?pid=ImgDet&rs=1"></a>
+				<a href="/"><img src="https://purepng.com/public/uploads/large/heart-icon-jst.png"></a>
+				<a href="https://Menfess-1.mfathinhalim.repl.co"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Info_icon_001.svg/1024px-Info_icon_001.svg.png"></a></a>
+			</nav>
+
+			<!--Teks Doank-->
+			<h3>Menfess!!(Admin)</h3>
+			<h3 style="color: #D8B9C3;">©Created By <strong>M.Fathin Halim</strong></h3>
+
+		</div>
+	</body>
+
+  <!--JS-->
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2998592050723815" crossorigin="anonymous"></script>
+	<script src="/js/main.js"></script>
+            
+</html>
+
+<!--Original Script Created by Doma Tomoharu(Real Names: M.Fathin Halim)!-->

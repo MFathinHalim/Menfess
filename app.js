@@ -90,12 +90,15 @@ db.all(sql, [], (err, rows) => {
   
   rows.forEach((row) => {
     const noteId = row.noteId;
+    console.log(row.color)
+    
     const noteData = {
       noteId: row.noteId,
       noteContent: row.noteContent,
       noteName: row.noteName,
       like: row.Like,
-      comment: []
+      comment: [],
+      color: row.color
     };
     const commentSql = 'SELECT * FROM comment WHERE noteId = ?';
     db.all(commentSql, [noteId], (err, commentRows) => {
@@ -115,7 +118,6 @@ db.all(sql, [], (err, rows) => {
 sql = 'SELECT * FROM data';
 dbvid.all(sql, [], (err, rows) => {
   if (err) return console.error(err.message);
-  
   rows.forEach((row) => {
     const noteId = row.noteId;
     const noteData = {
@@ -178,181 +180,86 @@ app.use(bodyParser.urlencoded({
 }))
 
 //TODO Finally, the hard one. We will be make the get function. We will be use pagination.
-var shuf = true; //TODO for shuf
+var shuf = true; //* for shuffle
 var postCounter = 0;
 
 //TODO function for shuffle on client, so dont change the main data
 function shuffleOnClient(data) {
-  if (shuf==true){
-    const shuffledData = [...data];
-    for (let i = shuffledData.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledData[i], shuffledData[j]] = [shuffledData[j], shuffledData[i]];
-    }
-    return shuffledData;
-  }else{
+
     return data;
-  }
+  
 }
 //? ==============================================
 
-//TODO pagination
-app.get("/page/:pageNumber", function(req, res) {
-  //TODO okay, in pagination we will be make the const variable first
-  const currentPage = parseInt(req.params.pageNumber) || 1;
-  const adjustedPage = currentPage - 1;
-  const itemsPerPage = 10;
-  const startIndex = adjustedPage * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedData = data.slice(startIndex, endIndex);
-
-  //TODO then will make the paginated data and see if the note with the same noteId in loop has liked in cookies or not.
-  for (let i = 0; i < paginatedData.length; i++) {
-    const noteId = paginatedData[i].noteId;
-    paginatedData.find((note) => note.noteId === noteId).hasLiked = req.cookies[`liked_${noteId}`] === "true";
+//TODO Make class for application function
+class Application {
+  constructor(data, ejs, pageNumber, cookies) {
+    this.data = data;
+    this.ejs = ejs;
+    this.pageNumber = pageNumber;
+    this.cookies = cookies;
   }
   
-  //TODO this will be make the paginatedData will shuffle.
-  var gg;
-  gg = shuffleOnClient(paginatedData);
+  //TODO next make function for app.get()
+  getFunction() {
+    //TODO okay, in pagination we will be make the const variable first
+    const currentPage = parseInt(this.pageNumber) || 1;
+    const adjustedPage = currentPage - 1;
+    const itemsPerPage = 10;
+    const startIndex = adjustedPage * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedData = this.data.slice(startIndex, endIndex);
 
-  if (postCounter % 2 === 0) {
-    res.render("home", {
-      data: gg,
-      ads: '<!-- tempatkan kode iklan di sini -->',
-      currentPage: currentPage,
-      totalPages: Math.ceil(data.length / itemsPerPage)
-    });
-  } else {
-    res.render("home", {
-      data: gg,
-      ads: "google.com, pub-2998592050723815, DIRECT, f08c47fec0942fa0",
-      currentPage: currentPage,
-      totalPages: Math.ceil(data.length / itemsPerPage)
-    });
-  }
-
-  postCounter++;
-});
-//* well, the algorithms are same on the video page.
-app.get("/videos/page/:pageNumber", function(req, res) {
-  const currentPage = parseInt(req.query.page) || 1;
-  
-  const itemsPerPage = 10;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedData = datavid.slice(startIndex, endIndex);
-  
-  for (let i = 0; i < paginatedData.length; i++) {
-    const noteId = paginatedData[i].noteId;
-    paginatedData.find((note) => note.noteId === noteId).hasLiked = req.cookies[`liked_${noteId}`] === "true";
-  }
-  
-  var gg;
-  if (shuf == true) {
+    /*
+      * TODO then will make the paginated data and see if the note with the same noteId in loop has liked in cookies or not.
+      for (let i = 0; i < paginatedData.length; i++) {
+        const noteId = paginatedData[i].noteId;
+        paginatedData.find((note) => note.noteId === noteId).hasLiked = req.cookies[`liked_${noteId}`] === "true";
+    }*/
+    
+    //TODO this will be make the paginatedData will shuffle.
+    var gg;
     gg = shuffleOnClient(paginatedData);
-  } else {
-    shuf = true;
-    gg = paginatedData;
+
+    if (postCounter % 2 === 0) {
+      this.cookies.render(this.ejs, {
+        data: gg,
+        ads: '<!-- tempatkan kode iklan di sini -->',
+        currentPage: currentPage,
+        totalPages: Math.ceil(this.data.length / itemsPerPage)
+      });
+    } else {
+      this.cookies.render(this.ejs, {
+        data: gg,
+        ads: "google.com, pub-2998592050723815, DIRECT, f08c47fec0942fa0",
+        currentPage: currentPage,
+        totalPages: Math.ceil(this.data.length / itemsPerPage)
+      });
+    }
+
+    postCounter++;
   }
 
-  if (postCounter % 2 === 0) {
-    res.render("vid", {
-      data: gg,
-      ads: '<!-- tempatkan kode iklan di sini -->',
-      currentPage: currentPage, 
-      totalPages: Math.ceil(data.length / itemsPerPage)
-    });
-  } else {
-    res.render("vid", {
-      data: gg,
-      ads: "google.com, pub-2998592050723815, DIRECT, f08c47fec0942fa0",
-      currentPage: currentPage,
-      totalPages: Math.ceil(data.length / itemsPerPage) 
-    });
-  }
+}
 
-  postCounter++;
+app.get("/page/:pageNumber", function(req, res) {
+  const applicationFunction = new Application(data, "home", req.params.pageNumber, res);
+  applicationFunction.getFunction();
+});
+
+app.get("/videos/page/:pageNumber", function(req, res) {
+  const applicationFunction = new Application(datavid, "vid", req.params.pageNumber, res);
+  applicationFunction.getFunction();
 });
 
 //TODO and the next function when aplication first load on client(the algorithm is same, so dont be confused) :D
 app.get("/", function(req, res) {
-  const currentPage = parseInt(req.query.page) || 1;
-  
-  const itemsPerPage = 10;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedData = data.slice(startIndex, endIndex);
-  
-  for (let i = 0; i < paginatedData.length; i++) {
-    const noteId = paginatedData[i].noteId;
-    paginatedData.find((note) => note.noteId === noteId).hasLiked = req.cookies[`liked_${noteId}`] === "true";
-  }
-  
-  var gg;
-  if (shuf == true) {
-    gg = shuffleOnClient(paginatedData);
-  } else {
-    shuf = true;
-    gg = paginatedData;
-  }
-
-  if (postCounter % 2 === 0) {
-    res.render("home", {
-      data: gg,
-      ads: '<!-- tempatkan kode iklan di sini -->',
-      currentPage: currentPage,
-      totalPages: Math.ceil(data.length / itemsPerPage)
-    });
-  } else {
-    res.render("home", {
-      data: gg,
-      ads: "google.com, pub-2998592050723815, DIRECT, f08c47fec0942fa0",
-      currentPage: currentPage,
-      totalPages: Math.ceil(data.length / itemsPerPage)
-    });
-  }
-
-  postCounter++;
+  const applicationFunction = new Application(data, "home", req.params.pageNumber, res);
+  applicationFunction.getFunction();
 });
 app.get("/videos", function(req, res) {
-  const currentPage = parseInt(req.query.page) || 1;
-  
-  const itemsPerPage = 10;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedData = datavid.slice(startIndex, endIndex);
-  
-  for (let i = 0; i < paginatedData.length; i++) {
-    const noteId = paginatedData[i].noteId;
-    paginatedData.find((note) => note.noteId === noteId).hasLiked = req.cookies[`liked_${noteId}`] === "true";
-  }
-  
-  var gg;
-  if (shuf == true) {
-    gg = shuffleOnClient(paginatedData);
-  } else {
-    shuf = true;
-    gg = paginatedData;
-  }
-
-  if (postCounter % 2 === 0) {
-    res.render("vid", {
-      data: gg,
-      ads: '<!-- tempatkan kode iklan di sini -->',
-      currentPage: currentPage,
-      totalPages: Math.ceil(data.length / itemsPerPage)
-    });
-  } else {
-    res.render("vid", {
-      data: gg,
-      ads: "google.com, pub-2998592050723815, DIRECT, f08c47fec0942fa0",
-      currentPage: currentPage,
-      totalPages: Math.ceil(data.length / itemsPerPage)
-    });
-  }
-
-  postCounter++;
+  const applicationFunction = new Application(datavid, "vid", req.params.pageNumber, res);
+  applicationFunction.getFunction();
 });
 //TODO in this function, its just loaded the shared link and move the data to first on array
 app.get("/share/:noteId", function(req, res) {
@@ -377,12 +284,7 @@ app.get("/share/:noteId", function(req, res) {
 //? ======================================================================================
 //* okay, the next one will be little harder
 //TODO first, the function to post menfess
-app.post("/", upload.single('image'), (req, res) => {
-  //TODO first things, we will make the const variable from the req data
-  const noteContent = req.body.noteContent
-  const noteName = req.body.noteName
-  const noteId = data.length + 100;
-
+function post(data, noteContent,noteName, noteId, noteColor, db, redirect, res){
   if (noteContent.trim() !== "" && noteName.trim() !== "") {
     //TODO next we will add the post to database first.
     sql = 'INSERT INTO data(noteId,noteContent,noteName) VALUES (?,?,?)';
@@ -394,16 +296,30 @@ app.post("/", upload.single('image'), (req, res) => {
           noteContent: noteContent,
           noteName: noteName,
           like: 0,
-          comment: []
+          comment: [],
+          color: noteColor
         });
         //TODO the shuf will be false because we want to post is in first on array
         shuf = false;
-        res.redirect("/")
+
       }else{
         console.error(err)
       }
     })
   }
+}
+app.post("/", upload.single('image'), (req, res) => {
+  //TODO first things, we will make the const variable from the req data
+  const noteContent = req.body.noteContent
+  const noteName = req.body.noteName
+  const noteId = data.length + 100;
+  const noteColor = req.body.noteColor
+  
+
+  //TODO then call the function
+  post(data, noteContent, noteName, noteId, noteColor, db, "/", noteColor);
+
+  res.redirect("/")
 })
 //* second function is to post comment. The algorithm is same, but in comment a little tricky
 //TODO its because we need has the noteId position on array.
@@ -480,12 +396,8 @@ app.post("/videos/comment/:noteId", (req, res) => {
             shuf = false;
             res.redirect("/videos")
           }
-        });
-        
-        
+        });  
       }
-      
-      
 });
 //* third function is to post video. THe algorithm is same, nothing different.
 app.post("/videos", uploadvid.single('video'), (req, res) => {
@@ -493,27 +405,8 @@ app.post("/videos", uploadvid.single('video'), (req, res) => {
   const noteName = req.body.noteName;
   const noteId = datavid.length + 100;
 
-  if (noteContent.trim() !== "" && noteName.trim() !== "") {
-    const file = req.file;
-    if (file) {
-      sql = 'INSERT INTO data(noteId,noteContent,noteName) VALUES (?,?,?)';
-      dbvid.run(sql, [noteId, noteContent, noteName], (err) => {
-        if (!err) {
-          datavid.unshift({
-            noteId: noteId,
-            noteContent: noteContent,
-            noteName: noteName,
-            like: 0,
-            comment: []
-          });
-          shuf = false;
-          res.redirect("/videos");
-        } else {
-          console.error(err);
-        }
-      });
-    }
-  }
+  //TODO then call the function
+  post(datavid, noteContent, noteName, noteId, dbvid, "/", res);
 });
 //TODO fourth, we will be like button
 app.post("/like/:noteId", (req, res) => {
@@ -684,12 +577,11 @@ app.post("/anime", uploadAnime.single('image'), (req, res) => {
     data: dataAnime
   })
 })
-//? =======================================================================
+//* =======================================================================
 //TODO finnaly, we will be export the app and will run on "index.js" script :)
-
 module.exports = {
   app: app
 }
-//? =======================================================================
+//* =======================================================================
 //! © The script created by M.Fathin Halim(Doma Tomoharu). 
 //? If you want copy it, you need to change it and you cant use ALL my script to your apps:/

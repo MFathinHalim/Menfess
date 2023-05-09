@@ -10,10 +10,25 @@ const sqlite3 = require('sqlite3').verbose();
 const cookieParser = require("cookie-parser");
 const fs = require('fs');
 const multer = require('multer');
+const fileupload = require('express-fileupload'); 
+const FormData = require('form-data')
+
+
+// SDK initialization
+
+var ImageKit = require("imagekit");
 
 //* Just variable for SQL command
 let sql;
 let sqlMemes;
+
+//TODO Make ImageKit
+var imagekit = new ImageKit({
+  publicKey : "public_sfR8hcnPMIJ1ilavSLhv5IZiZ7E=",
+  privateKey : "private_eKrKi5RKb3/NijnWKF82mNgH4gA=",
+  urlEndpoint : "https://ik.imagekit.io/9hpbqscxd"
+});
+
 
 //TODO Now, we will make the storage with Multer:
 
@@ -28,10 +43,10 @@ const storage = multer.diskStorage({
 });
 //* Video Storage
 const storageVid = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function(req, file, cb) {
     cb(null, 'public/videos/');
   },
-  filename: function (req, file, cb) {
+  filename: function(req, file, cb) {
     cb(null, `video-${datavid.length + 100}.mp4`);
   }
 });
@@ -77,21 +92,21 @@ const dbAnime = new sqlite3.Database("./anime.db", sqlite3.OPEN_READWRITE, (err)
 //? ===============================================
 
 //TODO Now will make the data list variable
-const { notes, memes, anime, notesC } = require("./notes")
+const { notes, memes, anime, notesC } = require("./notes");
+const { error } = require('console');
 var data = notes; //* Main Data
 var datavid = []; //* Video data
 var dataMemes = memes;
 var dataAnime = anime;
 
 //TODO and then connect the data variable to SQLITE3
-sql = 'SELECT * FROM data';
+sql = 'SELECT * FROM data ORDER BY Like DESC';
 db.all(sql, [], (err, rows) => {
   if (err) return console.error(err.message);
-  
-  rows.forEach((row) => {
-    const noteId = row.noteId;
-    console.log(row.color)
-    
+  const promises = rows.map((row) => {
+    if (row.color == null) {
+      row.color = Math.floor(Math.random() * 4);
+    }
     const noteData = {
       noteId: row.noteId,
       noteContent: row.noteContent,
@@ -101,18 +116,26 @@ db.all(sql, [], (err, rows) => {
       color: row.color
     };
     const commentSql = 'SELECT * FROM comment WHERE noteId = ?';
-    db.all(commentSql, [noteId], (err, commentRows) => {
-      if (err) return console.error(err.message);
-      commentRows.forEach((commentRow) => {
-        noteData.comment.push({
-          commentId: commentRow.commentId,
-          commenterName: commentRow.commenterName,
-          commentContent: commentRow.commentContent
+    return new Promise((resolve, reject) => {
+      db.all(commentSql, [row.noteId], (err, commentRows) => {
+        if (err) return reject(err.message);
+        commentRows.forEach((commentRow) => {
+          noteData.comment.push({
+            commenterName: commentRow.commenterName,
+            commentContent: commentRow.commentContent
+          });
         });
+        resolve(noteData);
       });
-      data.push(noteData);
     });
   });
+  Promise.all(promises)
+    .then((dataWithComments) => {
+      data = dataWithComments;
+    })
+    .catch((err) => {
+      console.error(err.message);
+    });
 });
 //? ===============================================
 sql = 'SELECT * FROM data';
@@ -151,7 +174,7 @@ dbMemes.all(sql, [], (err, rows) => {
       noteContent: row.noteContent,
       noteName: row.noteName
     });
-    
+
   });
 });
 sqlAnime = 'SELECT * FROM data';
@@ -163,7 +186,7 @@ dbAnime.all(sql, [], (err, rows) => {
       noteContent: row.noteContent,
       noteName: row.noteName
     });
-    
+
   });
 });
 //? ===============================================
@@ -186,8 +209,8 @@ var postCounter = 0;
 //TODO function for shuffle on client, so dont change the main data
 function shuffleOnClient(data) {
 
-    return data;
-  
+  return data;
+
 }
 //? ==============================================
 
@@ -199,7 +222,7 @@ class Application {
     this.pageNumber = pageNumber;
     this.cookies = cookies;
   }
-  
+
   //TODO next make function for app.get()
   getFunction() {
     //TODO okay, in pagination we will be make the const variable first
@@ -216,7 +239,7 @@ class Application {
         const noteId = paginatedData[i].noteId;
         paginatedData.find((note) => note.noteId === noteId).hasLiked = req.cookies[`liked_${noteId}`] === "true";
     }*/
-    
+
     //TODO this will be make the paginatedData will shuffle.
     var gg;
     gg = shuffleOnClient(paginatedData);
@@ -278,46 +301,70 @@ app.get("/share/:noteId", function(req, res) {
     const item = data.splice(itemIndex, 1)[0];
     data.unshift(item);
   }
-  
+
   res.redirect("/");
 });
 //? ======================================================================================
 //* okay, the next one will be little harder
 //TODO first, the function to post menfess
-function post(data, noteContent,noteName, noteId, noteColor, db, redirect, res){
-  if (noteContent.trim() !== "" && noteName.trim() !== "") {
-    //TODO next we will add the post to database first.
-    sql = 'INSERT INTO data(noteId,noteContent,noteName) VALUES (?,?,?)';
-    db.run(sql, [noteId, noteContent, noteName], (err) => {
-      if (!err) {
-        //TODO if not error, the array data will add it
-        data.unshift({
-          noteId: noteId,
-          noteContent: noteContent,
-          noteName: noteName,
-          like: 0,
-          comment: [],
-          color: noteColor
-        });
-        //TODO the shuf will be false because we want to post is in first on array
-        shuf = false;
+function post(data, noteContent, noteName, noteId, noteColor, db) {
+  try {
 
-      }else{
-        console.error(err)
-      }
-    })
+    if (noteContent.trim() !== "" && noteName.trim() !== "") {
+      //TODO next we will add the post to database first.
+      sql = 'INSERT INTO data(noteId,noteContent,noteName,color) VALUES (?,?,?,?)';
+      db.run(sql, [noteId, noteContent, noteName, noteColor], (err) => {
+        setTimeout(() => {
+          if (!err) {
+            // TODO: add data to array
+            //TODO if not error, the array data will add it
+            data.unshift({
+              noteId: noteId,
+              noteContent: noteContent,
+              noteName: noteName,
+              like: 0,
+              comment: [],
+              color: noteColor
+            });
+            //TODO the shuf will be false because we want to post is in first on array
+            shuf = false;
+          } else {
+            console.error(err);
+          }
+        }, 1000);
+      })
+    }
+  } catch {
+    console.log("Ada yang error")
   }
 }
-app.post("/", upload.single('image'), (req, res) => {
+app.post("/",upload.single("image"), (req, res) => {
   //TODO first things, we will make the const variable from the req data
   const noteContent = req.body.noteContent
   const noteName = req.body.noteName
   const noteId = data.length + 100;
   const noteColor = req.body.noteColor
+  const file = req.file;
   
-
+  console.log(file)
+  fs.readFile(path.join(__dirname, '/public/images/uploads', 'image-'+noteId+'.jpg'), function(err, data) {
+    if (err) throw err; // Fail if the file can't be read.
+    imagekit.upload({
+      file : data, //required
+      fileName : 'image-'+noteId+'.jpg', //required
+      useUniqueFileName: false,
+    }, function(error, result) {
+      if(error) console.log(error);
+      else console.log(result);
+    });
+  });
+  const imageFileName = `image-${noteId}.jpg`;
+      const imageFilePath = path.join(__dirname, '/public/images/uploads', imageFileName);
+      if (fs.existsSync(imageFilePath)) {
+        fs.unlinkSync(imageFilePath);
+      }
   //TODO then call the function
-  post(data, noteContent, noteName, noteId, noteColor, db, "/", noteColor);
+  post(data, noteContent, noteName, noteId, noteColor, db);
 
   res.redirect("/")
 })
@@ -351,53 +398,51 @@ app.post("/comment/:noteId", (req, res) => {
             commenterName: noteName,
             commentContent: noteContent
           });
-          console.log(item.comment);
         }
-        
-          shuf = false;
-          res.redirect("/")
-        }
-      });
-      
-      
-    }
-    
-    
+
+        shuf = false;
+        res.redirect("/")
+      }
+    });
+
+
+  }
+
+
 });
 app.post("/videos/comment/:noteId", (req, res) => {
-    const noteContent = req.body.commentContent;
-    const noteName = req.body.commenterName;
-    const noteId = parseInt(req.params.noteId.trim());
-    const commentID = datavid.length + 50;
-  
-    if (noteContent.trim() !== "" && noteName.trim() !== "") {
-      sqlMemes = 'INSERT INTO comment(noteId,commentId,commentContent,commenterName) VALUES (?,?,?,?)';
-      dbvid.run(sqlMemes, [noteId, commentID, noteContent, noteName], (err) => {
-        if (!err) {
-          let itemIndex = -1;
-          for (let i = 0; i < datavid.length; i++) {
-            if (datavid[i].noteId == noteId) {
-              itemIndex = i;
-              break;
-            }
+  const noteContent = req.body.commentContent;
+  const noteName = req.body.commenterName;
+  const noteId = parseInt(req.params.noteId.trim());
+  const commentID = datavid.length + 50;
+
+  if (noteContent.trim() !== "" && noteName.trim() !== "") {
+    sqlMemes = 'INSERT INTO comment(noteId,commentId,commentContent,commenterName) VALUES (?,?,?,?)';
+    dbvid.run(sqlMemes, [noteId, commentID, noteContent, noteName], (err) => {
+      if (!err) {
+        let itemIndex = -1;
+        for (let i = 0; i < datavid.length; i++) {
+          if (datavid[i].noteId == noteId) {
+            itemIndex = i;
+            break;
           }
-  
-          if (itemIndex !== -1) {
-            const item = datavid.splice(itemIndex, 1)[0];
-            datavid.unshift(item);
-            item.comment.push({
-              commentId: commentID,
-              commenterName: noteName,
-              commentContent: noteContent
-            });
-            console.log(item.comment);
-          }
-          
-            shuf = false;
-            res.redirect("/videos")
-          }
-        });  
+        }
+
+        if (itemIndex !== -1) {
+          const item = datavid.splice(itemIndex, 1)[0];
+          datavid.unshift(item);
+          item.comment.push({
+            commentId: commentID,
+            commenterName: noteName,
+            commentContent: noteContent
+          });
+        }
+
+        shuf = false;
+        res.redirect("/videos")
       }
+    });
+  }
 });
 //* third function is to post video. THe algorithm is same, nothing different.
 app.post("/videos", uploadvid.single('video'), (req, res) => {
@@ -409,6 +454,7 @@ app.post("/videos", uploadvid.single('video'), (req, res) => {
   post(datavid, noteContent, noteName, noteId, dbvid, "/", res);
 });
 //TODO fourth, we will be like button
+
 app.post("/like/:noteId", (req, res) => {
   //TODO first the shuf we will be false
   shuf = false;
@@ -428,18 +474,16 @@ app.post("/like/:noteId", (req, res) => {
     data.unshift(item);
     if (!item.hasLiked) {
       //TODO like usualy,the script will run the database first
-      sql = 'UPDATE data SET "Like" = ? WHERE noteId = ?';
-      db.run(sql, [item.like + 1, noteId], (err) => {
-        if (!err) {
-          item.like++;
-          item.hasLiked = true;
-          //TODO then the cookie will be saved.
-          res.cookie(`liked_${noteId}`, "true");
-          res.redirect("/");
+
+      db.run("UPDATE data SET Like = Like + 1 WHERE noteId = ?", [noteId], function(err) {
+        item.like++
+        if (err) {
+          return console.log(err.message);
         }
+        item.hasLiked = true;
+        res.cookie(`liked_${noteId}`, "true");
+        res.redirect("/");
       });
-    } else {
-      res.redirect("/");
     }
   }
 });
@@ -461,7 +505,7 @@ app.post("/videos/like/:noteId", (req, res) => {
     datavid.unshift(item);
 
     if (!item.hasLiked) {
-      
+
       sql = 'UPDATE data SET "Like" = ? WHERE noteId = ?';
       dbvid.run(sql, [item.like + 1, noteId], (err) => {
         if (!err) {

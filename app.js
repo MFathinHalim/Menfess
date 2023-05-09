@@ -103,28 +103,18 @@ var dataAnime = anime;
 sql = 'SELECT * FROM data ORDER BY Like DESC';
 db.all(sql, [], (err, rows) => {
   if (err) return console.error(err.message);
-  const promises = rows.map((row) => {
-    if (row.color == null) {
-      row.color = Math.floor(Math.random() * 4);
+  const promises = rows.map(({ color, noteId, noteContent, noteName, Like }) => {
+    if (color == null) {
+      color = Math.floor(Math.random() * 4);
     }
-    const noteData = {
-      noteId: row.noteId,
-      noteContent: row.noteContent,
-      noteName: row.noteName,
-      like: row.Like,
-      comment: [],
-      color: row.color
-    };
+    const noteData = { noteId, noteContent, noteName, like: Like, comment: [], color };
     const commentSql = 'SELECT * FROM comment WHERE noteId = ?';
     return new Promise((resolve, reject) => {
-      db.all(commentSql, [row.noteId], (err, commentRows) => {
+      db.all(commentSql, [noteId], (err, commentRows) => {
         if (err) return reject(err.message);
-        commentRows.forEach((commentRow) => {
-          noteData.comment.push({
-            commenterName: commentRow.commenterName,
-            commentContent: commentRow.commentContent
-          });
-        });
+        for ({ commenterName, commentContent} of commentRows) {
+          noteData.comment.push({ commenterName, commentContent });
+        };
         resolve(noteData);
       });
     });
@@ -141,53 +131,32 @@ db.all(sql, [], (err, rows) => {
 sql = 'SELECT * FROM data';
 dbvid.all(sql, [], (err, rows) => {
   if (err) return console.error(err.message);
-  rows.forEach((row) => {
-    const noteId = row.noteId;
-    const noteData = {
-      noteId: row.noteId,
-      noteContent: row.noteContent,
-      noteName: row.noteName,
-      like: row.Like,
-      comment: []
-    };
+  for ({ noteId, noteContent, noteName, Like } of rows) {
+    const noteData = { noteId, noteContent, noteName, like: Like, comment: [] };
     const commentSql = 'SELECT * FROM comment WHERE noteId = ?';
     db.all(commentSql, [noteId], (err, commentRows) => {
       if (err) return console.error(err.message);
-      commentRows.forEach((commentRow) => {
-        noteData.comment.push({
-          commentId: commentRow.commentId,
-          commenterName: commentRow.commenterName,
-          commentContent: commentRow.commentContent
-        });
-      });
+      for ({commentId, commenterName, commentContent} of commentRows) {
+        noteData.comment.push({ commentId, commenterName, commentContent });
+      };
       datavid.push(noteData);
     });
-  });
+  };
 });
 //? ===============================================
 sqlMemes = 'SELECT * FROM data';
 dbMemes.all(sql, [], (err, rows) => {
   if (err) return console.error(err.message);
-  rows.forEach((row) => {
-    dataMemes.push({
-      noteId: row.noteId,
-      noteContent: row.noteContent,
-      noteName: row.noteName
-    });
-
-  });
+  for ({ noteId, noteContent, noteName } of rows) {
+    dataMemes.push({ noteId, noteContent, noteName });
+  };
 });
 sqlAnime = 'SELECT * FROM data';
 dbAnime.all(sql, [], (err, rows) => {
   if (err) return console.error(err.message);
-  rows.forEach((row) => {
-    dataAnime.push({
-      noteId: row.noteId,
-      noteContent: row.noteContent,
-      noteName: row.noteName
-    });
-
-  });
+  for ({ noteId, noteContent, noteName } of rows) {
+    dataAnime.push({ noteId, noteContent, noteName });
+  };
 });
 //? ===============================================
 //TODO Now times to make the app
@@ -287,11 +256,11 @@ app.get("/videos", function(req, res) {
 //TODO in this function, its just loaded the shared link and move the data to first on array
 app.get("/share/:noteId", function(req, res) {
   shuf = false;
-  const noteId = parseInt(req.params.noteId.trim());
+  const noteIdGet = parseInt(req.params.noteId.trim());
 
   let itemIndex = -1;
-  for (let i = 0; i < data.length; i++) {
-    if (data[i].noteId == noteId) {
+  for ({ noteId } of data) {
+    if (noteId == noteIdGet) {
       itemIndex = i;
       break;
     }
@@ -307,25 +276,18 @@ app.get("/share/:noteId", function(req, res) {
 //? ======================================================================================
 //* okay, the next one will be little harder
 //TODO first, the function to post menfess
-function post(data, noteContent, noteName, noteId, noteColor, db) {
+function post(data, noteContent, noteName, noteId, color, db) {
   try {
 
     if (noteContent.trim() !== "" && noteName.trim() !== "") {
       //TODO next we will add the post to database first.
       sql = 'INSERT INTO data(noteId,noteContent,noteName,color) VALUES (?,?,?,?)';
-      db.run(sql, [noteId, noteContent, noteName, noteColor], (err) => {
+      db.run(sql, [noteId, noteContent, noteName, color], (err) => {
         setTimeout(() => {
           if (!err) {
             // TODO: add data to array
             //TODO if not error, the array data will add it
-            data.unshift({
-              noteId: noteId,
-              noteContent: noteContent,
-              noteName: noteName,
-              like: 0,
-              comment: [],
-              color: noteColor
-            });
+            data.unshift({ noteId, noteContent, noteName, like: 0, comment: [], color });
             //TODO the shuf will be false because we want to post is in first on array
             shuf = false;
           } else {
@@ -373,18 +335,18 @@ app.post("/",upload.single("image"), (req, res) => {
 
 //* overall, its same
 app.post("/comment/:noteId", (req, res) => {
-  const noteContent = req.body.commentContent;
-  const noteName = req.body.commenterName;
-  const noteId = parseInt(req.params.noteId.trim());
+  const commentContent = req.body.commentContent;
+  const commenterName = req.body.commenterName;
+  const noteIdPost = parseInt(req.params.noteId.trim());
   const commentID = data.length + 50;
 
   if (noteContent.trim() !== "" && noteName.trim() !== "") {
     sqlMemes = 'INSERT INTO comment(noteId,commentId,commentContent,commenterName) VALUES (?,?,?,?)';
-    db.run(sqlMemes, [noteId, commentID, noteContent, noteName], (err) => {
+    db.run(sqlMemes, [noteIdPost, commentID, commentContent, commenterName], (err) => {
       if (!err) {
         let itemIndex = -1;
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].noteId == noteId) {
+        for ({ noteId } of data) {
+          if (noteId == noteIdPost) {
             itemIndex = i;
             break;
           }
@@ -393,11 +355,7 @@ app.post("/comment/:noteId", (req, res) => {
         if (itemIndex !== -1) {
           const item = data.splice(itemIndex, 1)[0];
           data.unshift(item);
-          item.comment.push({
-            commentId: commentID,
-            commenterName: noteName,
-            commentContent: noteContent
-          });
+          item.comment.push({ commentID, commenterName, commentContent });
         }
 
         shuf = false;
@@ -411,18 +369,18 @@ app.post("/comment/:noteId", (req, res) => {
 
 });
 app.post("/videos/comment/:noteId", (req, res) => {
-  const noteContent = req.body.commentContent;
-  const noteName = req.body.commenterName;
-  const noteId = parseInt(req.params.noteId.trim());
+  const commentContent = req.body.commentContent;
+  const commenterName = req.body.commenterName;
+  const noteIdPost = parseInt(req.params.noteId.trim());
   const commentID = datavid.length + 50;
 
   if (noteContent.trim() !== "" && noteName.trim() !== "") {
     sqlMemes = 'INSERT INTO comment(noteId,commentId,commentContent,commenterName) VALUES (?,?,?,?)';
-    dbvid.run(sqlMemes, [noteId, commentID, noteContent, noteName], (err) => {
+    dbvid.run(sqlMemes, [noteIdPost, commentID, commentContent, commenterName], (err) => {
       if (!err) {
         let itemIndex = -1;
-        for (let i = 0; i < datavid.length; i++) {
-          if (datavid[i].noteId == noteId) {
+        for ({ noteId } of datavid) {
+          if (noteId == noteIdPost) {
             itemIndex = i;
             break;
           }
@@ -431,11 +389,7 @@ app.post("/videos/comment/:noteId", (req, res) => {
         if (itemIndex !== -1) {
           const item = datavid.splice(itemIndex, 1)[0];
           datavid.unshift(item);
-          item.comment.push({
-            commentId: commentID,
-            commenterName: noteName,
-            commentContent: noteContent
-          });
+          item.comment.push({ commentId, commenterName, commentContent });
         }
 
         shuf = false;
@@ -458,12 +412,12 @@ app.post("/videos", uploadvid.single('video'), (req, res) => {
 app.post("/like/:noteId", (req, res) => {
   //TODO first the shuf we will be false
   shuf = false;
-  const noteId = parseInt(req.params.noteId.trim());
+  const noteIdPost = parseInt(req.params.noteId.trim());
 
   //TODO next we will be search the position of noteId
   let itemIndex = -1;
-  for (let i = 0; i < data.length; i++) {
-    if (data[i].noteId == noteId) {
+  for ({ noteId } of data) {
+    if (noteId == noteIdPost) {
       itemIndex = i;
       break;
     }
@@ -475,13 +429,13 @@ app.post("/like/:noteId", (req, res) => {
     if (!item.hasLiked) {
       //TODO like usualy,the script will run the database first
 
-      db.run("UPDATE data SET Like = Like + 1 WHERE noteId = ?", [noteId], function(err) {
+      db.run("UPDATE data SET Like = Like + 1 WHERE noteId = ?", [noteIdPost], function(err) {
         item.like++
         if (err) {
           return console.log(err.message);
         }
         item.hasLiked = true;
-        res.cookie(`liked_${noteId}`, "true");
+        res.cookie(`liked_${noteIdPost}`, "true");
         res.redirect("/");
       });
     }
@@ -490,11 +444,11 @@ app.post("/like/:noteId", (req, res) => {
 //* the algorithm of like in videos is same
 app.post("/videos/like/:noteId", (req, res) => {
   shuf = false;
-  const noteId = parseInt(req.params.noteId.trim());
+  const noteIdPost = parseInt(req.params.noteId.trim());
 
   let itemIndex = -1;
-  for (let i = 0; i < datavid.length; i++) {
-    if (datavid[i].noteId == noteId) {
+  for ({ noteId } of datavid) {
+    if (noteId == noteIdPost) {
       itemIndex = i;
       break;
     }
@@ -507,11 +461,11 @@ app.post("/videos/like/:noteId", (req, res) => {
     if (!item.hasLiked) {
 
       sql = 'UPDATE data SET "Like" = ? WHERE noteId = ?';
-      dbvid.run(sql, [item.like + 1, noteId], (err) => {
+      dbvid.run(sql, [item.like + 1, noteIdPost], (err) => {
         if (!err) {
           item.like++;
           item.hasLiked = true;
-          res.cookie(`liked_${noteId}`, "true");
+          res.cookie(`liked_${noteIdPost}`, "true");
           res.redirect("/videos");
         }
       });
@@ -524,8 +478,7 @@ app.post("/videos/like/:noteId", (req, res) => {
 
 //TODO next will be admin feature, overall its just add the delete function
 app.get("/admin", function(req, res) {
-  for (let i = 0; i < data.length; i++) {
-    const noteId = data[i].noteId;
+  for ({ noteId } of data) {
     data.find((note) => note.noteId === noteId).hasLiked = req.cookies[`liked_${noteId}`] === "true";
   }
   var gg;
@@ -591,11 +544,7 @@ app.post("/memes", uploadMemes.single('image'), (req, res) => {
     })
   }
 
-  dataMemes.push({
-    noteId: noteId,
-    noteContent: noteContent,
-    noteName: noteName
-  });
+  dataMemes.push({ noteId, noteContent, noteName });
   res.render("memes", {
     data: dataMemes
   })
@@ -612,11 +561,7 @@ app.post("/anime", uploadAnime.single('image'), (req, res) => {
     })
   }
 
-  dataAnime.push({
-    noteId: noteId,
-    noteContent: noteContent,
-    noteName: noteName
-  });
+  dataAnime.push({ noteId, noteContent, noteName });
   res.render("anime", {
     data: dataAnime
   })

@@ -13,6 +13,8 @@ const multer = require('multer');
 const fileupload = require('express-fileupload'); 
 const FormData = require('form-data')
 
+// Load .env file
+require("dotenv").config()
 
 // SDK initialization
 
@@ -24,9 +26,9 @@ let sqlMemes;
 
 //TODO Make ImageKit
 var imagekit = new ImageKit({
-  publicKey : "public_sfR8hcnPMIJ1ilavSLhv5IZiZ7E=",
-  privateKey : "private_eKrKi5RKb3/NijnWKF82mNgH4gA=",
-  urlEndpoint : "https://ik.imagekit.io/9hpbqscxd"
+  publicKey : process.env.IMAGEKIT_PUBLICKEY,
+  privateKey : process.env.IMAGEKIT_PRIVATEKEY,
+  urlEndpoint : process.env.IMAGEKIT_URLENDPOINT
 });
 
 

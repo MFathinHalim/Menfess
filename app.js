@@ -13,6 +13,8 @@ const multer = require('multer');
 const fileupload = require('express-fileupload'); 
 const FormData = require('form-data')
 
+// Load .env file
+require("dotenv").config()
 
 // SDK initialization
 
@@ -24,71 +26,44 @@ let sqlMemes;
 
 //TODO Make ImageKit
 var imagekit = new ImageKit({
-  publicKey : "public_sfR8hcnPMIJ1ilavSLhv5IZiZ7E=",
-  privateKey : "private_eKrKi5RKb3/NijnWKF82mNgH4gA=",
-  urlEndpoint : "https://ik.imagekit.io/9hpbqscxd"
+  publicKey : process.env.IMAGEKIT_PUBLICKEY,
+  privateKey : process.env.IMAGEKIT_PRIVATEKEY,
+  urlEndpoint : process.env.IMAGEKIT_URLENDPOINT
 });
 
 
 //TODO Now, we will make the storage with Multer:
 
-//* Main Storage
-const storage = multer.diskStorage({
+const makeStorage = (destination, filename) => multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, 'public/images/uploads');
+    cb(null, destination)
   },
   filename: function(req, file, cb) {
-    cb(null, `image-${data.length + 100}.jpg`);
+    cb(null, filename)
   }
-});
-//* Video Storage
-const storageVid = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'public/videos/');
-  },
-  filename: function(req, file, cb) {
-    cb(null, `video-${datavid.length + 100}.mp4`);
-  }
-});
+})
 
-//* You can ignore this
-const storageMemes = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'public/images/uploads/memes');
-  },
-  filename: function(req, file, cb) {
-    cb(null, `image-${dataMemes.length + 1}.jpg`);
-  }
-});
-const storageAnime = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'public/images/uploads/anime');
-  },
-  filename: function(req, file, cb) {
-    cb(null, `image-${dataAnime.length + 1}.jpg`);
-  }
-});
+const storage = makeStorage('public/images/uploads', `image-${data.length + 100}.jpg`),
+      storageVid = makeStorage('public/videos/', `video-${datavid.length + 100}.mp4`),
+      storageMemes = makeStorage('public/images/uploads/memes', `image-${dataMemes.length + 1}.jpg`),
+      storageAnime = makeStorage('public/images/uploads/anime', `image-${dataAnime.length + 1}.jpg`)
+      
 //? ==================================================
 //TODO Now will make the connection variable to connect from multer Storage
-
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 const uploadvid = multer({ storage: storageVid });
 const uploadMemes = multer({ storage: storageMemes });
 const uploadAnime = multer({ storage: storageAnime });
 
 //? =================================================== 
-const db = new sqlite3.Database("./test.db", sqlite3.OPEN_READWRITE, (err) => {
-  if (err) return console.error(err.message);
-});
-const dbvid = new sqlite3.Database("./video.db", sqlite3.OPEN_READWRITE, (err) => {
-  if (err) return console.error(err.message);
-});
-const dbMemes = new sqlite3.Database("./memes.db", sqlite3.OPEN_READWRITE, (err) => {
-  if (err) return console.error(err.message);
-});
-const dbAnime = new sqlite3.Database("./anime.db", sqlite3.OPEN_READWRITE, (err) => {
-  if (err) return console.error(err.message);
-});
+const loadDB = file => new sqlite3.Database(file, sqlite3.OPEN_READWRITE, (err) => {
+  if (err) return console.error(err.message)
+})
+
+const db = loadDB("./test.db"),
+      dbvid = loadDB("./video.db"),
+      dbMemes = loadDB("./memes.db"),
+      dbAnime = loadDb("./anime.db")
 //? ===============================================
 
 //TODO Now will make the data list variable
@@ -258,13 +233,7 @@ app.get("/share/:noteId", function(req, res) {
   shuf = false;
   const noteIdGet = parseInt(req.params.noteId.trim());
 
-  let itemIndex = -1;
-  for ({ noteId } of data) {
-    if (noteId == noteIdGet) {
-      itemIndex = i;
-      break;
-    }
-  }
+  const itemIndex = data.findIndex(({noteId}) => noteId == noteIdGet)
 
   if (itemIndex !== -1) {
     const item = data.splice(itemIndex, 1)[0];
@@ -344,13 +313,7 @@ app.post("/comment/:noteId", (req, res) => {
     sqlMemes = 'INSERT INTO comment(noteId,commentId,commentContent,commenterName) VALUES (?,?,?,?)';
     db.run(sqlMemes, [noteIdPost, commentID, commentContent, commenterName], (err) => {
       if (!err) {
-        let itemIndex = -1;
-        for ({ noteId } of data) {
-          if (noteId == noteIdPost) {
-            itemIndex = i;
-            break;
-          }
-        }
+        const itemIndex = data.findIndex(({noteId}) => noteId == noteIdPost)
 
         if (itemIndex !== -1) {
           const item = data.splice(itemIndex, 1)[0];
@@ -378,13 +341,7 @@ app.post("/videos/comment/:noteId", (req, res) => {
     sqlMemes = 'INSERT INTO comment(noteId,commentId,commentContent,commenterName) VALUES (?,?,?,?)';
     dbvid.run(sqlMemes, [noteIdPost, commentID, commentContent, commenterName], (err) => {
       if (!err) {
-        let itemIndex = -1;
-        for ({ noteId } of datavid) {
-          if (noteId == noteIdPost) {
-            itemIndex = i;
-            break;
-          }
-        }
+        const itemIndex = datavid.findIndex(({noteId}) => noteId == noteIdPost)
 
         if (itemIndex !== -1) {
           const item = datavid.splice(itemIndex, 1)[0];
@@ -415,13 +372,7 @@ app.post("/like/:noteId", (req, res) => {
   const noteIdPost = parseInt(req.params.noteId.trim());
 
   //TODO next we will be search the position of noteId
-  let itemIndex = -1;
-  for ({ noteId } of data) {
-    if (noteId == noteIdPost) {
-      itemIndex = i;
-      break;
-    }
-  }
+  const itemIndex = data.findIndex(({noteId}) => noteId == noteIdPost)
 
   if (itemIndex !== -1) {
     const item = data.splice(itemIndex, 1)[0];
@@ -446,13 +397,7 @@ app.post("/videos/like/:noteId", (req, res) => {
   shuf = false;
   const noteIdPost = parseInt(req.params.noteId.trim());
 
-  let itemIndex = -1;
-  for ({ noteId } of datavid) {
-    if (noteId == noteIdPost) {
-      itemIndex = i;
-      break;
-    }
-  }
+  const itemIndex = datavid.findIndex(({noteId}) => noteId == noteIdPost)
 
   if (itemIndex !== -1) {
     const item = datavid.splice(itemIndex, 1)[0];

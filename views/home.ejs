@@ -77,7 +77,7 @@ window.onload = function() {
 													<%= element.noteContent %>
 											</h3>
 
-												<img class="image-zoom" name="img" src="https://ik.imagekit.io/9hpbqscxd/image-<%= element.noteId %>.jpg" onError="this.remove();" alt="Gambar" class="lazy-load">
+												<img class="image-zoom" name="img" src="<%= process.env.IMAGEKIT_URLENDPOINT %>/image-<%= element.noteId %>.jpg" onError="this.remove();" alt="Gambar" class="lazy-load">
 
 										</article>
 

@@ -6,23 +6,16 @@
 const path = require('path');
 const express = require('express')
 const bodyParser = require('body-parser')
-const sqlite3 = require('sqlite3').verbose();
 const cookieParser = require("cookie-parser");
 const fs = require('fs');
 const multer = require('multer');
 const fileupload = require('express-fileupload'); 
 const FormData = require('form-data')
-
-// Load .env file
-require("dotenv").config()
+const { mainModel, videoModel, memesModel, animeModel } = require("./models/post")
 
 // SDK initialization
 
 var ImageKit = require("imagekit");
-
-//* Just variable for SQL command
-let sql;
-let sqlMemes;
 
 //TODO Make ImageKit
 var imagekit = new ImageKit({
@@ -31,23 +24,45 @@ var imagekit = new ImageKit({
   urlEndpoint : process.env.IMAGEKIT_URLENDPOINT
 });
 
+//? ===============================================
 
 //TODO Now, we will make the storage with Multer:
-
-const makeStorage = (destination, filename) => multer.diskStorage({
+const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, destination)
+    cb(null, `public/images/uploads`)
   },
   filename: function(req, file, cb) {
-    cb(null, filename)
+    cb(null, `image-${data.length + 100}.jpg`)
   }
 })
 
-const storage = makeStorage('public/images/uploads', `image-${data.length + 100}.jpg`),
-      storageVid = makeStorage('public/videos/', `video-${datavid.length + 100}.mp4`),
-      storageMemes = makeStorage('public/images/uploads/memes', `image-${dataMemes.length + 1}.jpg`),
-      storageAnime = makeStorage('public/images/uploads/anime', `image-${dataAnime.length + 1}.jpg`)
-      
+const storageVid = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, `public/videos/`)
+  },
+  filename: function(req, file, cb) {
+    cb(null, `video-${datavid.length + 100}.mp4`)
+  }
+})
+
+const storageMemes = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, `public/images/uploads/memes`)
+  },
+  filename: function(req, file, cb) {
+    cb(null, `image-${dataMemes.length + 1}.jpg`)
+  }
+})
+
+const storageAnime = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, `public/images/uploads/anime`)
+  },
+  filename: function(req, file, cb) {
+    cb(null, `image-${dataAnime.length + 1}.jpg`)
+  }
+})
+
 //? ==================================================
 //TODO Now will make the connection variable to connect from multer Storage
 const upload = multer({ storage });
@@ -56,84 +71,20 @@ const uploadMemes = multer({ storage: storageMemes });
 const uploadAnime = multer({ storage: storageAnime });
 
 //? =================================================== 
-const loadDB = file => new sqlite3.Database(file, sqlite3.OPEN_READWRITE, (err) => {
-  if (err) return console.error(err.message)
-})
-
-const db = loadDB("./test.db"),
-      dbvid = loadDB("./video.db"),
-      dbMemes = loadDB("./memes.db"),
-      dbAnime = loadDb("./anime.db")
-//? ===============================================
 
 //TODO Now will make the data list variable
-const { notes, memes, anime, notesC } = require("./notes");
-const { error } = require('console');
-var data = notes; //* Main Data
+var data = []; //* Main Data
 var datavid = []; //* Video data
-var dataMemes = memes;
-var dataAnime = anime;
+var dataMemes = [];
+var dataAnime = [];
 
-//TODO and then connect the data variable to SQLITE3
-sql = 'SELECT * FROM data ORDER BY Like DESC';
-db.all(sql, [], (err, rows) => {
-  if (err) return console.error(err.message);
-  const promises = rows.map(({ color, noteId, noteContent, noteName, Like }) => {
-    if (color == null) {
-      color = Math.floor(Math.random() * 4);
-    }
-    const noteData = { noteId, noteContent, noteName, like: Like, comment: [], color };
-    const commentSql = 'SELECT * FROM comment WHERE noteId = ?';
-    return new Promise((resolve, reject) => {
-      db.all(commentSql, [noteId], (err, commentRows) => {
-        if (err) return reject(err.message);
-        for ({ commenterName, commentContent} of commentRows) {
-          noteData.comment.push({ commenterName, commentContent });
-        };
-        resolve(noteData);
-      });
-    });
-  });
-  Promise.all(promises)
-    .then((dataWithComments) => {
-      data = dataWithComments;
-    })
-    .catch((err) => {
-      console.error(err.message);
-    });
-});
-//? ===============================================
-sql = 'SELECT * FROM data';
-dbvid.all(sql, [], (err, rows) => {
-  if (err) return console.error(err.message);
-  for ({ noteId, noteContent, noteName, Like } of rows) {
-    const noteData = { noteId, noteContent, noteName, like: Like, comment: [] };
-    const commentSql = 'SELECT * FROM comment WHERE noteId = ?';
-    db.all(commentSql, [noteId], (err, commentRows) => {
-      if (err) return console.error(err.message);
-      for ({commentId, commenterName, commentContent} of commentRows) {
-        noteData.comment.push({ commentId, commenterName, commentContent });
-      };
-      datavid.push(noteData);
-    });
-  };
-});
-//? ===============================================
-sqlMemes = 'SELECT * FROM data';
-dbMemes.all(sql, [], (err, rows) => {
-  if (err) return console.error(err.message);
-  for ({ noteId, noteContent, noteName } of rows) {
-    dataMemes.push({ noteId, noteContent, noteName });
-  };
-});
-sqlAnime = 'SELECT * FROM data';
-dbAnime.all(sql, [], (err, rows) => {
-  if (err) return console.error(err.message);
-  for ({ noteId, noteContent, noteName } of rows) {
-    dataAnime.push({ noteId, noteContent, noteName });
-  };
-});
-//? ===============================================
+// intinya ngambil dari mongodb taruh variabel data
+mainModel.find({}, null, { sort: { like: -1 } }).then(docs => data = docs)
+videoModel.find({}, null, { sort: { like: -1 } }).then(docs => datavid = docs)
+memesModel.find({}, null, { sort: { like: -1 } }).then(docs => dataMemes = docs)
+animeModel.find({}, null, { sort: { like: -1 } }).then(docs => dataAnime = docs)
+
+
 //TODO Now times to make the app
 const app = express()
 
@@ -245,59 +196,55 @@ app.get("/share/:noteId", function(req, res) {
 //? ======================================================================================
 //* okay, the next one will be little harder
 //TODO first, the function to post menfess
-function post(data, noteContent, noteName, noteId, color, db) {
+/**
+ * @param {mainModel} model 
+ */
+async function post(data, noteContent, noteName, noteId, color, model, file, res) {
   try {
-
     if (noteContent.trim() !== "" && noteName.trim() !== "") {
       //TODO next we will add the post to database first.
-      sql = 'INSERT INTO data(noteId,noteContent,noteName,color) VALUES (?,?,?,?)';
-      db.run(sql, [noteId, noteContent, noteName, color], (err) => {
-        setTimeout(() => {
-          if (!err) {
-            // TODO: add data to array
-            //TODO if not error, the array data will add it
-            data.unshift({ noteId, noteContent, noteName, like: 0, comment: [], color });
-            //TODO the shuf will be false because we want to post is in first on array
-            shuf = false;
-          } else {
-            console.error(err);
-          }
-        }, 1000);
-      })
+      await model.create({ noteContent, noteName, noteId, color, comment: [], like: 0})
+      data.unshift({ noteId, noteContent, noteName, like: 0, comment: [], color })
+      shuf = false
     }
-  } catch {
-    console.log("Ada yang error")
+    if (file) {
+      const ext = file.filename.split(".")[file.filename.split(".").length - 1]
+      if (ext == "jpg") {
+        console.log(file)
+        fs.readFile(path.join(__dirname, '/public/images/uploads', 'image-'+noteId+'.jpg'), async function(err, data) {
+          if (err) throw err; // Fail if the file can't be read.
+          await imagekit.upload({
+            file : data, //required
+            fileName : 'image-'+noteId+'.jpg', //required
+            useUniqueFileName: false,
+          }, function(error, result) {
+            if(error) console.log(error);
+            else console.log(result);
+            res.redirect("/")
+          });
+        });
+        const imageFileName = `image-${noteId}.jpg`;
+        const imageFilePath = path.join(__dirname, '/public/images/uploads', imageFileName);
+        if (fs.existsSync(imageFilePath)) {
+          fs.unlinkSync(imageFilePath);
+        }
+      }
+    } else if (res) res.redirect("/")
+  } catch (err) {
+    console.error(err)
   }
 }
-app.post("/",upload.single("image"), (req, res) => {
+
+app.post("/",upload.single("image"), async (req, res) => {
   //TODO first things, we will make the const variable from the req data
   const noteContent = req.body.noteContent
   const noteName = req.body.noteName
   const noteId = data.length + 100;
   const noteColor = req.body.noteColor
   const file = req.file;
-  
-  console.log(file)
-  fs.readFile(path.join(__dirname, '/public/images/uploads', 'image-'+noteId+'.jpg'), function(err, data) {
-    if (err) throw err; // Fail if the file can't be read.
-    imagekit.upload({
-      file : data, //required
-      fileName : 'image-'+noteId+'.jpg', //required
-      useUniqueFileName: false,
-    }, function(error, result) {
-      if(error) console.log(error);
-      else console.log(result);
-    });
-  });
-  const imageFileName = `image-${noteId}.jpg`;
-      const imageFilePath = path.join(__dirname, '/public/images/uploads', imageFileName);
-      if (fs.existsSync(imageFilePath)) {
-        fs.unlinkSync(imageFilePath);
-      }
-  //TODO then call the function
-  post(data, noteContent, noteName, noteId, noteColor, db);
 
-  res.redirect("/")
+  //TODO then call the function
+  await post(data, noteContent, noteName, noteId, noteColor, mainModel, file, res);
 })
 //* second function is to post comment. The algorithm is same, but in comment a little tricky
 //TODO its because we need has the noteId position on array.
@@ -309,10 +256,9 @@ app.post("/comment/:noteId", (req, res) => {
   const noteIdPost = parseInt(req.params.noteId.trim());
   const commentID = data.length + 50;
 
-  if (noteContent.trim() !== "" && noteName.trim() !== "") {
-    sqlMemes = 'INSERT INTO comment(noteId,commentId,commentContent,commenterName) VALUES (?,?,?,?)';
-    db.run(sqlMemes, [noteIdPost, commentID, commentContent, commenterName], (err) => {
-      if (!err) {
+  if (commentContent.trim() !== "" && commenterName.trim() !== "") {
+    mainModel.findOneAndUpdate({ noteId: noteIdPost }, { $push: { comment: { commentContent, commentId: commentID, commenterName } } })
+      .then(() => {
         const itemIndex = data.findIndex(({noteId}) => noteId == noteIdPost)
 
         if (itemIndex !== -1) {
@@ -323,46 +269,43 @@ app.post("/comment/:noteId", (req, res) => {
 
         shuf = false;
         res.redirect("/")
-      }
-    });
-
-
+      })
+      .catch(err => console.error(err))
   }
-
-
 });
+
 app.post("/videos/comment/:noteId", (req, res) => {
   const commentContent = req.body.commentContent;
   const commenterName = req.body.commenterName;
   const noteIdPost = parseInt(req.params.noteId.trim());
   const commentID = datavid.length + 50;
 
-  if (noteContent.trim() !== "" && noteName.trim() !== "") {
-    sqlMemes = 'INSERT INTO comment(noteId,commentId,commentContent,commenterName) VALUES (?,?,?,?)';
-    dbvid.run(sqlMemes, [noteIdPost, commentID, commentContent, commenterName], (err) => {
-      if (!err) {
+  if (commentContent.trim() !== "" && commenterName.trim() !== "") {
+    videoModel.findOneAndUpdate({ noteId: noteIdPost }, { $push: { comment: { commentContent, commentId: commentID, commenterName } } })
+      .then(() => {
         const itemIndex = datavid.findIndex(({noteId}) => noteId == noteIdPost)
 
         if (itemIndex !== -1) {
           const item = datavid.splice(itemIndex, 1)[0];
           datavid.unshift(item);
-          item.comment.push({ commentId, commenterName, commentContent });
+          item.comment.push({ commentID, commenterName, commentContent });
         }
 
         shuf = false;
         res.redirect("/videos")
-      }
-    });
+      })
+      .catch(err => console.error(err))
   }
 });
 //* third function is to post video. THe algorithm is same, nothing different.
-app.post("/videos", uploadvid.single('video'), (req, res) => {
+app.post("/videos", uploadvid.single('video'), async (req, res) => {
   const noteContent = req.body.noteContent;
   const noteName = req.body.noteName;
   const noteId = datavid.length + 100;
 
   //TODO then call the function
-  post(datavid, noteContent, noteName, noteId, dbvid, "/", res);
+  await post(datavid, noteContent, noteName, noteId, null, videoModel);
+  res.redirect("/videos")
 });
 //TODO fourth, we will be like button
 
@@ -379,16 +322,14 @@ app.post("/like/:noteId", (req, res) => {
     data.unshift(item);
     if (!item.hasLiked) {
       //TODO like usualy,the script will run the database first
-
-      db.run("UPDATE data SET Like = Like + 1 WHERE noteId = ?", [noteIdPost], function(err) {
-        item.like++
-        if (err) {
-          return console.log(err.message);
-        }
-        item.hasLiked = true;
-        res.cookie(`liked_${noteIdPost}`, "true");
-        res.redirect("/");
-      });
+      mainModel.findOneAndUpdate({noteId: noteIdPost}, { $inc: { like: 1 } })
+        .then(() => {
+          item.like >= 0 ? item.like++ : item.like = 1
+          item.hasLiked = true;
+          res.cookie(`liked_${noteIdPost}`, "true");
+          res.redirect("/");
+        })
+        .catch(err => console.error(err))
     }
   }
 });
@@ -401,21 +342,17 @@ app.post("/videos/like/:noteId", (req, res) => {
 
   if (itemIndex !== -1) {
     const item = datavid.splice(itemIndex, 1)[0];
-    datavid.unshift(item);
-
+    data.unshift(item);
     if (!item.hasLiked) {
-
-      sql = 'UPDATE data SET "Like" = ? WHERE noteId = ?';
-      dbvid.run(sql, [item.like + 1, noteIdPost], (err) => {
-        if (!err) {
-          item.like++;
+      //TODO like usualy,the script will run the database first
+      videoModel.findOneAndUpdate({noteId: noteIdPost}, { $inc: { like: 1 } })
+        .then(() => {
+          item.like >= 0 ? item.like++ : item.like = 1
           item.hasLiked = true;
           res.cookie(`liked_${noteIdPost}`, "true");
           res.redirect("/videos");
-        }
-      });
-    } else {
-      res.redirect("/videos");
+        })
+        .catch(err => console.error(err))
     }
   }
 });
@@ -440,29 +377,24 @@ app.get("/admin", function(req, res) {
 app.post('/delete/:noteId', (req, res) => {
   const noteId = parseInt(req.params.noteId.trim());
 
-  sql = 'DELETE FROM data WHERE noteId=?';
-  db.run(sql, [noteId], (err) => {
-    db.run('DELETE FROM comment WHERE noteId=?', [noteId], (err) => {
-      if (err) return console.error(err.message);
-
-      sql = 'DELETE FROM data WHERE id=?';
-      const imageFileName = `image-${noteId}.jpg`;
-      const imageFilePath = path.join(__dirname, '/public/images/uploads', imageFileName);
-      if (fs.existsSync(imageFilePath)) {
-        fs.unlinkSync(imageFilePath);
-      }
-      var j = 0;
-      data.forEach(note => {
-        j = j + 1;
-        if (note.noteId == noteId) {
-          data.splice((j - 1), 1)
+  mainModel.findOneAndDelete({ noteId })
+    .then(() => {
+        const imageFileName = `image-${noteId}.jpg`;
+        const imageFilePath = path.join(__dirname, '/public/images/uploads', imageFileName);
+        if (fs.existsSync(imageFilePath)) {
+          fs.unlinkSync(imageFilePath);
         }
-      })
+        var j = 0;
+        data.forEach(note => {
+          j = j + 1;
+          if (note.noteId == noteId) {
+            data.splice((j - 1), 1)
+          }
+        })
 
-      res.redirect("/admin")
+        res.redirect("/admin")
     })
-  });
-
+    .catch(console.error(err))
 })
 //? ======================================================================
 //* the the Memes and Anime channel. The function use the old algorithm so you can ignore :)
@@ -513,9 +445,7 @@ app.post("/anime", uploadAnime.single('image'), (req, res) => {
 })
 //* =======================================================================
 //TODO finnaly, we will be export the app and will run on "index.js" script :)
-module.exports = {
-  app: app
-}
+module.exports = app
 //* =======================================================================
 //! © The script created by M.Fathin Halim(Doma Tomoharu). 
 //? If you want copy it, you need to change it and you cant use ALL my script to your apps:/

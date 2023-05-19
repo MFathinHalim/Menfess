@@ -1,13 +1,22 @@
-const mongoose = require('mongoose')
-require("dotenv").config()
+const mongoose = require('mongoose');
+require('dotenv').config();
 
-const app = require('./app')
+const app = require('./app');
 
-app.listen(3000, (req, res) => {
-  Host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
-    console.log("App is running on port 3000")
-    mongoose.connect(process.env.MONGODBURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    })
+const uri = process.env.MONGODBURI;
+const port = 3000;
+
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000, // Increase the server selection timeout
 })
+  .then(() => {
+    console.log('Connected to the database');
+    app.listen(port, () => {
+      console.log(`App is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Database connection error:', error);
+  });

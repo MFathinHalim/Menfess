@@ -16,9 +16,10 @@ const postSchema = new Schema({
     }],
 })
 
+
 module.exports = {
-    mainModel: model("main", postSchema),
-    videoModel: model("video", postSchema),
+    mainModel: model("mains", postSchema),
+    videoModel: model("videos", postSchema),
     memesModel: model("memes", postSchema),
-    animeModel: model("anime", postSchema)
+    animeModel: model("animes", postSchema)
 }

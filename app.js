@@ -79,10 +79,26 @@ var dataMemes = [];
 var dataAnime = [];
 
 // intinya ngambil dari mongodb taruh variabel data
-mainModel.find({}, null, { sort: { like: -1 } }).then(docs => data = docs)
-videoModel.find({}, null, { sort: { like: -1 } }).then(docs => datavid = docs)
-memesModel.find({}, null, { sort: { like: -1 } }).then(docs => dataMemes = docs)
-animeModel.find({}, null, { sort: { like: -1 } }).then(docs => dataAnime = docs)
+try{
+  mainModel.find({}, null, { sort: { like: -1 } }).then(docs => data = docs)
+  videoModel.find({}, null, { sort: { like: -1 } }).then(docs => datavid = docs)
+  memesModel.find({}, null, { sort: { like: -1 } }).then(docs => dataMemes = docs)
+  animeModel.find({}, null, { sort: { like: -1 } }).then(docs => dataAnime = docs)
+
+}catch{
+  try{
+    mainModel.find({}, null, { sort: { like: -1 } }).then(docs => data = docs)
+    videoModel.find({}, null, { sort: { like: -1 } }).then(docs => datavid = docs)
+    memesModel.find({}, null, { sort: { like: -1 } }).then(docs => dataMemes = docs)
+    animeModel.find({}, null, { sort: { like: -1 } }).then(docs => dataAnime = docs)
+  
+  }catch{
+    mainModel.find({}, null, { sort: { like: -1 } }).then(docs => data = docs)
+    videoModel.find({}, null, { sort: { like: -1 } }).then(docs => datavid = docs)
+    memesModel.find({}, null, { sort: { like: -1 } }).then(docs => dataMemes = docs)
+    animeModel.find({}, null, { sort: { like: -1 } }).then(docs => dataAnime = docs)
+  }
+}
 
 
 //TODO Now times to make the app

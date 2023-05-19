@@ -306,6 +306,7 @@ button:active{transform: scale(0.9);}
 	}
 
 	#main{
+		justify-items: center;
 		margin-top: 160px;
 	}
 		
@@ -345,6 +346,7 @@ button:active{transform: scale(0.9);}
 	
 }
 @media screen and (min-width: 780px){
+
 	#myVideo {
     width: 240px; /* Set a smaller width for larger screens */
     height: 320px; /* Set a smaller height for larger screens */
@@ -356,15 +358,13 @@ button:active{transform: scale(0.9);}
     font-size: 2vw;
   }
 	#mainn {
+
+		margin-top: 25px;
 		display: grid;
-		grid-template-rows: repeat(auto-fit, minmax(100px, auto));
-		grid-template-columns: 1fr 1fr;
-		margin-top: 10px;
-		grid-gap: 10px;
-		justify-content: center;
-		align-items: start;
+justify-items: center;
 	  }	  
-	  
+	  .card2{max-height:710px; margin-top:  20px; width: 500px; 
+		}
 	#table2{
 		display: grid;
 		grid-template-rows: repeat(auto-fit, minmax(100px, auto));
@@ -469,8 +469,8 @@ button:active{transform: scale(0.9);}
 	}
 	button:active{transform: scale(0.9);}
 	#main{
-
-		padding-top: 70px;
+		justify-items: center;
+		padding-top: 100px;
 	}
 
 }

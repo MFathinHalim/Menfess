@@ -368,6 +368,23 @@ app.post("/like/:noteId", (req, res) => {
     }
   }
 });
+
+//TODO lets make Share Feature
+app.post("/share/:noteId", (req, res) => {
+  //TODO first the shuf we will be false
+  shuf = false;
+  const noteIdPost = parseInt(req.params.noteId.trim());
+
+  //TODO next we will be search the position of noteId
+  const itemIndex = data.findIndex(({noteId}) => noteId == noteIdPost)
+
+  if (itemIndex !== -1) {
+    const item = data.splice(itemIndex, 1)[0];
+    data.unshift(item);
+
+  }
+});
+
 //* the algorithm of like in videos is same
 app.post("/videos/like/:noteId", (req, res) => {
   shuf = false;
@@ -482,5 +499,5 @@ app.post("/anime", uploadAnime.single('image'), (req, res) => {
 //TODO finnaly, we will be export the app and will run on "index.js" script :)
 module.exports = app
 //* =======================================================================
-//! © The script created by M.Fathin Halim(Doma Tomoharu). 
-//? If you want copy it, you need to change it and you cant use ALL my script to your apps:/
+//! © The script created by M.Fathin Halim(Doma Tomoharu) and The Friends. 
+//? If you want copy it, you need to change it and you cant use ALL our script to your apps:/

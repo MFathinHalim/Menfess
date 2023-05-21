@@ -499,5 +499,5 @@ app.post("/anime", uploadAnime.single('image'), (req, res) => {
 //TODO finnaly, we will be export the app and will run on "index.js" script :)
 module.exports = app
 //* =======================================================================
-//! © The script created by M.Fathin Halim(Doma Tomoharu) and The Friends. 
-//? If you want copy it, you need to change it and you cant use ALL our script to your apps:/
+//! © The script created by M.Fathin Halim(Doma Tomoharu). 
+//? If you want copy it, you need to change it and you cant use ALL my script to your apps:/

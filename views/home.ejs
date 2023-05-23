@@ -24,98 +24,93 @@
       }
    </script>
    <!-- Body(Tampilan) -->
-   <body>
-      <!-- Tampilan Pada Aplikasi agar tidak mengganggu Sidebar -->
-      <article id="main">
-         <!-- Div Utama -->
-         <div class="card">
-            <!-- Postingan -->
-            <article id="mainn">
-               <% data.forEach(element => { %>
-               <!-- Untuk Setiap Post -->
-               <article id="cardp<%= element.noteId %>" class="card2" onload="">
-									
-                  <script>
-                     function pickColor(cardId, colors, color) {
-                       var card = document.getElementById(cardId);
-                       var random_color = colors[color];
-                       if (random_color.startsWith('linear-gradient')) {
-                         card.style.backgroundImage = random_color;
-                       } else {
-                         card.style.backgroundColor = random_color;
-                       }
+<body>
+<!-- Tampilan Pada Aplikasi agar tidak mengganggu Sidebar -->
+<article id="main">
+   <!-- Div Utama -->
+   <div class="card">
+         <!-- Postingan -->
+         <article id="mainn">
+            <% data.forEach(element => { %>
+            <!-- Untuk Setiap Post -->
+            <article id="cardp<%= element.noteId %>" class="card2" onload="">				
+               <script>
+                  function pickColor(cardId, colors, color) {
+                    var card = document.getElementById(cardId);
+                    var random_color = colors[color];
+                    if (random_color.startsWith('linear-gradient')) {
+                      card.style.backgroundImage = random_color;
+                    } else {
+                      card.style.backgroundColor = random_color;
+                    }
+                  }
+                  window.onload = function() {
+                    var colors = ['#a9d18e', 'linear-gradient(56deg, rgba(16,142,230,1) 0%, rgba(179,63,255,1) 100%)', '#9dc3e6', '#f4b183'];
+                    "<% data.forEach(element => { %>"
+                      pickColor('cardp<%= element.noteId %>', colors, '<%= element.color %>');
+                    "<% }) %>"
+                  }
+					   function share(text){
+					   	var copyText = window.location.href +"share/" +text + "\nSelamat Datang Di Menfess! Ungkapin Aja!";
+					   	const shareData = {
+                        title: 'Menfess!!',
+                        text: 'Sebuah Post dari <%= element.noteName %>!',
+                        url: copyText,
+					      }
+                     // Copy the text inside the text field
+                     //navigator.clipboard.writeText(copyText);
+                     const textArea = document.createElement("textarea");
+                     textArea.value = copyText;
+                     document.body.appendChild(textArea);
+                     textArea.focus();
+                     textArea.select();
+                     try {
+                        document.execCommand('copy');
+                     } catch (err) {
+                        console.error('Unable to copy to clipboard', err);
                      }
-                     
-                     window.onload = function() {
-                       var colors = ['#a9d18e', 'linear-gradient(56deg, rgba(16,142,230,1) 0%, rgba(179,63,255,1) 100%)', '#9dc3e6', '#f4b183'];
-                       "<% data.forEach(element => { %>"
-                         pickColor('cardp<%= element.noteId %>', colors, '<%= element.color %>');
-                       "<% }) %>"
-                     }
-                     
-										 function share(text){
-											var copyText = window.location.href +"share/" +text + "\nSelamat Datang Di Menfess! Ungkapin Aja!";
-											const shareData = {
-											title: 'Menfess!!',
-											text: 'Sebuah Post dari <%= element.noteName %>!',
-											url: copyText,
-											}
-											// Copy the text inside the text field
-											//navigator.clipboard.writeText(copyText);
-											const textArea = document.createElement("textarea");
-										textArea.value = copyText;
-										document.body.appendChild(textArea);
-										textArea.focus();
-										textArea.select();
-										try {
-											document.execCommand('copy');
-										} catch (err) {
-											console.error('Unable to copy to clipboard', err);
-										}
-										document.body.removeChild(textArea);
-											//navigator.share(shareData)
-										alert("Udah di copy nih, silahkan share ke temen kamu ya:3")
-											
-										 }
-                     									
-                  </script>
-									<!--Untuk Share-->
-									<button onclick="share('<%= element.noteId %>')">Share</button>
-									<br>
-                  <!-- Untuk Like -->
-                  <% if (element.hasLiked) { %>
+                     document.body.removeChild(textArea);
+                        //navigator.share(shareData)
+                     alert("Udah di copy nih, silahkan share ke temen kamu ya:3")
+					   }									
+               </script>
+					<!--Untuk Share-->
+					<button onclick="share('<%= element.noteId %>')">Share</button>
+					<br>
+               <!-- Untuk Like -->
+               <% if (element.hasLiked) { %>
                   <p style="text-align: center;" name="noteLike" value="<%= element.like %>"> ❤️ <%= element.like %> </p>
-                  <% } else { %>
+               <% } else { %>
                   <form action="/like/<%= element.noteId %>" method="post" enctype="multipart/form-data" id="popup">
                      <button type="submit">❤️ <%= element.like %> </button>
                   </form>
-                  <% } %>
-                  <!-- Input ID -->
-                  <input type="number" style="display: none;" name="noteId" charset="UTF-8" id="noteId" value="<%= element.noteId %>">
-                  <h4 id="oren" type="text" rows="6" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
-                     background-color: #ffffff;
-                     height: fit-content;
-                     border-radius: 24px; padding: 10px;" readonly="true" placeholder="Type Here..." name="noteContent" value="<%= element.noteName %>">
-                     <%= element.noteName %>
-                  </h4>
-                  <!-- Isi dari postingan(Nama dan Postingan) -->
-                  <article>
-                     <h3 type="text" rows="6" readonly="true" placeholder="Type Here..." name="noteContent" value="<%= element.noteContent %>">
-                        <%= element.noteContent %>
-                     </h3>
-                     <img class="image-zoom" name="img" src="https://ik.imagekit.io/menfessdoma/image-<%= element.noteId %>.jpg" onError="this.remove();" alt="Gambar" class="lazy-load">
-                  </article>
-                  <!-- Tentang Comment -->
-                  <!-- Tombol Coment -->
-                  <button style="height: fit-content;"onclick="showComment('<%= element.noteId %>')">Mau Comment?</button>
-                  <!-- Untuk Post Komen -->
-                  <article id="table2">
-                     <form style="display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                        align-items: center;
-                        flex-grow: 1;
-                        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+               <% } %>
+               <!-- Input ID -->
+               <input type="number" style="display: none;" name="noteId" charset="UTF-8" id="noteId" value="<%= element.noteId %>">
+               <h4 id="oren" type="text" rows="6" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
+                  background-color: #ffffff;
+                  height: fit-content;
+                  border-radius: 24px; padding: 10px;" readonly="true" placeholder="Type Here..." name="noteContent" value="<%= element.noteName %>">
+                  <%= element.noteName %>
+               </h4>
+               <!-- Isi dari postingan(Nama dan Postingan) -->
+               <article>
+                  <h3 type="text" rows="6" readonly="true" placeholder="Type Here..." name="noteContent" value="<%= element.noteContent %>">
+                     <%= element.noteContent %>
+                  </h3>
+                  <img class="image-zoom" name="img" src="https://ik.imagekit.io/menfessdoma/image-<%= element.noteId %>.jpg" onError="this.remove();" alt="Gambar" class="lazy-load">
+               </article>
+               <!-- Tentang Comment -->
+               <!-- Tombol Coment -->
+               <button style="height: fit-content;"onclick="showComment('<%= element.noteId %>')">Mau Comment?</button>
+               <!-- Untuk Post Komen -->
+               <article id="table2">
+                  <form style="display: flex;
+                     flex-direction: column;
+                     justify-content: space-between;
+                     align-items: center;
+                     flex-grow: 1;
+                     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8);
                         background-color: #ffffff;
                         border-radius: 24px;
                         height: fit-content;
@@ -123,7 +118,11 @@
                         padding: 10px;
                         margin-top: 10px;	
                         display: none;
-                        overflow-x:hidden; "action="/comment/<%= element.noteId %>" method="post" id="testt<%= element.noteId %>" style="display: none;">
+                        overflow-x:hidden; "
+                        action="/comment/<%= element.noteId %>" 
+                        method="post" id="testt<%= element.noteId %>" 
+                        style="display: none;">
+
                         <h4 style="color: #262626;">Comments:</h4>
                         <input type="number" style="display: none;" name="noteId" value="<%= element.noteId %>">
                         <p style="color: #262626;">Apa Yang Anda Pikirkan?</p>
@@ -139,17 +138,16 @@
                         <% if (element.comment && element.comment.length > 0) { %>
                         <ul>
                            <% (element.comment).forEach(comments => { %>
-                           <li class="card4" style="height: auto; max-height: 300px; width: fit-content; /* set the height to your desired fixed size */
-                              -webkit-overflow-scrolling: none; background-color: white;color: #262626;
-                              overflow-y:auto;
-                              " id="comment">
-                              <strong><%= comments.commenterName %>:</strong> <%= comments.commentContent %>
-                           </li>
+                              <li class="card4" style="height: auto; max-height: 300px; width: fit-content; /* set the height to your desired fixed size */
+                                 -webkit-overflow-scrolling: none; background-color: white;color: #262626;
+                                 overflow-y:auto;
+                                 " id="comment">
+                                 <strong><%= comments.commenterName %>:</strong> <%= comments.commentContent %>
+                              </li>
                            <% }) %>
                         </ul>
                         <!--Jika tidak ada, maka akan ditambah "belum ada komen"-->
-                        <% } else{%>
-                        <ul>
+                     <% } else{%>
                         <li class="card4" style="height: auto; max-height: 300px; width: fit-content; /* set the height to your desired fixed size */
                            -webkit-overflow-scrolling: none;
                            color: #262626;
@@ -157,109 +155,109 @@
                            " id="comment">
                            Belum Ada Comment
                         </li>
-                        <% } %>
-                     </article>
+                     <% } %>
                   </article>
                </article>
-               <% }) %>
             </article>
-            <!-- Pagination -->
-            <div class="pagination">
-               <% if (currentPage > 1) { %>
-               <a class="" href="/page/<%= currentPage - 1 %>">&laquo; Prev</a>
-               <% } %>
-               <% if (currentPage < totalPages) { %>
-               <a href="/page/<%= currentPage + 1 %>">Next &raquo;</a>
-               <% } %>
-            </div>
-            <!-- JavaScript -->
-            <script>
-               // Menambahkan event listener untuk tindakan klik pada elemen a dengan menggunakan class atau tagname
-               var aButtons = document.querySelectorAll('.pagination a'); // Mengambil semua elemen a dalam div.pagination
-               aButtons.forEach(function(button) {
-               	button.addEventListener('click', function(event) {
-               	event.preventDefault(); // Mencegah aksi default mengarahkan ke URL
-               	var href = this.getAttribute('href'); // Mendapatkan nilai atribut href dari elemen a
-               	window.location.href = href; // Mengarahkan halaman ke URL yang diperoleh dari atribut href
-               	});
-               });
-            </script>
-         </div>
+         <% }) %>
       </article>
-      <%- include('top.html') -%>
-      <!--Fungsi Untuk Post!-->
-      <div class="background" id="background" style="display: flex; align-items: center; align-self: center; justify-content: center; display: none;">
-         <!--Backgroundnya agar lebih gelap-->
-         <div id="add" class="card4" style="height: fit-content; max-height: 700px;">
-            <!--Div untuk Postnya-->
-            <button onclick="myFunction()"  class="float2" style="background-color: #262626;">X</button> <!--Tombol Close-->
-            <br>
-            <!--Form untuk Posting-->
-            <form action="/" method="post" enctype="multipart/form-data" id="popup">
-               <input type="number" style="display: none;"
-                  name="noteId"> <!--noteId(Seperti Biasa)-->
-               <input type="number" style="display: none;"
-                  name="noteColor" id="noteColor" value="0">
-               <textarea type="text" rows="6" cols="30"
-                  placeholder="Tulis Yang Anda Pikirkan!"
-                  name="noteContent"></textarea>
-               <!--Pengen Post tentang apa-->
-               <br>
-               <input type="text" rows="6" cols="30"
-                  style="margin-top: 20px; margin-bottom: 40px; width: fit-content;"
-                  placeholder="Nama?"
-                  name="noteName"></input> <!--Nama-->
-               <br>
-               <label for="choose" id="input" style="color:#262626;background-color: #ffffff; font-size: 1vw; height: fit-content;">Pilih Gambar!</label>
-               <input type="file" name="image" id="choose" onchange="previewImage(event)"/>
-               <br>
-               <img id="image-preview" style="margin-top: 20px; height: auto;
-                  max-height: 200px;
-                  width: auto;
-                  max-width: 200px;
-                  object-fit: contain;"> <!--Tampilan Preview Gambar-->
-               <br>
-               <button type="button" onclick="visibleCOlor()">Pilih Warna</button>
-               <script>
-                  function visibleCOlor(){
-                  	var x = document.getElementById("warna");
-                  if (x.style.display === "none") {
-                  x.style.display = "block";
-                  } else {
-                  x.style.display = "none";
-                  }
-                  }
-               </script>
-               <button type="submit">Confess!</button><!--Tombol Post-->
+      <!-- Pagination -->
+      <div class="pagination">
+         <% if (currentPage > 1) { %>
+            <a class="" href="/page/<%= currentPage - 1 %>">&laquo; Prev</a>
+         <% } %>
+         <% if (currentPage < totalPages) { %>
+            <a href="/page/<%= currentPage + 1 %>">Next &raquo;</a>
+         <% } %>
+      </div>
+      <!-- JavaScript -->
+      <script>
+         // Menambahkan event listener untuk tindakan klik pada elemen a dengan menggunakan class atau tagname
+         var aButtons = document.querySelectorAll('.pagination a'); // Mengambil semua elemen a dalam div.pagination
+         aButtons.forEach(function(button) {
+         	button.addEventListener('click', function(event) {
+         	event.preventDefault(); // Mencegah aksi default mengarahkan ke URL
+         	var href = this.getAttribute('href'); // Mendapatkan nilai atribut href dari elemen a
+         	window.location.href = href; // Mengarahkan halaman ke URL yang diperoleh dari atribut href
+         	});
+         });
+      </script>
+   </div>
+</article>
+<%- include('top.html') -%>
+<!--Fungsi Untuk Post!-->
+<div class="background" id="background" style="display: flex; align-items: center; align-self: center; justify-content: center; display: none;">
+   <!--Backgroundnya agar lebih gelap-->
+   <div id="add" class="card4" style="height: fit-content; max-height: 700px;">
+      <!--Div untuk Postnya-->
+      <button onclick="myFunction()"  class="float2" style="background-color: #262626;">X</button> <!--Tombol Close-->
+      <br>
+      <!--Form untuk Posting-->
+      <form action="/" method="post" enctype="multipart/form-data" id="popup">
+         <input type="number" style="display: none;"
+            name="noteId"> <!--noteId(Seperti Biasa)-->
+         <input type="number" style="display: none;"
+            name="noteColor" id="noteColor" value="0">
+         <textarea type="text" rows="6" cols="30"
+            placeholder="Tulis Yang Anda Pikirkan!"
+            name="noteContent"></textarea>
+         <!--Pengen Post tentang apa-->
+         <br>
+         <input type="text" rows="6" cols="30"
+            style="margin-top: 20px; margin-bottom: 40px; width: fit-content;"
+            placeholder="Nama?"
+            name="noteName"></input> <!--Nama-->
+         <br>
+         <label for="choose" id="input" style="color:#262626;background-color: #ffffff; font-size: 1vw; height: fit-content;">Pilih Gambar!</label>
+         <input type="file" name="image" id="choose" onchange="previewImage(event)"/>
+         <br>
+         <img id="image-preview" style="margin-top: 20px; height: auto;
+            max-height: 200px;
+            width: auto;
+            max-width: 200px;
+            object-fit: contain;"> <!--Tampilan Preview Gambar-->
+         <br>
+         <button type="button" onclick="visibleCOlor()">Pilih Warna</button>
+         <script>
+            function visibleCOlor(){
+            	var x = document.getElementById("warna");
+            if (x.style.display === "none") {
+            x.style.display = "block";
+            } else {
+            x.style.display = "none";
+            }
+            }
+         </script>
+         <button type="submit">Confess!</button><!--Tombol Post-->
+      </div>
+      <div class="card2" id="warna" style="display: none; background: #a9d18e; margin: 10px; flex-direction: column; height: fit-content;">
+         <div class="button-row">
+            <button type="button" onclick="document.getElementById('noteColor').value = 0; document.getElementById('warna').style.display = 'none'; document.getElementById('add').style.background = '#a9d18e'" style="color: white; background: #a9d18e;">Pale Green</button>
+            <button type="button" onclick="document.getElementById('noteColor').value = 1; document.getElementById('warna').style.display = 'none'; document.getElementById('add').style.background = 'linear-gradient(56deg, rgba(16,142,230,1) 0%, rgba(179,63,255,1) 100%)'" style="color: white; background: linear-gradient(56deg, rgba(16,142,230,1) 0%, rgba(179,63,255,1) 100%);">Blurple Jewel</button>
          </div>
-         <div class="card2" id="warna" style="display: none; background: #a9d18e; margin: 10px; flex-direction: column; height: fit-content;">
-					<div class="button-row">
-						<button type="button" onclick="document.getElementById('noteColor').value = 0; document.getElementById('warna').style.display = 'none'; document.getElementById('add').style.background = '#a9d18e'" style="color: white; background: #a9d18e;">Pale Green</button>
-						<button type="button" onclick="document.getElementById('noteColor').value = 1; document.getElementById('warna').style.display = 'none'; document.getElementById('add').style.background = 'linear-gradient(56deg, rgba(16,142,230,1) 0%, rgba(179,63,255,1) 100%)'" style="color: white; background: linear-gradient(56deg, rgba(16,142,230,1) 0%, rgba(179,63,255,1) 100%);">Blurple Jewel</button>
-					</div>
-					<div class="button-row">
-						<button type="button" onclick="document.getElementById('noteColor').value = 2; document.getElementById('warna').style.display = 'none'; document.getElementById('add').style.background = '#9dc3e6'" style="color: white; background: #9dc3e6;">Soft Powder Blue</button>
-						<button type="button" onclick="document.getElementById('noteColor').value = 3; document.getElementById('warna').style.display = 'none'; document.getElementById('add').style.background = '#f4b183'" style="color: white; background: #f4b183;">Peachy Orange</button>
-					</div>
+         <div class="button-row">
+            <button type="button" onclick="document.getElementById('noteColor').value = 2; document.getElementById('warna').style.display = 'none'; document.getElementById('add').style.background = '#9dc3e6'" style="color: white; background: #9dc3e6;">Soft Powder Blue</button>
+            <button type="button" onclick="document.getElementById('noteColor').value = 3; document.getElementById('warna').style.display = 'none'; document.getElementById('add').style.background = '#f4b183'" style="color: white; background: #f4b183;">Peachy Orange</button>
+         </div>
          <br>
          <style>
-					.button-row {
-					display: flex;
-					flex-wrap: wrap;
-					justify-content: center;
-					}
-					.button-row > * {
-					margin: 5px;
-					flex: 1 1 45%;
-					}
-					@media (max-width: 480px) {
-						.button-row > * {
-						flex: 1 1 100%;
-						}
-					}
+               .button-row {
+               display: flex;
+               flex-wrap: wrap;
+               justify-content: center;
+               }
+               .button-row > * {
+               margin: 5px;
+               flex: 1 1 45%;
+               }
+               @media (max-width: 480px) {
+                  .button-row > * {
+                  flex: 1 1 100%;
+                  }
+               }
          </style>
-         </form>
-         </div>
-      </div>
-   </body>
+      </form>
+   </div>
+</div>
+</body>
 </html>

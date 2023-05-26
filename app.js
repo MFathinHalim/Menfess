@@ -244,6 +244,25 @@ async function post(data, noteContent, noteName, noteId, color, model, file, res
         if (fs.existsSync(imageFilePath)) {
           fs.unlinkSync(imageFilePath);
         }
+      }else if(ext == "mp4"){
+        console.log(file)
+        fs.readFile(path.join(__dirname, '/public/videos', 'video-'+noteId+'.mp4'), async function(err, data) {
+          if (err) throw err; // Fail if the file can't be read.
+          await imagekit.upload({
+            file : data, //required
+            fileName : 'video-'+noteId+'.mp4', //required
+            useUniqueFileName: false,
+          }, function(error, result) {
+            if(error) console.log(error);
+            else console.log(result);
+            res.redirect("/")
+          });
+        });
+        const imageFileName = `video-${noteId}.mp4`;
+        const imageFilePath = path.join(__dirname, '/public/videos', imageFileName);
+        if (fs.existsSync(imageFilePath)) {
+          fs.unlinkSync(imageFilePath);
+        }
       }
     } else if (res) res.redirect("/")
   } catch (err) {
@@ -318,10 +337,10 @@ app.post("/videos", uploadvid.single('video'), async (req, res) => {
   const noteContent = req.body.noteContent;
   const noteName = req.body.noteName;
   const noteId = datavid.length + 100;
+  const file = req.file;
 
   //TODO then call the function
-  await post(datavid, noteContent, noteName, noteId, null, videoModel);
-  res.redirect("/videos")
+  await post(datavid, noteContent, noteName, noteId, null, videoModel, file, res);
 });
 //TODO fourth, we will be like button
 
@@ -349,6 +368,23 @@ app.post("/like/:noteId", (req, res) => {
     }
   }
 });
+
+//TODO lets make Share Feature
+app.post("/share/:noteId", (req, res) => {
+  //TODO first the shuf we will be false
+  shuf = false;
+  const noteIdPost = parseInt(req.params.noteId.trim());
+
+  //TODO next we will be search the position of noteId
+  const itemIndex = data.findIndex(({noteId}) => noteId == noteIdPost)
+
+  if (itemIndex !== -1) {
+    const item = data.splice(itemIndex, 1)[0];
+    data.unshift(item);
+
+  }
+});
+
 //* the algorithm of like in videos is same
 app.post("/videos/like/:noteId", (req, res) => {
   shuf = false;

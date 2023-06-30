@@ -126,19 +126,7 @@ function handleImageError(event, imgElement) {
 }
 
 
-const fileInput = document.getElementById("choose");
-const imagePreview = document.getElementById("image-preview");
 
-fileInput.addEventListener("change", (event) => {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-
-  reader.onload = (event) => {
-    imagePreview.src = event.target.result;
-  };
-
-  reader.readAsDataURL(file);
-});
 
 window.addEventListener('scroll', revealOnScroll);
 revealOnScroll();

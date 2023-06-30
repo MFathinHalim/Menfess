@@ -12,6 +12,7 @@ const multer = require('multer');
 const fileupload = require('express-fileupload'); 
 const FormData = require('form-data')
 const { mainModel, videoModel, memesModel, animeModel } = require("./models/post")
+const http = require('http');
 
 // SDK initialization
 
@@ -103,6 +104,8 @@ try{
 
 //TODO Now times to make the app
 const app = express()
+const server = http.createServer(app);
+const io = require('socket.io')(server);
 
 //TODO Next we will be setup the app package, like EJS, cookies, path, and etc.
 app.set('view engine', 'ejs')
@@ -125,60 +128,52 @@ function shuffleOnClient(data) {
 }
 //? ==============================================
 
-//TODO Make class for application function
+// TODO: Make class for application function
 class Application {
-  constructor(data, ejs, pageNumber, cookies) {
+  constructor(data, ejs, pageNumber, res) {
     this.data = data;
     this.ejs = ejs;
     this.pageNumber = pageNumber;
-    this.cookies = cookies;
+    this.res = res;
   }
 
-  //TODO next make function for app.get()
   getFunction() {
-    //TODO okay, in pagination we will be make the const variable first
     const currentPage = parseInt(this.pageNumber) || 1;
     const adjustedPage = currentPage - 1;
-    const itemsPerPage = 10;
+    const itemsPerPage = 25;
     const startIndex = adjustedPage * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedData = this.data.slice(startIndex, endIndex);
 
-    /*
-      * TODO then will make the paginated data and see if the note with the same noteId in loop has liked in cookies or not.
-      for (let i = 0; i < paginatedData.length; i++) {
-        const noteId = paginatedData[i].noteId;
-        paginatedData.find((note) => note.noteId === noteId).hasLiked = req.cookies[`liked_${noteId}`] === "true";
-    }*/
 
-    //TODO this will be make the paginatedData will shuffle.
-    var gg;
-    gg = shuffleOnClient(paginatedData);
+    const gg = shuffleOnClient(paginatedData);
 
+    let ads;
     if (postCounter % 2 === 0) {
-      this.cookies.render(this.ejs, {
-        data: gg,
-        ads: '<!-- tempatkan kode iklan di sini -->',
-        currentPage: currentPage,
-        totalPages: Math.ceil(this.data.length / itemsPerPage)
-      });
+      ads = '<!-- tempatkan kode iklan di sini -->';
     } else {
-      this.cookies.render(this.ejs, {
-        data: gg,
-        ads: "google.com, pub-2998592050723815, DIRECT, f08c47fec0942fa0",
-        currentPage: currentPage,
-        totalPages: Math.ceil(this.data.length / itemsPerPage)
-      });
+      ads = 'google.com, pub-2998592050723815, DIRECT, f08c47fec0942fa0';
     }
+
+    this.res.render(this.ejs, {
+      data: gg,
+      ads: ads,
+      currentPage: currentPage,
+      totalPages: Math.ceil(this.data.length / itemsPerPage)
+    });
 
     postCounter++;
   }
-
 }
 
 app.get("/page/:pageNumber", function(req, res) {
   const applicationFunction = new Application(data, "home", req.params.pageNumber, res);
   applicationFunction.getFunction();
+
+  const scrollToElement = req.query.scrollToElement;
+  if (scrollToElement) {
+    res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+  }
 });
 
 app.get("/videos/page/:pageNumber", function(req, res) {
@@ -186,29 +181,54 @@ app.get("/videos/page/:pageNumber", function(req, res) {
   applicationFunction.getFunction();
 });
 
-//TODO and the next function when aplication first load on client(the algorithm is same, so dont be confused) :D
 app.get("/", function(req, res) {
   const applicationFunction = new Application(data, "home", req.params.pageNumber, res);
   applicationFunction.getFunction();
+
+  const scrollToElement = req.query.scrollToElement;
+  if (scrollToElement) {
+    res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+  }
 });
+
 app.get("/videos", function(req, res) {
   const applicationFunction = new Application(datavid, "vid", req.params.pageNumber, res);
   applicationFunction.getFunction();
 });
-//TODO in this function, its just loaded the shared link and move the data to first on array
+
 app.get("/share/:noteId", function(req, res) {
-  shuf = false;
-  const noteIdGet = parseInt(req.params.noteId.trim());
-
-  const itemIndex = data.findIndex(({noteId}) => noteId == noteIdGet)
-
-  if (itemIndex !== -1) {
-    const item = data.splice(itemIndex, 1)[0];
-    data.unshift(item);
+  // Move the data with the specified noteId to the first position in the array
+  const sharedNote = data.find((note) => note.noteId === req.params.noteId);
+  if (sharedNote) {
+    const sharedNoteIndex = data.indexOf(sharedNote);
+    data.splice(sharedNoteIndex, 1);
+    data.unshift(sharedNote);
   }
 
-  res.redirect("/");
+  const applicationFunction = new Application(data, "home", req.params.pageNumber, res);
+  applicationFunction.getFunction();
+
+  const scrollToElement = `#cardp${req.params.noteId}`;
+  res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
 });
+
+app.get("/page/:pageNumber/share/:noteId", function(req, res) {
+  // Move the data with the specified noteId to the first position in the array
+  const sharedNote = data.find((note) => note.noteId === req.params.noteId);
+  if (sharedNote) {
+    const sharedNoteIndex = data.indexOf(sharedNote);
+    data.splice(sharedNoteIndex, 1);
+    data.unshift(sharedNote);
+  }
+
+  const applicationFunction = new Application(data, "home", req.params.pageNumber, res);
+  applicationFunction.getFunction();
+
+  const scrollToElement = `#cardp${req.params.noteId}`;
+  res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+});
+
+
 //? ======================================================================================
 //* okay, the next one will be little harder
 //TODO first, the function to post menfess
@@ -222,6 +242,7 @@ async function post(data, noteContent, noteName, noteId, color, model, file, res
       await model.create({ noteContent, noteName, noteId, color, comment: [], like: 0})
       data.unshift({ noteId, noteContent, noteName, like: 0, comment: [], color })
       shuf = false
+      io.emit('newPost');
     }
     if (file) {
       const ext = file.filename.split(".")[file.filename.split(".").length - 1]
@@ -284,7 +305,6 @@ app.post("/",upload.single("image"), async (req, res) => {
 //* second function is to post comment. The algorithm is same, but in comment a little tricky
 //TODO its because we need has the noteId position on array.
 
-//* overall, its same
 app.post("/comment/:noteId", (req, res) => {
   const commentContent = req.body.commentContent;
   const commenterName = req.body.commenterName;
@@ -294,20 +314,23 @@ app.post("/comment/:noteId", (req, res) => {
   if (commentContent.trim() !== "" && commenterName.trim() !== "") {
     mainModel.findOneAndUpdate({ noteId: noteIdPost }, { $push: { comment: { commentContent, commentId: commentID, commenterName } } })
       .then(() => {
-        const itemIndex = data.findIndex(({noteId}) => noteId == noteIdPost)
+        const itemIndex = data.findIndex(({ noteId }) => noteId == noteIdPost);
 
         if (itemIndex !== -1) {
-          const item = data.splice(itemIndex, 1)[0];
-          data.unshift(item);
+          const item = data[itemIndex];
           item.comment.push({ commentID, commenterName, commentContent });
-        }
 
-        shuf = false;
-        res.redirect("/")
+          // Emit a socket event to notify clients about the new comment
+          io.emit('newComment', { noteId: noteIdPost, comment: item.comment[item.comment.length - 1] });
+  
+        }
+        res.sendStatus(200)
       })
-      .catch(err => console.error(err))
+      
+      .catch(err => console.error(err));
   }
 });
+
 
 app.post("/videos/comment/:noteId", (req, res) => {
   const commentContent = req.body.commentContent;
@@ -360,9 +383,7 @@ app.post("/like/:noteId", (req, res) => {
       mainModel.findOneAndUpdate({noteId: noteIdPost}, { $inc: { like: 1 } })
         .then(() => {
           item.like >= 0 ? item.like++ : item.like = 1
-          item.hasLiked = true;
-          res.cookie(`liked_${noteIdPost}`, "true");
-          res.redirect("/");
+          res.sendStatus(200);
         })
         .catch(err => console.error(err))
     }
@@ -371,18 +392,10 @@ app.post("/like/:noteId", (req, res) => {
 
 //TODO lets make Share Feature
 app.post("/share/:noteId", (req, res) => {
-  //TODO first the shuf we will be false
-  shuf = false;
-  const noteIdPost = parseInt(req.params.noteId.trim());
 
-  //TODO next we will be search the position of noteId
-  const itemIndex = data.findIndex(({noteId}) => noteId == noteIdPost)
-
-  if (itemIndex !== -1) {
-    const item = data.splice(itemIndex, 1)[0];
-    data.unshift(item);
-
-  }
+    const scrollToElement = `#note-${item.noteId}`; // Assuming there is an HTML element with an ID of "note-{noteId}"
+    res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+    console.log(data)
 });
 
 //* the algorithm of like in videos is same

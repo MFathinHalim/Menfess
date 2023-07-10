@@ -72,7 +72,7 @@
       <div class="col-12 col-lg-8">
         <div class="col-md-8 offset-md-2">
       
-          <div class="card mb-3" style="margin-top: 50px;">
+          <div class="card mb-3" style="margin-top: 100px;">
             <div id="cardp" class="card-body text-white">
               
               <h4 class="card-title" style="font-size:20px; color: #FFE569;"> <strong>Doma</strong></h4>
@@ -96,7 +96,7 @@
                 
                 <br>
                 <div class="form-group">
-                  <input type="text" class="form-control input" placeholder="Nama?" name="noteName">
+                  <input type="text" class="form-control input" placeholder="Nama?" name="noteName" value="<%= username %>">
                 </div>
                
                 <br>
@@ -131,8 +131,43 @@
               
               <img class="img-fluid rounded border border-light" style="max-width: 300px; max-height: 500px;" name="img" src="https://ik.imagekit.io/menfessdoma/image-<%= element.noteId %>.jpg" onerror="this.remove();" alt="Gambar" style="object-fit: cover;">
                <div class="d-flex justify-content-between align-items-center m-4">
-                <button id="likeButton<%= element.noteId %>" onclick="handleLike('<%= element.noteId %>')" class="btn btn-primary" style="background: #F2BE22;"><ion-icon name="heart"></ion-icon>  <%= element.like %></button>
-    
+                <button id="likeButton<%= element.noteId %>" onclick="handleLike('<%= element.noteId %>')" class="btn btn-primary" style="background: #F2BE22;">
+                  <ion-icon name="heart"></ion-icon> <span id="likeCount<%= element.noteId %>"><%= element.like %></span>
+                </button>
+                
+                <script>
+                  function formatLikesCount(number) {
+                    if (number >= 1000000) {
+                      return (number / 1000000).toFixed(1) + 'M';
+                    } else if (number >= 1000) {
+                      return (number / 1000).toFixed(1) + 'k';
+                    } else {
+                      return number.toString();
+                    }
+                  }
+                
+                  function formatAllLikesCount() {
+                    var likeCountElements = document.querySelectorAll('[id^="likeCount"]');
+                    likeCountElements.forEach(function(element) {
+                      var number = parseInt(element.textContent);
+                      if (number >= 1000000) {
+                        console.log((number / 1000000).toFixed(1) + 'M')
+                        element.textContent = (number / 1000000).toFixed(1) + 'M';
+                      } else if (number >= 1000) {
+                        console.log((number / 1000).toFixed(1) + 'k')
+                        element.textContent = (number / 1000).toFixed(1) + 'k';
+                        
+                      }
+                    });
+                  }
+                
+                  window.addEventListener('DOMContentLoaded', formatAllLikesCount);
+                </script>
+                
+                
+                
+                
+                 
                 
                 <button onclick="share('<%= element.noteId %>')" class="btn btn-primary m-4" style="background: #47A992;"><ion-icon name="share-social-outline"></ion-icon> Bagikan</button>	
                    <script>
@@ -175,7 +210,7 @@
                   </div>
                   <div class="mb-3">
                     <label for="commenterName<%= element.noteId %>" class="form-label">Nama?</label>
-                    <input type="text" class="form-control" id="commenterName<%= element.noteId %>" placeholder="Nama Anda?" name="commenterName">
+                    <input type="text" class="form-control" id="commenterName<%= element.noteId %>" value="<%= username %>" placeholder="Nama Anda?" name="commenterName">
                   </div>
                   <button onclick="handleCommentSubmit('<%= element.noteId %>')" class="btn btn-primaryy">Add Comment</button>
                   <div class="d-flex align-items-center" >
@@ -211,7 +246,7 @@
         <div class="row">
           <div class="col-12 col-md-6 col-lg-12" id="multiplier">
             <div>
-              <div class="card-body" id="rules">
+              <div class="card-body" id="rules" style="margin-top: 50px;">
 
                 <div class="card" style="background-color: #47A992; color:white;">
                   <div class="card-header">
@@ -249,7 +284,7 @@
               </div>
             </div>
               <div class="card-body">
-                <% const trendingPosts = data.slice(0, 10); %>
+                <% const trendingPosts = trending.slice(0, 10); %>
                 <% if (trendingPosts.length > 0) { %>
                 <div class="card" style="background-color: #47A992; color:white;">
                   <div class="card-header">
@@ -258,7 +293,7 @@
                   <ul class="list-group list-group-flush" >
                     <% trendingPosts.forEach(element => { %>
                     <li class="list-group-item" style="background-color: #27374D; color:white;">
-                      <p><ion-icon name="heart"></ion-icon>  <%= element.like %></p>
+                      <p id="likeCount"><ion-icon name="heart"></ion-icon>  <%= element.like %></p>
                       <div id="cardp" class="text-white">
                         
                         <h4 class="card-title" style="font-size:20px; color: #FFE569;"> <strong><%= element.noteName %></strong></h4>
@@ -380,7 +415,7 @@ function createPostElement(post) {
   // Construct the rest of the post element
   // ...
 
-  return postElement;
+  postElement;
 }
 
 function createCommentElement(post, commenterName, commentContent) {
@@ -390,7 +425,7 @@ function createCommentElement(post, commenterName, commentContent) {
   // Construct the rest of the post element
   // ...
 
-  return postElement;
+  postElement;
 }
 
 

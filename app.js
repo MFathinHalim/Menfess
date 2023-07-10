@@ -18,7 +18,7 @@ const http = require('http');
 
 var ImageKit = require("imagekit");
 
-//TODO Make ImageKit
+//TODO Test Make ImageKit
 var imagekit = new ImageKit({
   publicKey : process.env.IMAGEKIT_PUBLICKEY,
   privateKey : process.env.IMAGEKIT_PRIVATEKEY,
@@ -48,10 +48,11 @@ const storageVid = multer.diskStorage({
 
 const storageMemes = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, `public/images/uploads/memes`)
+    cb(null, `public/images/uploads/`)
   },
   filename: function(req, file, cb) {
-    cb(null, `image-${dataMemes.length + 1}.jpg`)
+    console.log(dataMemes.length+100)
+    cb(null, `imagememes-${dataMemes.length + 100}.jpg`)
   }
 })
 
@@ -130,11 +131,13 @@ function shuffleOnClient(data) {
 
 // TODO: Make class for application function
 class Application {
-  constructor(data, ejs, pageNumber, res) {
+  constructor(data, ejs, pageNumber, res, cookiesName, model) {
     this.data = data;
     this.ejs = ejs;
     this.pageNumber = pageNumber;
     this.res = res;
+    this.cookiesName = cookiesName;
+    this.model = model;
   }
 
   getFunction() {
@@ -157,12 +160,43 @@ class Application {
 
     this.res.render(this.ejs, {
       data: gg,
+      username: this.cookiesName,
+      trending: this.data,
       ads: ads,
       currentPage: currentPage,
       totalPages: Math.ceil(this.data.length / itemsPerPage)
     });
 
     postCounter++;
+  }
+
+  async searchFunction(userInput) {
+    const currentPage = parseInt(this.pageNumber) || 1;
+    const itemsPerPage = 25;
+        
+    var searchData = []
+    
+    const existingNote = await this.model.find({
+      $or: [
+        { noteName: { $regex: userInput, $options: 'i' } }
+      ]
+    });
+    
+    if (existingNote.length === 0) {
+      const existingNoteName = await this.model.find({
+        noteContent: { $regex: userInput, $options: 'i' }
+      });
+      searchData = existingNoteName;
+    } else {
+      searchData = existingNote;
+    }
+    this.res.render(this.ejs, {
+      data: searchData,
+      username: this.cookiesName,
+      currentPage: currentPage,
+      trending: this.data,
+      totalPages: Math.ceil(searchData.length / itemsPerPage)
+    })
   }
 }
 
@@ -182,7 +216,7 @@ app.get("/videos/page/:pageNumber", function(req, res) {
 });
 
 app.get("/", function(req, res) {
-  const applicationFunction = new Application(data, "home", req.params.pageNumber, res);
+  const applicationFunction = new Application(data, "home", req.params.pageNumber, res, req.cookies.userName);
   applicationFunction.getFunction();
 
   const scrollToElement = req.query.scrollToElement;
@@ -190,6 +224,7 @@ app.get("/", function(req, res) {
     res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
   }
 });
+
 
 app.get("/videos", function(req, res) {
   const applicationFunction = new Application(datavid, "vid", req.params.pageNumber, res);
@@ -211,6 +246,23 @@ app.get("/share/:noteId", function(req, res) {
   const scrollToElement = `#cardp${req.params.noteId}`;
   res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
 });
+
+app.get("/memes/share/:noteId", function(req, res) {
+  // Move the data with the specified noteId to the first position in the array
+  const sharedNote = dataMemes.find((note) => note.noteId === req.params.noteId);
+  if (sharedNote) {
+    const sharedNoteIndex = dataMemes.indexOf(sharedNote);
+    dataMemes.splice(sharedNoteIndex, 1);
+    dataMemes.unshift(sharedNote);
+  }
+
+  const applicationFunction = new Application(dataMemes, "memes", req.params.pageNumber, res, req.cookies.userName);
+  applicationFunction.getFunction();
+
+  const scrollToElement = `#cardp${req.params.noteId}`;
+  res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+});
+
 
 app.get("/page/:pageNumber/share/:noteId", function(req, res) {
   // Move the data with the specified noteId to the first position in the array
@@ -235,8 +287,20 @@ app.get("/page/:pageNumber/share/:noteId", function(req, res) {
 /**
  * @param {mainModel} model 
  */
-async function post(data, noteContent, noteName, noteId, color, model, file, res) {
+async function post(data, noteContent, noteName, noteId, color, model, file, res, type) {
   try {
+    res.cookie('userName', noteName)
+    const existingNote = await model.findOne({
+      $or: [
+        { noteContent }
+      ]
+    });
+    
+    if (existingNote) {
+      // Note with the same noteContent or noteName already exists, do not add anything
+      if (res) res.redirect("/" + type);
+      return;
+    }
     if (noteContent.trim() !== "" && noteName.trim() !== "") {
       //TODO next we will add the post to database first.
       await model.create({ noteContent, noteName, noteId, color, comment: [], like: 0})
@@ -248,19 +312,19 @@ async function post(data, noteContent, noteName, noteId, color, model, file, res
       const ext = file.filename.split(".")[file.filename.split(".").length - 1]
       if (ext == "jpg") {
         console.log(file)
-        fs.readFile(path.join(__dirname, '/public/images/uploads', 'image-'+noteId+'.jpg'), async function(err, data) {
+        fs.readFile(path.join(__dirname, '/public/images/uploads', 'image'+type+'-'+noteId+'.jpg'), async function(err, data) {
           if (err) throw err; // Fail if the file can't be read.
           await imagekit.upload({
             file : data, //required
-            fileName : 'image-'+noteId+'.jpg', //required
+            fileName : 'image'+type+'-'+noteId+'.jpg', //required
             useUniqueFileName: false,
           }, function(error, result) {
             if(error) console.log(error);
             else console.log(result);
-            res.redirect("/")
+            res.redirect("/" + type)
           });
         });
-        const imageFileName = `image-${noteId}.jpg`;
+        const imageFileName = 'image'+type+'-'+noteId+'.jpg';
         const imageFilePath = path.join(__dirname, '/public/images/uploads', imageFileName);
         if (fs.existsSync(imageFilePath)) {
           fs.unlinkSync(imageFilePath);
@@ -300,7 +364,14 @@ app.post("/",upload.single("image"), async (req, res) => {
   const file = req.file;
 
   //TODO then call the function
-  await post(data, noteContent, noteName, noteId, noteColor, mainModel, file, res);
+  await post(data, noteContent, noteName, noteId, noteColor, mainModel, file, res, "");
+})
+
+app.post("/search", async (req, res) => {
+  //TODO first things, we will make the const variable from the req data
+  const noteContent = req.body.noteContent
+  const applicationFunction = new Application(data, "home", req.params.pageNumber, res, req.cookies.userName, mainModel);
+  applicationFunction.searchFunction(noteContent);
 })
 //* second function is to post comment. The algorithm is same, but in comment a little tricky
 //TODO its because we need has the noteId position on array.
@@ -330,6 +401,34 @@ app.post("/comment/:noteId", (req, res) => {
       .catch(err => console.error(err));
   }
 });
+
+
+app.post("/memes/comment/:noteId", (req, res) => {
+  const commentContent = req.body.commentContent;
+  const commenterName = req.body.commenterName;
+  const noteIdPost = parseInt(req.params.noteId.trim());
+  const commentID = dataMemes.length + 50;
+
+  if (commentContent.trim() !== "" && commenterName.trim() !== "") {
+    memesModel.findOneAndUpdate({ noteId: noteIdPost }, { $push: { comment: { commentContent, commentId: commentID, commenterName } } })
+      .then(() => {
+        const itemIndex = dataMemes.findIndex(({ noteId }) => noteId == noteIdPost);
+
+        if (itemIndex !== -1) {
+          const item = dataMemes[itemIndex];
+          item.comment.push({ commentID, commenterName, commentContent });
+
+          // Emit a socket event to notify clients about the new comment
+          io.emit('newComment', { noteId: noteIdPost, comment: item.comment[item.comment.length - 1] });
+  
+        }
+        res.sendStatus(200)
+      })
+      
+      .catch(err => console.error(err));
+  }
+});
+
 
 
 app.post("/videos/comment/:noteId", (req, res) => {
@@ -382,7 +481,11 @@ app.post("/like/:noteId", (req, res) => {
       //TODO like usualy,the script will run the database first
       mainModel.findOneAndUpdate({noteId: noteIdPost}, { $inc: { like: 1 } })
         .then(() => {
-          item.like >= 0 ? item.like++ : item.like = 1
+          if(item.like < 69420){
+            item.like >= 0 ? item.like++ : item.like = 1
+          }else {
+            item.like = 0;
+          }
           res.sendStatus(200);
         })
         .catch(err => console.error(err))
@@ -396,6 +499,12 @@ app.post("/share/:noteId", (req, res) => {
     const scrollToElement = `#note-${item.noteId}`; // Assuming there is an HTML element with an ID of "note-{noteId}"
     res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
     console.log(data)
+});
+app.post("/memes/share/:noteId", (req, res) => {
+
+  const scrollToElement = `#note-${item.noteId}`; // Assuming there is an HTML element with an ID of "note-{noteId}"
+  res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+  console.log(data)
 });
 
 //* the algorithm of like in videos is same
@@ -463,33 +572,68 @@ app.post('/delete/:noteId', (req, res) => {
 })
 //? ======================================================================
 //* the the Memes and Anime channel. The function use the old algorithm so you can ignore :)
+app.get("/page/:pageNumber", function(req, res) {
+  const applicationFunction = new Application(dataMemes, "memes", req.params.pageNumber, res);
+  applicationFunction.getFunction();
+
+  const scrollToElement = req.query.scrollToElement;
+  if (scrollToElement) {
+    res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+  }
+});
 
 app.get("/memes", function(req, res) {
-  res.render("memes", {
-    data: dataMemes
-  })
+  const applicationFunction = new Application(dataMemes, "memes", req.params.pageNumber, res);
+  applicationFunction.getFunction();
+
+  const scrollToElement = req.query.scrollToElement;
+  if (scrollToElement) {
+    res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+  }
 })
+//TODO fourth, we will be like button
+
+app.post("/memes/like/:noteId", (req, res) => {
+  //TODO first the shuf we will be false
+  shuf = false;
+  const noteIdPost = parseInt(req.params.noteId.trim());
+
+  //TODO next we will be search the position of noteId
+  const itemIndex = dataMemes.findIndex(({noteId}) => noteId == noteIdPost)
+
+  if (itemIndex !== -1) {
+    const item = dataMemes.splice(itemIndex, 1)[0];
+    dataMemes.unshift(item);
+    if (!item.hasLiked) {
+      //TODO like usualy,the script will run the database first
+      memesModel.findOneAndUpdate({noteId: noteIdPost}, { $inc: { like: 1 } })
+        .then(() => {
+          if(item.like < 69420){
+            item.like >= 0 ? item.like++ : item.like = 1
+          }else {
+            item.like = 0;
+          }
+          res.sendStatus(200);
+        })
+        .catch(err => console.error(err))
+    }
+  }
+});
 app.get("/anime", function(req, res) {
   res.render("anime", {
     data: dataAnime
   })
 })
-app.post("/memes", uploadMemes.single('image'), (req, res) => {
+app.post("/memes", uploadMemes.single('image'), async (req, res) => {
+  //TODO first things, we will make the const variable from the req data
   const noteContent = req.body.noteContent
   const noteName = req.body.noteName
-  const noteId = dataMemes.length + 1;
+  const noteId = dataMemes.length + 100;
+  const noteColor = req.body.noteColor
+  const file = req.file;
 
-  if (noteName && noteContent && noteName.toLowerCase() !== "test" && noteContent.toLowerCase() !== "test") {
-    sqlMemes = 'INSERT INTO data(noteId,noteContent,noteName) VALUES (?,?,?)';
-    dbMemes.run(sqlMemes, [noteId, noteContent, noteName], (err) => {
-      if (err) return console.error(err.message);
-    })
-  }
-
-  dataMemes.push({ noteId, noteContent, noteName });
-  res.render("memes", {
-    data: dataMemes
-  })
+  //TODO then call the function
+  await post(dataMemes, noteContent, noteName, noteId, noteColor, memesModel, file, res,"memes");
 })
 app.post("/anime", uploadAnime.single('image'), (req, res) => {
   const noteContent = req.body.noteContent

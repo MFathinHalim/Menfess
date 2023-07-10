@@ -55,6 +55,56 @@
   .text-white{
     color: #DDE6ED;
   }
+  .navbar-toggler-icon {
+    background-image: none!important;
+    background-color: var(--bs-gray-800);
+    height: 3px;
+    width: 25px;
+    margin: 10px 0;
+    position: relative;
+    transition: all 0.35s ease-out;
+    transform-origin: center;
+  }
+  
+  .navbar-toggler-icon::before {
+    display: block;
+    background-color: var(--bs-gray-800);
+    height: 3px;
+    content: "";
+    position: relative;
+    top: -7px;
+    transition: all 0.15s ease-out;/*taken down to hide quicker*/
+    transform-origin: center;
+  }
+  
+  .navbar-toggler-icon::after {
+    display: block;
+    background-color: var(--bs-gray-800);
+    height: 3px;
+    content: "";
+    position: relative;
+    top: 4px;
+    transition: all 0.35s ease-out;
+    transform-origin: center;
+  }
+  
+  .navbar-dark .navbar-toggler-icon,
+  .navbar-dark .navbar-toggler-icon::before,
+  .navbar-dark .navbar-toggler-icon::after {
+    background-color: var(--bs-gray-100);
+  }
+  
+  .navbar-toggler:not(.collapsed) .navbar-toggler-icon {
+    transform: rotate(45deg);
+  }
+  
+  .navbar-toggler:not(.collapsed) .navbar-toggler-icon::before {
+    opacity: 0;
+  }
+  
+  .navbar-toggler:not(.collapsed) .navbar-toggler-icon::after {
+    transform: rotate(-90deg) translateX(7px);
+  }
 
 </style>
 
@@ -65,18 +115,26 @@
       <img style="width: 30px;" class="rounded" src=/images/Menfess.png> Menfess!
     </a>
 
-
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link btn-primary btn p-1 m-1" href="#tentang" style="background:#47A992; color:white;">Confess</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link btn-primary btn p-1 m-1" href="#rules" style="background:#47A992; color:white;">Rules!!</a>
-        </li>
-
-
-      </ul>
-
+    <button class="navbar-toggler" type="button" data-bs="collapse" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link btn btn-primary p-1 m-1" href="#tentang" style="background: #47A992; color: white;">Confess</a>
+        <a class="nav-link btn btn-primary p-1 m-1" href="#rules" style="background: #47A992; color: white;">Rules!!</a>
+        <a class="nav-link btn btn-primary p-1 m-1" href="/memes" style="background: #47A992; color: white;">Memes!!</a>
+      </div>
+      <form class="form-inline my-2 my-lg-0" action="/search" method="post">
+        <div class="input-group">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="noteContent">
+          <div class="input-group-append">
+            <button class="btn btn-success my-2 my-sm-0 m-1" type="submit">Search</button>
+          </div>
+        </div>
+      </form>
+      
+    </div>
+    
    
   </div>
 </nav>
@@ -115,5 +173,6 @@ var loadFile = function(event) {
 };
 </script>
 
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 </header>

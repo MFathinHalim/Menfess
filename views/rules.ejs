@@ -72,16 +72,16 @@
       <div class="col-12 col-lg-8">
         <div class="col-md-8 offset-md-2">
       
-          <div class="card mb-3" style="margin-top: 100px;">
+          <div class="card mb-3" style="margin-top: 50px;">
             <div id="cardp" class="card-body text-white">
               
               <h4 class="card-title" style="font-size:20px; color: #FFE569;"> <strong>Doma</strong></h4>
   
   
             <p class="card-text">
-              Selamat Datang di Memes!!! <br> Tertawa Aja!
+              Selamat Datang di Menfess!! <br> Ungkapin Aja
             </p>
-            <img class="img-fluid rounded border border-light" style="max-width: 300px; max-height: 500px;" name="img" src="https://media.tenor.com/eTRa3hfuExcAAAAd/anime-laughing.gif" onerror="this.remove();" alt="Gambar" style="object-fit: cover;">
+            <img class="img-fluid rounded border border-light" style="max-width: 300px; max-height: 500px;" name="img" src="https://i.pinimg.com/originals/eb/fa/04/ebfa04eff6eea432ce87cc72b196951a.gif" onerror="this.remove();" alt="Gambar" style="object-fit: cover;">
   
               </div>
               <hr class="post-separator"> 
@@ -89,14 +89,14 @@
               
      
               <h4>Mau Confess?</h4>
-              <form action="/memes" method="post" enctype="multipart/form-data">
+              <form action="/" method="post" enctype="multipart/form-data">
                 <input type="number" name="noteId" hidden> 
                 <input type="number" name="noteColor" id="noteColor" value="0" hidden>
                 <textarea class="form-control" rows="6" placeholder="Tulis Yang Anda Pikirkan!" name="noteContent"></textarea>
                 
                 <br>
                 <div class="form-group">
-                  <input type="text" class="form-control input" placeholder="Nama?" name="noteName" value="<%= username %>">
+                  <input type="text" class="form-control input" placeholder="Nama?" name="noteName">
                 </div>
                
                 <br>
@@ -129,51 +129,16 @@
                 <%= element.noteContent %>
               </p>
               
-              <img class="img-fluid rounded border border-light" style="max-width: 300px; max-height: 500px;" name="img" src="https://ik.imagekit.io/menfessdoma/imagememes-<%= element.noteId %>.jpg" onerror="this.remove();" alt="Gambar" style="object-fit: cover;">
+              <img class="img-fluid rounded border border-light" style="max-width: 300px; max-height: 500px;" name="img" src="https://ik.imagekit.io/menfessdoma/image-<%= element.noteId %>.jpg" onerror="this.remove();" alt="Gambar" style="object-fit: cover;">
                <div class="d-flex justify-content-between align-items-center m-4">
-                <button id="likeButton<%= element.noteId %>" onclick="handleLike('<%= element.noteId %>')" class="btn btn-primary" style="background: #F2BE22;">
-                  <ion-icon name="heart"></ion-icon> <span id="likeCount<%= element.noteId %>"><%= element.like %></span>
-                </button>
-                
-                <script>
-                  function formatLikesCount(number) {
-                    if (number >= 1000000) {
-                      return (number / 1000000).toFixed(1) + 'M';
-                    } else if (number >= 1000) {
-                      return (number / 1000).toFixed(1) + 'k';
-                    } else {
-                      return number.toString();
-                    }
-                  }
-                
-                  function formatAllLikesCount() {
-                    var likeCountElements = document.querySelectorAll('[id^="likeCount"]');
-                    likeCountElements.forEach(function(element) {
-                      var number = parseInt(element.textContent);
-                      if (number >= 1000000) {
-                        console.log((number / 1000000).toFixed(1) + 'M')
-                        element.textContent = (number / 1000000).toFixed(1) + 'M';
-                      } else if (number >= 1000) {
-                        console.log((number / 1000).toFixed(1) + 'k')
-                        element.textContent = (number / 1000).toFixed(1) + 'k';
-                        
-                      }
-                    });
-                  }
-                
-                  window.addEventListener('DOMContentLoaded', formatAllLikesCount);
-                </script>
-                
-                
-                
-                
-                 
+                <button id="likeButton<%= element.noteId %>" onclick="handleLike('<%= element.noteId %>')" class="btn btn-primary" style="background: #F2BE22;"><ion-icon name="heart"></ion-icon>  <%= element.like %></button>
+    
                 
                 <button onclick="share('<%= element.noteId %>')" class="btn btn-primary m-4" style="background: #47A992;"><ion-icon name="share-social-outline"></ion-icon> Bagikan</button>	
                    <script>
     
                  function share(text){
-                   var copyText = "https://menfess.mfathinhalim.repl.co/memes/" +"share/" +text + "\nSelamat Datang Di Menfess! Ungkapin Aja!";
+                   var copyText = "https://menfess.mfathinhalim.repl.co/" +"share/" +text + "\nSelamat Datang Di Menfess! Ungkapin Aja!";
                    const shareData = {
                             title: 'Menfess!!',
                             text: 'Sebuah Post dari <%= element.noteName %>!',
@@ -210,7 +175,7 @@
                   </div>
                   <div class="mb-3">
                     <label for="commenterName<%= element.noteId %>" class="form-label">Nama?</label>
-                    <input type="text" class="form-control" id="commenterName<%= element.noteId %>" value="<%= username %>" placeholder="Nama Anda?" name="commenterName">
+                    <input type="text" class="form-control" id="commenterName<%= element.noteId %>" placeholder="Nama Anda?" name="commenterName">
                   </div>
                   <button onclick="handleCommentSubmit('<%= element.noteId %>')" class="btn btn-primaryy">Add Comment</button>
                   <div class="d-flex align-items-center" >
@@ -246,45 +211,8 @@
         <div class="row">
           <div class="col-12 col-md-6 col-lg-12" id="multiplier">
             <div>
-              <div class="card-body" id="rules" style="margin-top: 50px;">
-
-                <div class="card" style="background-color: #47A992; color:white;">
-                  <div class="card-header">
-                    <h5 class="card-title">Rules</h5>
-                  </div>
-                  <ul class="list-group list-group-flush" >
-                    <li class="list-group-item" style="background-color: #27374D; color:white;">
-                      Dilarang Posting NSFW: Setiap bentuk konten yang bersifat pornografi, vulgar, atau mengandung materi dewasa tidak diizinkan. Ini termasuk gambar, video, teks, atau tautan yang merujuk pada konten tersebut.
-
-                   
-                    </li>
-                    <li class="list-group-item" style="background-color: #27374D; color:white;">
-                      
-                      Larangan Konten Politik: Postingan yang berkaitan dengan politik dan kontroversi politik tidak diizinkan. Dalam rangka menjaga lingkungan yang netral dan bebas dari konflik politik, diharapkan agar pengguna tidak membahas topik politik di platform ini.
-                  
-                      
-                    </li>
-                    <li class="list-group-item" style="background-color: #27374D; color:white;">
-                      
-                      Dilarang Konten Toksik atau Tidak Senonoh: Postingan yang mengandung pelecehan, ancaman, penyerangan pribadi, atau bahasa kasar yang tidak pantas tidak diizinkan. Selain itu, postingan yang meremehkan, mendiskriminasi, atau menyinggung kelompok agama, suku, gender, atau orientasi seksual juga dilarang.                  
-                      
-                    </li>
-                    <li class="list-group-item" style="background-color: #27374D; color:white;">
-                      
-                      Larangan Tautan Eksternal NSFW: Tautan yang mengarah ke situs web atau sumber eksternal yang mengandung konten NSFW tidak diperbolehkan. Pastikan semua tautan yang Anda bagikan sesuai dengan pedoman dan tidak melanggar peraturan ini.                  
-                      
-                    </li>
-                    <li class="list-group-item" style="background-color: #27374D; color:white;">
-                      
-                      Pengawasan Konten: Administrator platform akan melakukan pengawasan untuk memastikan konten yang diposting sesuai dengan peraturan ini. Jika ada postingan yang melanggar peraturan tersebut, administrator berhak menghapusnya dan mungkin memberikan sanksi kepada pengguna yang melanggar.                  
-                      
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
               <div class="card-body">
-                <% const trendingPosts = trending.slice(0, 10); %>
+                <% const trendingPosts = data.slice(0, 10); %>
                 <% if (trendingPosts.length > 0) { %>
                 <div class="card" style="background-color: #47A992; color:white;">
                   <div class="card-header">
@@ -293,7 +221,7 @@
                   <ul class="list-group list-group-flush" >
                     <% trendingPosts.forEach(element => { %>
                     <li class="list-group-item" style="background-color: #27374D; color:white;">
-                      <p id="likeCount"><ion-icon name="heart"></ion-icon>  <%= element.like %></p>
+                      <p><ion-icon name="heart"></ion-icon>  <%= element.like %></p>
                       <div id="cardp" class="text-white">
                         
                         <h4 class="card-title" style="font-size:20px; color: #FFE569;"> <strong><%= element.noteName %></strong></h4>
@@ -301,7 +229,7 @@
                         <p class="card-text">
                           <%= element.noteContent %>
                         </p>
-                        <img class="img-fluid rounded border border-light" style="max-width: 300px; max-height: 500px; width: 100%;" name="img" src="https://ik.imagekit.io/menfessdoma/imagememes-<%= element.noteId %>.jpg" onerror="this.remove();" alt="Gambar" style="object-fit: cover;">
+                        <img class="img-fluid rounded border border-light" style="max-width: 300px; max-height: 500px; width: 100%;" name="img" src="https://ik.imagekit.io/menfessdoma/image-<%= element.noteId %>.jpg" onerror="this.remove();" alt="Gambar" style="object-fit: cover;">
                       </div>
                     </li>
                     <% }) %>
@@ -309,8 +237,7 @@
                 </div>
                 <% } %>
               </div>
-
-              
+            </div>
           </div>
         </div>
       </div>
@@ -374,7 +301,7 @@ function handleCommentSubmit(noteId) {
   const commenterName = document.getElementById(`commenterName${noteId}`).value;
   const loading = document.getElementById(`loading-comments${noteId}`)
   loading.style.display='block';
-  fetch(`/memes/comment/${noteId}`, {
+  fetch(`/comment/${noteId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -415,7 +342,7 @@ function createPostElement(post) {
   // Construct the rest of the post element
   // ...
 
-  postElement;
+  return postElement;
 }
 
 function createCommentElement(post, commenterName, commentContent) {
@@ -425,12 +352,12 @@ function createCommentElement(post, commenterName, commentContent) {
   // Construct the rest of the post element
   // ...
 
-  postElement;
+  return postElement;
 }
 
 
 function handleLike(noteId) {
-  fetch(`/memes/like/${noteId}`, {
+  fetch(`/like/${noteId}`, {
     method: 'POST'
   })
   .then(response => {

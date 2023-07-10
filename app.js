@@ -12,12 +12,13 @@ const multer = require('multer');
 const fileupload = require('express-fileupload'); 
 const FormData = require('form-data')
 const { mainModel, videoModel, memesModel, animeModel } = require("./models/post")
+const http = require('http');
 
 // SDK initialization
 
 var ImageKit = require("imagekit");
 
-//TODO Make ImageKit
+//TODO Test Make ImageKit
 var imagekit = new ImageKit({
   publicKey : process.env.IMAGEKIT_PUBLICKEY,
   privateKey : process.env.IMAGEKIT_PRIVATEKEY,
@@ -47,10 +48,11 @@ const storageVid = multer.diskStorage({
 
 const storageMemes = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, `public/images/uploads/memes`)
+    cb(null, `public/images/uploads/`)
   },
   filename: function(req, file, cb) {
-    cb(null, `image-${dataMemes.length + 1}.jpg`)
+    console.log(dataMemes.length+100)
+    cb(null, `imagememes-${dataMemes.length + 100}.jpg`)
   }
 })
 
@@ -103,6 +105,8 @@ try{
 
 //TODO Now times to make the app
 const app = express()
+const server = http.createServer(app);
+const io = require('socket.io')(server);
 
 //TODO Next we will be setup the app package, like EJS, cookies, path, and etc.
 app.set('view engine', 'ejs')
@@ -125,60 +129,85 @@ function shuffleOnClient(data) {
 }
 //? ==============================================
 
-//TODO Make class for application function
+// TODO: Make class for application function
 class Application {
-  constructor(data, ejs, pageNumber, cookies) {
+  constructor(data, ejs, pageNumber, res, cookiesName, model) {
     this.data = data;
     this.ejs = ejs;
     this.pageNumber = pageNumber;
-    this.cookies = cookies;
+    this.res = res;
+    this.cookiesName = cookiesName;
+    this.model = model;
   }
 
-  //TODO next make function for app.get()
   getFunction() {
-    //TODO okay, in pagination we will be make the const variable first
     const currentPage = parseInt(this.pageNumber) || 1;
     const adjustedPage = currentPage - 1;
-    const itemsPerPage = 10;
+    const itemsPerPage = 25;
     const startIndex = adjustedPage * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedData = this.data.slice(startIndex, endIndex);
 
-    /*
-      * TODO then will make the paginated data and see if the note with the same noteId in loop has liked in cookies or not.
-      for (let i = 0; i < paginatedData.length; i++) {
-        const noteId = paginatedData[i].noteId;
-        paginatedData.find((note) => note.noteId === noteId).hasLiked = req.cookies[`liked_${noteId}`] === "true";
-    }*/
 
-    //TODO this will be make the paginatedData will shuffle.
-    var gg;
-    gg = shuffleOnClient(paginatedData);
+    const gg = shuffleOnClient(paginatedData);
 
+    let ads;
     if (postCounter % 2 === 0) {
-      this.cookies.render(this.ejs, {
-        data: gg,
-        ads: '<!-- tempatkan kode iklan di sini -->',
-        currentPage: currentPage,
-        totalPages: Math.ceil(this.data.length / itemsPerPage)
-      });
+      ads = '<!-- tempatkan kode iklan di sini -->';
     } else {
-      this.cookies.render(this.ejs, {
-        data: gg,
-        ads: "google.com, pub-2998592050723815, DIRECT, f08c47fec0942fa0",
-        currentPage: currentPage,
-        totalPages: Math.ceil(this.data.length / itemsPerPage)
-      });
+      ads = 'google.com, pub-2998592050723815, DIRECT, f08c47fec0942fa0';
     }
+
+    this.res.render(this.ejs, {
+      data: gg,
+      username: this.cookiesName,
+      trending: this.data,
+      ads: ads,
+      currentPage: currentPage,
+      totalPages: Math.ceil(this.data.length / itemsPerPage)
+    });
 
     postCounter++;
   }
 
+  async searchFunction(userInput) {
+    const currentPage = parseInt(this.pageNumber) || 1;
+    const itemsPerPage = 25;
+        
+    var searchData = []
+    
+    const existingNote = await this.model.find({
+      $or: [
+        { noteName: { $regex: userInput, $options: 'i' } }
+      ]
+    });
+    
+    if (existingNote.length === 0) {
+      const existingNoteName = await this.model.find({
+        noteContent: { $regex: userInput, $options: 'i' }
+      });
+      searchData = existingNoteName;
+    } else {
+      searchData = existingNote;
+    }
+    this.res.render(this.ejs, {
+      data: searchData,
+      username: this.cookiesName,
+      currentPage: currentPage,
+      trending: this.data,
+      totalPages: Math.ceil(searchData.length / itemsPerPage)
+    })
+  }
 }
 
 app.get("/page/:pageNumber", function(req, res) {
   const applicationFunction = new Application(data, "home", req.params.pageNumber, res);
   applicationFunction.getFunction();
+
+  const scrollToElement = req.query.scrollToElement;
+  if (scrollToElement) {
+    res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+  }
 });
 
 app.get("/videos/page/:pageNumber", function(req, res) {
@@ -186,60 +215,116 @@ app.get("/videos/page/:pageNumber", function(req, res) {
   applicationFunction.getFunction();
 });
 
-//TODO and the next function when aplication first load on client(the algorithm is same, so dont be confused) :D
 app.get("/", function(req, res) {
-  const applicationFunction = new Application(data, "home", req.params.pageNumber, res);
+  const applicationFunction = new Application(data, "home", req.params.pageNumber, res, req.cookies.userName);
   applicationFunction.getFunction();
+
+  const scrollToElement = req.query.scrollToElement;
+  if (scrollToElement) {
+    res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+  }
 });
+
+
 app.get("/videos", function(req, res) {
   const applicationFunction = new Application(datavid, "vid", req.params.pageNumber, res);
   applicationFunction.getFunction();
 });
-//TODO in this function, its just loaded the shared link and move the data to first on array
+
 app.get("/share/:noteId", function(req, res) {
-  shuf = false;
-  const noteIdGet = parseInt(req.params.noteId.trim());
-
-  const itemIndex = data.findIndex(({noteId}) => noteId == noteIdGet)
-
-  if (itemIndex !== -1) {
-    const item = data.splice(itemIndex, 1)[0];
-    data.unshift(item);
+  // Move the data with the specified noteId to the first position in the array
+  const sharedNote = data.find((note) => note.noteId === req.params.noteId);
+  if (sharedNote) {
+    const sharedNoteIndex = data.indexOf(sharedNote);
+    data.splice(sharedNoteIndex, 1);
+    data.unshift(sharedNote);
   }
 
-  res.redirect("/");
+  const applicationFunction = new Application(data, "home", req.params.pageNumber, res);
+  applicationFunction.getFunction();
+
+  const scrollToElement = `#cardp${req.params.noteId}`;
+  res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
 });
+
+app.get("/memes/share/:noteId", function(req, res) {
+  // Move the data with the specified noteId to the first position in the array
+  const sharedNote = dataMemes.find((note) => note.noteId === req.params.noteId);
+  if (sharedNote) {
+    const sharedNoteIndex = dataMemes.indexOf(sharedNote);
+    dataMemes.splice(sharedNoteIndex, 1);
+    dataMemes.unshift(sharedNote);
+  }
+
+  const applicationFunction = new Application(dataMemes, "memes", req.params.pageNumber, res, req.cookies.userName);
+  applicationFunction.getFunction();
+
+  const scrollToElement = `#cardp${req.params.noteId}`;
+  res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+});
+
+
+app.get("/page/:pageNumber/share/:noteId", function(req, res) {
+  // Move the data with the specified noteId to the first position in the array
+  const sharedNote = data.find((note) => note.noteId === req.params.noteId);
+  if (sharedNote) {
+    const sharedNoteIndex = data.indexOf(sharedNote);
+    data.splice(sharedNoteIndex, 1);
+    data.unshift(sharedNote);
+  }
+
+  const applicationFunction = new Application(data, "home", req.params.pageNumber, res);
+  applicationFunction.getFunction();
+
+  const scrollToElement = `#cardp${req.params.noteId}`;
+  res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+});
+
+
 //? ======================================================================================
 //* okay, the next one will be little harder
 //TODO first, the function to post menfess
 /**
  * @param {mainModel} model 
  */
-async function post(data, noteContent, noteName, noteId, color, model, file, res) {
+async function post(data, noteContent, noteName, noteId, color, model, file, res, type) {
   try {
+    res.cookie('userName', noteName)
+    const existingNote = await model.findOne({
+      $or: [
+        { noteContent }
+      ]
+    });
+    
+    if (existingNote) {
+      // Note with the same noteContent or noteName already exists, do not add anything
+      if (res) res.redirect("/" + type);
+      return;
+    }
     if (noteContent.trim() !== "" && noteName.trim() !== "") {
       //TODO next we will add the post to database first.
       await model.create({ noteContent, noteName, noteId, color, comment: [], like: 0})
       data.unshift({ noteId, noteContent, noteName, like: 0, comment: [], color })
       shuf = false
+      io.emit('newPost');
     }
     if (file) {
       const ext = file.filename.split(".")[file.filename.split(".").length - 1]
       if (ext == "jpg") {
         console.log(file)
-        fs.readFile(path.join(__dirname, '/public/images/uploads', 'image-'+noteId+'.jpg'), async function(err, data) {
+        fs.readFile(path.join(__dirname, '/public/images/uploads', 'image'+type+'-'+noteId+'.jpg'), async function(err, data) {
           if (err) throw err; // Fail if the file can't be read.
           await imagekit.upload({
             file : data, //required
-            fileName : 'image-'+noteId+'.jpg', //required
+            fileName : 'image'+type+'-'+noteId+'.jpg', //required
             useUniqueFileName: false,
           }, function(error, result) {
             if(error) console.log(error);
             else console.log(result);
-            res.redirect("/")
+            res.redirect("/" + type)
           });
         });
-        const imageFileName = `image-${noteId}.jpg`;
+        const imageFileName = 'image'+type+'-'+noteId+'.jpg';
         const imageFilePath = path.join(__dirname, '/public/images/uploads', imageFileName);
         if (fs.existsSync(imageFilePath)) {
           fs.unlinkSync(imageFilePath);
@@ -279,12 +364,18 @@ app.post("/",upload.single("image"), async (req, res) => {
   const file = req.file;
 
   //TODO then call the function
-  await post(data, noteContent, noteName, noteId, noteColor, mainModel, file, res);
+  await post(data, noteContent, noteName, noteId, noteColor, mainModel, file, res, "");
+})
+
+app.post("/search", async (req, res) => {
+  //TODO first things, we will make the const variable from the req data
+  const noteContent = req.body.noteContent
+  const applicationFunction = new Application(data, "home", req.params.pageNumber, res, req.cookies.userName, mainModel);
+  applicationFunction.searchFunction(noteContent);
 })
 //* second function is to post comment. The algorithm is same, but in comment a little tricky
 //TODO its because we need has the noteId position on array.
 
-//* overall, its same
 app.post("/comment/:noteId", (req, res) => {
   const commentContent = req.body.commentContent;
   const commenterName = req.body.commenterName;
@@ -294,20 +385,51 @@ app.post("/comment/:noteId", (req, res) => {
   if (commentContent.trim() !== "" && commenterName.trim() !== "") {
     mainModel.findOneAndUpdate({ noteId: noteIdPost }, { $push: { comment: { commentContent, commentId: commentID, commenterName } } })
       .then(() => {
-        const itemIndex = data.findIndex(({noteId}) => noteId == noteIdPost)
+        const itemIndex = data.findIndex(({ noteId }) => noteId == noteIdPost);
 
         if (itemIndex !== -1) {
-          const item = data.splice(itemIndex, 1)[0];
-          data.unshift(item);
+          const item = data[itemIndex];
           item.comment.push({ commentID, commenterName, commentContent });
-        }
 
-        shuf = false;
-        res.redirect("/")
+          // Emit a socket event to notify clients about the new comment
+          io.emit('newComment', { noteId: noteIdPost, comment: item.comment[item.comment.length - 1] });
+  
+        }
+        res.sendStatus(200)
       })
-      .catch(err => console.error(err))
+      
+      .catch(err => console.error(err));
   }
 });
+
+
+app.post("/memes/comment/:noteId", (req, res) => {
+  const commentContent = req.body.commentContent;
+  const commenterName = req.body.commenterName;
+  const noteIdPost = parseInt(req.params.noteId.trim());
+  const commentID = dataMemes.length + 50;
+
+  if (commentContent.trim() !== "" && commenterName.trim() !== "") {
+    memesModel.findOneAndUpdate({ noteId: noteIdPost }, { $push: { comment: { commentContent, commentId: commentID, commenterName } } })
+      .then(() => {
+        const itemIndex = dataMemes.findIndex(({ noteId }) => noteId == noteIdPost);
+
+        if (itemIndex !== -1) {
+          const item = dataMemes[itemIndex];
+          item.comment.push({ commentID, commenterName, commentContent });
+
+          // Emit a socket event to notify clients about the new comment
+          io.emit('newComment', { noteId: noteIdPost, comment: item.comment[item.comment.length - 1] });
+  
+        }
+        res.sendStatus(200)
+      })
+      
+      .catch(err => console.error(err));
+  }
+});
+
+
 
 app.post("/videos/comment/:noteId", (req, res) => {
   const commentContent = req.body.commentContent;
@@ -359,10 +481,12 @@ app.post("/like/:noteId", (req, res) => {
       //TODO like usualy,the script will run the database first
       mainModel.findOneAndUpdate({noteId: noteIdPost}, { $inc: { like: 1 } })
         .then(() => {
-          item.like >= 0 ? item.like++ : item.like = 1
-          item.hasLiked = true;
-          res.cookie(`liked_${noteIdPost}`, "true");
-          res.redirect("/");
+          if(item.like < 69420){
+            item.like >= 0 ? item.like++ : item.like = 1
+          }else {
+            item.like = 0;
+          }
+          res.sendStatus(200);
         })
         .catch(err => console.error(err))
     }
@@ -371,18 +495,16 @@ app.post("/like/:noteId", (req, res) => {
 
 //TODO lets make Share Feature
 app.post("/share/:noteId", (req, res) => {
-  //TODO first the shuf we will be false
-  shuf = false;
-  const noteIdPost = parseInt(req.params.noteId.trim());
 
-  //TODO next we will be search the position of noteId
-  const itemIndex = data.findIndex(({noteId}) => noteId == noteIdPost)
+    const scrollToElement = `#note-${item.noteId}`; // Assuming there is an HTML element with an ID of "note-{noteId}"
+    res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+    console.log(data)
+});
+app.post("/memes/share/:noteId", (req, res) => {
 
-  if (itemIndex !== -1) {
-    const item = data.splice(itemIndex, 1)[0];
-    data.unshift(item);
-
-  }
+  const scrollToElement = `#note-${item.noteId}`; // Assuming there is an HTML element with an ID of "note-{noteId}"
+  res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+  console.log(data)
 });
 
 //* the algorithm of like in videos is same
@@ -450,33 +572,68 @@ app.post('/delete/:noteId', (req, res) => {
 })
 //? ======================================================================
 //* the the Memes and Anime channel. The function use the old algorithm so you can ignore :)
+app.get("/page/:pageNumber", function(req, res) {
+  const applicationFunction = new Application(dataMemes, "memes", req.params.pageNumber, res);
+  applicationFunction.getFunction();
+
+  const scrollToElement = req.query.scrollToElement;
+  if (scrollToElement) {
+    res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+  }
+});
 
 app.get("/memes", function(req, res) {
-  res.render("memes", {
-    data: dataMemes
-  })
+  const applicationFunction = new Application(dataMemes, "memes", req.params.pageNumber, res);
+  applicationFunction.getFunction();
+
+  const scrollToElement = req.query.scrollToElement;
+  if (scrollToElement) {
+    res.send(`<script>window.location.href = '${scrollToElement}';</script>`);
+  }
 })
+//TODO fourth, we will be like button
+
+app.post("/memes/like/:noteId", (req, res) => {
+  //TODO first the shuf we will be false
+  shuf = false;
+  const noteIdPost = parseInt(req.params.noteId.trim());
+
+  //TODO next we will be search the position of noteId
+  const itemIndex = dataMemes.findIndex(({noteId}) => noteId == noteIdPost)
+
+  if (itemIndex !== -1) {
+    const item = dataMemes.splice(itemIndex, 1)[0];
+    dataMemes.unshift(item);
+    if (!item.hasLiked) {
+      //TODO like usualy,the script will run the database first
+      memesModel.findOneAndUpdate({noteId: noteIdPost}, { $inc: { like: 1 } })
+        .then(() => {
+          if(item.like < 69420){
+            item.like >= 0 ? item.like++ : item.like = 1
+          }else {
+            item.like = 0;
+          }
+          res.sendStatus(200);
+        })
+        .catch(err => console.error(err))
+    }
+  }
+});
 app.get("/anime", function(req, res) {
   res.render("anime", {
     data: dataAnime
   })
 })
-app.post("/memes", uploadMemes.single('image'), (req, res) => {
+app.post("/memes", uploadMemes.single('image'), async (req, res) => {
+  //TODO first things, we will make the const variable from the req data
   const noteContent = req.body.noteContent
   const noteName = req.body.noteName
-  const noteId = dataMemes.length + 1;
+  const noteId = dataMemes.length + 100;
+  const noteColor = req.body.noteColor
+  const file = req.file;
 
-  if (noteName && noteContent && noteName.toLowerCase() !== "test" && noteContent.toLowerCase() !== "test") {
-    sqlMemes = 'INSERT INTO data(noteId,noteContent,noteName) VALUES (?,?,?)';
-    dbMemes.run(sqlMemes, [noteId, noteContent, noteName], (err) => {
-      if (err) return console.error(err.message);
-    })
-  }
-
-  dataMemes.push({ noteId, noteContent, noteName });
-  res.render("memes", {
-    data: dataMemes
-  })
+  //TODO then call the function
+  await post(dataMemes, noteContent, noteName, noteId, noteColor, memesModel, file, res,"memes");
 })
 app.post("/anime", uploadAnime.single('image'), (req, res) => {
   const noteContent = req.body.noteContent

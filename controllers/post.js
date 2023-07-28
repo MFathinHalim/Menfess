@@ -38,7 +38,8 @@ class PostController {
         // Masukin ke cdn lah
         await imagekit.upload({
           file: file.buffer.toString("base64"),
-          fileName : 'image'+ (this.#type !== "main" ? this.#type : "")+'-'+noteId+'.jpg'
+          fileName : 'image'+ (this.#type !== "main" ? this.#type : "")+'-'+noteId+'.jpg',
+          useUniqueFileName: false
         })
       }
 

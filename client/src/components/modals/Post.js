@@ -26,7 +26,7 @@ function Post({ show, handleClose }) {
     let type = window.location.href.split("/")[3];
     if (type != "memes" && type != "anime") type = "main";
     navigate(`/${type !== "main" ? type : ""}`);
-    await axios.postForm(`/api/${type}/post`, formData);
+    await axios.postForm(`${process.env.REACT_APP_API_BASE_URL}/${type}/post`, formData);
     setFormData(initData);
     handleClose();
   };

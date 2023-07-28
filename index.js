@@ -10,6 +10,7 @@ const { Server } = require("socket.io");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require("path")
 
 require("dotenv").config();
 
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.resolve(__dirname, "client/build")))
 
 // Cuman naruh socket.io di req biar bisa diakses di router
 app.use((req, res, next) => {
@@ -39,6 +41,10 @@ app.use((req, res, next) => {
 
 // Pake router nya
 app.use("/api", apiRouter)
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client/build', 'index.html'));
+});
 
 const port = 5000;
 

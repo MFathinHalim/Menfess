@@ -36,7 +36,7 @@ function Post({ type }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post(`/api/${type}/comment/${post.noteId}`, commentFormData);
+    await axios.post(`${process.env.REACT_APP_API_BASE_URL}/${type}/comment/${post.noteId}`, commentFormData);
     setCommentFormData(initValue);
   };
 

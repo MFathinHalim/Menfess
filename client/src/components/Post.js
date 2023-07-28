@@ -15,7 +15,7 @@ function formatLikeCount(count) {
 
 function Post({ post, type }) {
   const handleShare = useCallback(() => {
-    const copyText = `${process.env.REACT_APP_BASE_URL}${
+    const copyText = `${window.location.origin}/${
       type !== "main" ? `${type}/` : ""
     }post/${post.noteId}`;
     const shareData = {
@@ -45,7 +45,7 @@ function Post({ post, type }) {
         </Card.Body>
         <Card.Img
           variant="bottom"
-          src={`https://ik.imagekit.io/menfessdoma/image${
+          src={`${process.env.REACT_APP_IMAGEKIT_URLENDPOINT}/image${
             type !== "main" ? type : ""
           }-${post.noteId}.jpg`}
           onError={(e) => e.target.remove()}
@@ -62,7 +62,7 @@ function Post({ post, type }) {
             <Col xs="auto" sm="auto">
               <Button
                 variant="primary"
-                onClick={() => axios.post(`/api/${type}/like/${post.noteId}`)}>
+                onClick={() => axios.post(`${process.env.REACT_APP_API_BASE_URL}/${type}/like/${post.noteId}`)}>
                 ♥ {`${formatLikeCount(post.like)} `}
               </Button>
             </Col>

@@ -14,6 +14,7 @@ function App() {
 
   return (
     <>
+    
       <Navbar handleShow={handleShow} />
       <Post show={show} handleClose={handleClose} />
       <Outlet />

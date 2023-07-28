@@ -46,7 +46,7 @@ const port = 5000;
 server.listen(port, async () => {
   console.log("App running on port", port);
   // Connect MongoDB
-  mongoose.connect(process.env.MONGODB_URI, {
+  mongoose.connect(process.env.MONGODBURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000, // Naikin timeout nya karena biasanya kalo di replit lama keburu timeout

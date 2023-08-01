@@ -30,6 +30,7 @@ const io = new Server(server, {
 app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
+app.use(express.static("./client/build"))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, "client/build")))
 
@@ -42,14 +43,14 @@ app.use((req, res, next) => {
 // Pake router nya
 app.use("/api", apiRouter)
 
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'client/build', 'index.html'));
 });
 
 const port = 5000;
 
 // Jalanin Backend nya. Frontend di folder terpisah
-server.listen(port, async () => {
+server.listen(port, async () => 
   console.log("App running on port", port);
   // Connect MongoDB
   mongoose.connect(process.env.MONGODBURI, {

@@ -91,7 +91,7 @@ class PostController {
     } else if (from && to) {
       const posts = this.#data.slice(from, to)
       if(!posts || posts === []) return res.status(404).json({ msg: "postingan tidak ditemukan" })
-      res.json({ posts, postTotal: this.#data.length })
+      res.json({ posts })
 
     // Kalo ga ya return aja semua
     } else {

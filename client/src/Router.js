@@ -10,47 +10,33 @@ import ErrorBoundary from "./ErrorBoundary"
 import Post from "./pages/Post"
 import Posts from "./pages/Posts"
 
+const createPostsLoader = type => () => axios.get(`${process.env.REACT_APP_API_BASE_URL}/${type}/posts?from=0&to=20`)
+
+const createSearchLoader = type => ({ request }) => {
+  const url = new URL(request.url)
+  const query = url.searchParams.get("q")
+  return axios.get(`${process.env.REACT_APP_API_BASE_URL}/${type}/posts?search=${query}`)
+}
+
+const createPostLoader = type => ({ params: { id } }) => axios.get(`${process.env.REACT_APP_API_BASE_URL}/${type}/post/${id}`)
+
 const shouldRevalidate = ({ currentParams: { id: currentId = 1 }, nextParams: { id: nextId = 1 } }) => currentId !== nextId
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<App />} errorElement={<ErrorBoundary />}>
-      <Route path="/" shouldRevalidate={shouldRevalidate} loader={({ params: { id = 1 } }) => axios.get(`${process.env.REACT_APP_API_BASE_URL}/main/posts?from=${(id - 1) * 10}&to=${id * 10}`)} element={<Posts type="main" />}>
-        <Route path="page">
-          <Route path=":id" />
-        </Route>
-      </Route>
-      <Route path="search" loader={({ request }) => {
-        const url = new URL(request.url)
-        const query = url.searchParams.get("q")
-        return axios.get(`${process.env.REACT_APP_API_BASE_URL}/main/posts?search=${query}`)
-      }} element={<Posts type="main" />} />
-      <Route path="post/:id" shouldRevalidate={shouldRevalidate} loader={({ params: { id } }) => axios.get(`${process.env.REACT_APP_API_BASE_URL}/main/post/${id}`)} element={<Post type="main" />}/>
+      <Route index shouldRevalidate={shouldRevalidate} loader={createPostsLoader("main")} element={<Posts type="main" />} />
+      <Route path="search" loader={createSearchLoader("main")} element={<Posts type="main" />} />
+      <Route path="post/:id" shouldRevalidate={shouldRevalidate} loader={createPostLoader("main")} element={<Post type="main" />}/>
       <Route path="memes">
-        <Route path="" shouldRevalidate={shouldRevalidate} loader={({ params: { id = 1 } }) => axios.get(`${process.env.REACT_APP_API_BASE_URL}/memes/posts?from=${(id - 1) * 10}&to=${id * 10}`)} element={<Posts type="memes" />}>
-          <Route path="page">
-            <Route path=":id" />
-          </Route>
-        </Route>
-        <Route path="search" loader={({ request }) => {
-          const url = new URL(request.url)
-          const query = url.searchParams.get("q")
-          return axios.get(`${process.env.REACT_APP_API_BASE_URL}/memes/posts?search=${query}`)
-        }} element={<Posts type="memes" />} />
-        <Route path="post/:id" shouldRevalidate={shouldRevalidate} loader={({ params: { id } }) => axios.get(`${process.env.REACT_APP_API_BASE_URL}/memes/post/${id}`)} element={<Post type="memes" />}/>
+        <Route index shouldRevalidate={shouldRevalidate} loader={createPostsLoader("memes")} element={<Posts type="memes" />} />
+        <Route path="search" loader={createSearchLoader("memes")} element={<Posts type="memes" />} />
+        <Route path="post/:id" shouldRevalidate={shouldRevalidate} loader={createPostLoader("memes")} element={<Post type="memes" />}/>
       </Route>
       <Route path="anime">
-        <Route path="" shouldRevalidate={shouldRevalidate} loader={({ params: { id = 1 } }) => axios.get(`${process.env.REACT_APP_API_BASE_URL}/anime/posts?from=${(id - 1) * 10}&to=${id * 10}`)} element={<Posts type="anime" />}>
-          <Route path="page">
-            <Route path=":id" />
-          </Route>
-        </Route>
-        <Route path="search" loader={({ request }) => {
-          const url = new URL(request.url)
-          const query = url.searchParams.get("q")
-          return axios.get(`${process.env.REACT_APP_API_BASE_URL}/anime/posts?search=${query}`)
-        }} element={<Posts type="anime" />} />
-        <Route path="post/:id" shouldRevalidate={shouldRevalidate} loader={({ params: { id } }) => axios.get(`${process.env.REACT_APP_API_BASE_URL}/anime/post/${id}`)} element={<Post type="anime" />}/>
+        <Route index shouldRevalidate={shouldRevalidate} loader={createPostsLoader("anime")} element={<Posts type="anime" />} />
+        <Route path="search" loader={createSearchLoader("anime")} element={<Posts type="anime" />} />
+        <Route path="post/:id" shouldRevalidate={shouldRevalidate} loader={createPostLoader("anime")} element={<Post type="anime" />}/>
       </Route>
     </Route>
   )

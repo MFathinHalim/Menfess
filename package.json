@@ -6,8 +6,8 @@
   "scripts": {
     "client": "npm start --prefix client",
     "server": "nodemon .",
-    "start": "node .",
     "build": "npm run build --prefix client",
+    "start": "npm run build && node .",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -42,5 +42,8 @@
     "react-router-dom": "^6.14.2",
     "socket.io": "^4.7.1",
     "socket.io-client": "^4.7.1"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1"
   }
 }

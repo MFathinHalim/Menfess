@@ -33,12 +33,12 @@ function Post({ show, handleClose }) {
 
   return (
     <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className="bg-secondary">
         <Modal.Title>New Post</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="bg-secondary" >
         <Form>
-          <Form.Group controlId="name">
+          <Form.Group controlId="name" className="m-1">
             <Form.Label>Name</Form.Label>
             <Form.Control
               required
@@ -49,7 +49,7 @@ function Post({ show, handleClose }) {
               placeholder="Masukkan nama"
             />
           </Form.Group>
-          <Form.Group controlId="content">
+          <Form.Group controlId="content" className="m-1">
             <Form.Label>Content</Form.Label>
             <Form.Control
               required
@@ -61,7 +61,7 @@ function Post({ show, handleClose }) {
               placeholder="Ketik aja"
             />
           </Form.Group>
-          <Form.Group controlId="image">
+          <Form.Group controlId="image" className="m-1">
             <Form.Control
               required
               name="image"
@@ -72,10 +72,14 @@ function Post({ show, handleClose }) {
         </Form>
         <div>
           <h3>Preview Gambar</h3>
-          <img src={previewUrl} alt="Preview" />
+          <img src={previewUrl} alt="Preview" style={{
+            maxHeight: "500px",
+            maxWidth: "500px",
+            objectFit: "contain",
+          }}/>
         </div>
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className="bg-secondary">
         <Button variant="primary" onClick={handleSubmit}>
           Send
         </Button>

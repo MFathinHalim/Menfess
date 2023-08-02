@@ -30,7 +30,6 @@ const io = new Server(server, {
 app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
-app.use(express.static("./client/build"))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, "client/build")))
 
@@ -50,7 +49,7 @@ app.get('*', (req, res) => {
 const port = 5000;
 
 // Jalanin Backend nya. Frontend di folder terpisah
-server.listen(port, async () => 
+server.listen(port, async () => {
   console.log("App running on port", port);
   // Connect MongoDB
   mongoose.connect(process.env.MONGODBURI, {

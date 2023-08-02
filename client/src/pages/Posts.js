@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useLoaderData, useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import Post from "../components/Post.js";
 import { socket } from "../socket.js";
 
@@ -79,6 +80,9 @@ function Posts({ type }) {
 
   return (
     <>
+      <Helmet>
+        <title>{`Menfess | ${[type.split("")[0].toUpperCase(), ...type.split("").splice(1)].join("")} | ${data.postTotal ? `Page ${id}` : "Search"}`}</title>
+      </Helmet>
       <div id="posts">
         {posts.map((post) => (
           <Post post={post} type={type} key={post.noteId} />

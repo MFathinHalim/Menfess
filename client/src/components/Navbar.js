@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../styles/navbar.css";
-import { Navbar as BsNavbar, Nav, Form, Button } from "react-bootstrap";
+import { Navbar as BsNavbar, Nav, Form, Button, Image } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
 
 function Navbar({ handleShow }) {
@@ -23,6 +23,11 @@ function Navbar({ handleShow }) {
       sticky="top"
       expand="lg">
       <BsNavbar.Brand as={NavLink} to="/" className="m-2 text-light">
+        <Image className="m-2 text-light"
+          src="https://play-lh.googleusercontent.com/ctZv22_YORB0adQB_V4eOo4pgm4Js744yB4wOPhTVbPSOm_Lg0opMsIjC9xTc2EdwQ=w240-h480"
+          alt="Navbar Image"
+          style={{ maxWidth: '50px', maxHeight: '50px' }}
+        />
         Menfess
       </BsNavbar.Brand>
       <BsNavbar.Toggle

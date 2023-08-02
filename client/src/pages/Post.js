@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Col, Row } from "react-bootstrap";
 import { useLoaderData } from "react-router";
+import { Helmet } from "react-helmet";
 import PostCard from "../components/Post.js";
 import { socket } from "../socket";
 
@@ -23,11 +24,6 @@ function Post({ type }) {
   const initValue = { name: "", content: "" };
   const [commentFormData, setCommentFormData] = useState(initValue);
   const { name, content } = commentFormData;
-
-  document.title = `Menfess | ${[
-    type.split("")[0].toUpperCase(),
-    ...type.split("").splice(1),
-  ].join("")} | Post ${post.noteId}`;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,6 +60,9 @@ function Post({ type }) {
 
   return (
     <>
+      <Helmet>
+        <title>{`Menfess | ${[type.split("")[0].toUpperCase(), ...type.split("").splice(1)].join("")} | Post ${post.noteId}`}</title>
+      </Helmet>
       <PostCard post={post} type={type} />
       <div className="d-flex justify-content-center align-items-center">
         <Card

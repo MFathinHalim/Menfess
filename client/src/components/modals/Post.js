@@ -26,17 +26,27 @@ function Post({ show, handleClose }) {
     let type = window.location.href.split("/")[3];
     if (type != "memes" && type != "anime") type = "main";
     navigate(`/${type !== "main" ? type : ""}`);
-    await axios.postForm(`${process.env.REACT_APP_API_BASE_URL}/${type}/post`, formData);
+    await axios.postForm(
+      `${process.env.REACT_APP_API_BASE_URL}/${type}/post`,
+      formData
+    );
     setFormData(initData);
     handleClose();
   };
 
   return (
     <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton className="bg-secondary">
+      <Modal.Header style={{ background: "#222222", color: "white" }}>
         <Modal.Title>New Post</Modal.Title>
+        <button
+          type="button"
+          className="close btn btn-white"
+          style={{ color: "white" }}
+          onClick={handleClose}>
+          <span aria-hidden="true">&times;</span>
+        </button>
       </Modal.Header>
-      <Modal.Body className="bg-secondary" >
+      <Modal.Body style={{ background: "#222222" }}>
         <Form>
           <Form.Group controlId="name" className="m-1">
             <Form.Label>Name</Form.Label>
@@ -72,14 +82,18 @@ function Post({ show, handleClose }) {
         </Form>
         <div>
           <h3>Preview Gambar</h3>
-          <img src={previewUrl} alt="Preview" style={{
-            maxHeight: "500px",
-            maxWidth: "500px",
-            objectFit: "contain",
-          }}/>
+          <img
+            src={previewUrl}
+            alt="Preview"
+            style={{
+              maxHeight: "300px",
+              maxWidth: "300px",
+              objectFit: "contain",
+            }}
+          />
         </div>
       </Modal.Body>
-      <Modal.Footer className="bg-secondary">
+      <Modal.Footer style={{ background: "#222222" }}>
         <Button variant="primary" onClick={handleSubmit}>
           Send
         </Button>

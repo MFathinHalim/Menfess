@@ -6,16 +6,36 @@ import { useLoaderData } from "react-router";
 import { Helmet } from "react-helmet";
 import PostCard from "../components/Post.js";
 import { socket } from "../socket";
+const ColoredLine = ({ color }) => (
+  <hr
+    style={{
+      background: "white",
+      color: "white",
+      borderColor: "white",
+      height: "3px",
+      width: "100%", // Set the width to 100 viewport width
+    }}
+  />
+);
 
 function Comments({ comments }) {
   if (!comments || !comments.length) return <div>Belum ada comment</div>;
   return comments.map((comment) => (
-    <Card className="mb-3 m-1 bg-secondary text-white" key={comment.commentId}>
-      <Card.Body>
-        <Card.Title>{comment.commenterName}</Card.Title>
-        <Card.Text>{comment.commentContent}</Card.Text>
-      </Card.Body>
-    </Card>
+    <div className="w-100">
+      {" "}
+      {/* Set the parent container to occupy full width */}
+      <Card
+        className="text-left text-white bg-transparent border-0"
+        key={comment.id}>
+        <ColoredLine color="#ccc" />
+        <Card.Body>
+          <Card.Text style={{ color: "#C44900" }} className="m-1">
+            {comment.commenterName}
+          </Card.Text>
+          <Card.Text className="m-1">{comment.commentContent}</Card.Text>
+        </Card.Body>
+      </Card>
+    </div>
   ));
 }
 
@@ -32,7 +52,10 @@ function Post({ type }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post(`${process.env.REACT_APP_API_BASE_URL}/${type}/comment/${post.noteId}`, commentFormData);
+    await axios.post(
+      `${process.env.REACT_APP_API_BASE_URL}/${type}/comment/${post.noteId}`,
+      commentFormData
+    );
     setCommentFormData(initValue);
   };
 
@@ -61,7 +84,10 @@ function Post({ type }) {
   return (
     <>
       <Helmet>
-        <title>{`Menfess | ${[type.split("")[0].toUpperCase(), ...type.split("").splice(1)].join("")} | Post ${post.noteId}`}</title>
+        <title>{`Menfess | ${[
+          type.split("")[0].toUpperCase(),
+          ...type.split("").splice(1),
+        ].join("")} | Post ${post.noteId}`}</title>
       </Helmet>
       <PostCard post={post} type={type} />
       <div className="d-flex justify-content-center align-items-center">
@@ -74,7 +100,8 @@ function Post({ type }) {
               <Comments comments={post.comment} />
             </div>
             <Form onSubmit={handleSubmit}>
-              <Card className="mb-3 m-1 bg-secondary text-white">
+              <ColoredLine color="#ccc" />
+              <Card className="text-left text-white bg-transparent border-0">
                 <Card.Body>
                   <Form.Group className="m-1" controlId="commenterName">
                     <Form.Label>Name</Form.Label>

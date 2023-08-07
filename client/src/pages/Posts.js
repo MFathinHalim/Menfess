@@ -70,7 +70,7 @@ function Posts({ type }) {
     setPosts(data.posts);
     window.scrollTo({ top: 0 });
   }, [data]);
-    
+
 
   return (
     <>
